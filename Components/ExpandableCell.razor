@@ -1,0 +1,19 @@
+﻿@code {
+    [Parameter] public string Text { get; set; }
+    [Parameter] public int MaxLength { get; set; } = 100;
+
+    private bool expanded = false;
+
+    private string DisplayText => expanded ? Text : Text.Substring(0, MaxLength) + "...";
+}
+
+<div style="display: flex; align-items: flex-start;">
+    <div style="flex: 1;">
+        @DisplayText
+    </div>
+    <button class="expand-btn icon-btn"
+            @onclick="() => expanded = !expanded"
+            style="border:none;background:none;padding:0;margin-left:8px;">
+        <i class="bi @(expanded ? "bi-chevron-up" : "bi-chevron-down")"></i>
+    </button>
+</div>

@@ -1,0 +1,113 @@
+﻿@typeparam TItem
+
+<div class="dropdown" style="position: relative;">
+   @*  <button class="btn btn-secondary" @onclick="ToggleDropdown"> *@
+    <button class="@Classes" @onclick="ToggleDropdown">
+        @Label
+    </button>
+    @if (showDropdown)
+    {
+        <div class="dropdown-content">
+            <div class="dropdown-row"
+                 @onclick="ToggleSelectAllRow">
+                <input type="checkbox"
+                       @ref="selectAllRef"
+                       checked="@IsAllSelected"
+                       @onchange="ToggleSelectAll"
+                       @onclick:stopPropagation="true" />
+                <label><strong>Select all</strong></label>
+            </div>
+            @foreach (var option in Options)
+            {
+                <div class="dropdown-row"
+                     @onclick="() => ToggleOption(option)">
+                    <input type="checkbox"
+                           checked="@SelectedValues.Contains(option)"
+                           @onchange="e => OnOptionChanged(e, option)"
+                           @onclick:stopPropagation="true" /> <!-- Prevents row click when clicking checkbox -->
+                    <label>@OptionLabel(option)</label>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string Label { get; set; } = "Select Options";
+    [Parameter] public string Classes { get; set; } = "sidebar-btn";
+    [Parameter] public IEnumerable<TItem> Options { get; set; }
+    [Parameter] public HashSet<TItem> SelectedValues { get; set; } = new();
+    [Parameter] public EventCallback<HashSet<TItem>> SelectedValuesChanged { get; set; }
+    [Parameter] public Func<Task>? OnSelectionChanged { get; set; }
+    [Parameter] public Func<TItem, string> OptionLabel { get; set; } = x => x?.ToString();
+
+    private bool showDropdown = false;
+    private ElementReference selectAllRef;
+
+    private void ToggleDropdown() => showDropdown = !showDropdown;
+
+    private bool IsAllSelected => Options != null && SelectedValues.Count == Options.Count();
+    private bool IsNoneSelected => SelectedValues.Count == 0;
+    private bool IsIndeterminate => !IsAllSelected && !IsNoneSelected;
+
+    private async Task ToggleSelectAll(ChangeEventArgs e)
+    {
+        if (IsAllSelected)
+        {
+            SelectedValues.Clear();
+        }
+        else
+        {
+            SelectedValues.Clear();
+            foreach (var option in Options)
+                SelectedValues.Add(option);
+        }
+
+        await SelectedValuesChanged.InvokeAsync(SelectedValues);
+
+        if (OnSelectionChanged is not null)
+            await OnSelectionChanged.Invoke();
+    }
+
+    private async Task ToggleSelectAllRow()
+    {
+        await ToggleSelectAll(new ChangeEventArgs { Value = !IsAllSelected });
+    }
+
+    private async Task OnOptionChanged(ChangeEventArgs e, TItem option)
+    {
+        if ((bool)e.Value)
+            SelectedValues.Add(option);
+        else
+            SelectedValues.Remove(option);
+
+        await SelectedValuesChanged.InvokeAsync(SelectedValues);
+
+        if (OnSelectionChanged is not null)
+            await OnSelectionChanged.Invoke();
+    }
+
+    private async Task ToggleOption(TItem option)
+    {
+        if (SelectedValues.Contains(option))
+            SelectedValues.Remove(option);
+        else
+            SelectedValues.Add(option);
+
+        await SelectedValuesChanged.InvokeAsync(SelectedValues);
+
+        if (OnSelectionChanged is not null)
+            await OnSelectionChanged.Invoke();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Set indeterminate state for "Select all" checkbox
+        if (showDropdown)
+        {
+            await JS.InvokeVoidAsync("setIndeterminateSelection", selectAllRef, IsIndeterminate);
+        }
+    }
+
+    [Inject] private IJSRuntime JS { get; set; }
+}

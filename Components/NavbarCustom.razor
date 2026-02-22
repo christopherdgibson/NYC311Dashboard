@@ -1,0 +1,87 @@
+﻿@* <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">NYC311Dashboard</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div> *@
+
+@* <nav role="navigation" class="@NavMenuCssClass toprow" @onclick="ToggleNavMenu"> *@
+ <nav>
+  <input type="checkbox" id="checkNav" />
+  <label for="checkNav" class="checkbtn">
+    <svg
+      width="40"
+      height="40"
+      xmlns="http://www.w3.org/2000/svg"
+      viewbox="0 -50 448 512"
+    >
+      <path
+        fill="currentColor"
+        d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"
+      />
+    </svg>
+  </label>
+    <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="requests">Requests</a></li>
+        <li><a href="requestsbyborough">Borough</a></li>
+        <li><a href="requestsbyzip">Zip</a></li>
+@*         <li class="dropdown">
+            <a href="#">Dropdown menu</a>
+            <div>
+                <a href="#">Item 1</a>
+            </div>
+        </li> *@
+        <li><a href="requestsreport">Report</a></li>
+    </ul>
+</nav>
+
+
+@* <nav>
+    <input type="checkbox" id="checkNav" />
+    <label for="checkNav" class="checkbtn">
+        <svg width="40"
+             height="40"
+             xmlns="http://www.w3.org/2000/svg"
+             viewbox="0 -50 448 512">
+            <path fill="currentColor"
+                  d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z" />
+        </svg>
+    </label>
+    <label>
+        <img class="logo-image"
+             src="images/logo.png"
+             alt="Brussels Group" />
+    </label>
+    <ul>
+        <li><a id="linkHome" href="#">Home</a></li>
+        <li class="dropdown">
+            <a id="linkMeetings" href="#">Meetings</a>
+            <div>
+                <a id="linkMeetingsmonday" href="#">Monday | Lundi | Maandag</a>
+                <a id="linkMeetingstuesday" href="#">Tuesday | Mardi | Dinsdag</a>
+                <a id="linkMeetingswednesday" href="#">Wednesday | Mercredi | Woensdag</a>
+                <a id="linkMeetingsthursday" href="#">Thursday | Jeudi | Donderdag</a>
+                <a id="linkMeetingsfriday" href="#">Friday | Vendredi | Vrijdag</a>
+                <a id="linkMeetingssaturday13h" href="#">Saturday 13h | Samedi | Zaterdag</a>
+                <a id="linkMeetingssaturday18h30" href="#">Saturday | Samedi | Zaterdag</a>
+                <a id="linkMeetingssunday" href="#">Sunday | Dimanche | Zondag</a>
+            </div>
+        </li>
+        <li><a id="linkLocation" href="#">How to get there</a></li>
+        <li><a id="linkReflection" href="#">Daily reflection</a></li>
+    </ul>
+</nav> *@
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

@@ -1,0 +1,48 @@
+﻿@* ConfirmDialog.razor *@
+@if (IsVisible)
+{
+    <div class="modal-backdrop" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);z-index:1050;">
+        <div class="modal-dialog" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1060;min-width:300px;">
+            <div class="modal-content" style="padding:1.5rem;">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Title</h5>
+                </div>
+                <div class="modal-body">
+                    @Message
+                </div>
+                <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:1rem;">
+                    <button class="btn btn-secondary" @onclick="OnCancelClicked">Cancel</button>
+                    <button class="btn btn-primary" @onclick="OnConfirmClicked">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = "Confirm";
+    [Parameter] public string Message { get; set; } = string.Empty;
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+
+    private bool IsVisible { get; set; }
+
+    public void Show(string message, string title = "Confirm")
+    {
+        Message = message;
+        Title = title;
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    private async Task OnConfirmClicked()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync(true);
+    }
+
+    private async Task OnCancelClicked()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync(false);
+    }
+}

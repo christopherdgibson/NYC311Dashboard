@@ -1,0 +1,100 @@
+﻿@using System.Reflection
+@using NYC311Dashboard.Extensions
+
+@typeparam TItem
+
+
+    <div class="">
+        <h4>@Title</h4>
+        @* todo: May turn off borders on table-responsive or v-wrapper. Otherwise change margins so they do not fill *@
+        <div class="table-responsive v-wrapper">
+            <table class="table table-sm fixed-width-table">
+                <thead>
+                    <tr>
+                        @foreach (var prop in Properties)
+                        {
+                            <th>
+                                @prop.Name.FromCamelCaseToSpacedString()
+                                <button class="icon-btn" @onclick="() => OnSort(prop)">
+                                    <i class="bi @(SortColumn == prop ? (SortAscending ? "bi-sort-up" : "bi-sort-down") : "bi-arrow-down-up")"></i>
+                                </button>
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in SortedItems)
+                    {
+                        <tr>
+                            @foreach (var prop in Properties)
+                            {
+                                var value = prop.GetValue(item);
+
+                                <td>
+                                    @if (value is double d)
+                                    {
+                                        @Math.Round(d, 2)
+                                    }
+                                    else if (value is string s && s.Length > 100)
+                                    {
+                                        <ExpandableCell Text="@s" MaxLength="100" />
+                                    }
+                                    else if (value is DateTime?)
+                                    {
+                                        DateTime? dateTime;
+                                        if (value == null)
+                                        {
+                                            dateTime = null;
+                                        }
+                                        else
+                                        {
+                                            dateTime = (DateTime)value;
+                                        }
+
+                                        @dateTime.ToDateTimeHour()
+                                    ;
+                                    }
+                                    else
+                                    {
+                                        @value
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+@code {
+    [Parameter] public IEnumerable<TItem> Items { get; set; }
+    [Parameter] public string Title { get; set; }
+    private List<TItem> SortedItems => GetSortedItems();
+
+    private static PropertyInfo[] Properties = typeof(TItem).GetProperties();
+
+    private PropertyInfo SortColumn { get; set; } = Properties.First();
+    private bool SortAscending { get; set; } = true;
+
+    private void OnSort(PropertyInfo prop)
+    {
+        if (SortColumn == prop)
+        {
+            SortAscending = !SortAscending;
+        }
+        else
+        {
+            SortColumn = prop;
+            SortAscending = true;
+        }
+    }
+
+    private List<TItem> GetSortedItems()
+    {
+        if (SortAscending)
+            return Items.OrderBy(x => SortColumn.GetValue(x)).ToList();
+        else
+            return Items.OrderByDescending(x => SortColumn.GetValue(x)).ToList();
+    }
+}

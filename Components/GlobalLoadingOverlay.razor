@@ -1,0 +1,22 @@
+﻿@inject ILoadingService LoadingService
+@using NYC311Dashboard.Services.Contracts
+
+@if (LoadingService.IsLoading)
+{
+    <div class="loading-overlay">
+        <img src="images/loading.gif?v=1" alt="Loading..." />
+        <div>@LoadingService.LoadingMessage</div>
+    </div>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        LoadingService.OnLoadingChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        LoadingService.OnLoadingChanged -= StateHasChanged;
+    }
+}

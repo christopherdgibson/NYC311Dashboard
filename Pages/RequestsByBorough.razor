@@ -1,0 +1,199 @@
+﻿@inject IRequestService RequestService
+@inject IChartService ChartService
+@inject ISidebarService SidebarService
+
+@page "/requestsbyborough"
+
+@using CSharpFunctionalExtensions
+@using NYC311Dashboard.Components
+@using NYC311Dashboard.Models
+@using NYC311Dashboard.Services
+@using NYC311Dashboard.Services.Contracts
+@using System.Text.Json
+@using NYC311Dashboard.Services.Models
+<h2>Requests by Borough</h2>
+
+@layout MainLayout
+
+
+@* <CascadingValue Name="CustomSidebar" Value="CustomSidebar">
+    <h1>Page Content Here</h1>
+ *@
+
+@* 
+<h2 class="blue-class">NYC 311 Requests by Borough</h2>
+ *@
+
+@* <p>
+    <button class="btn btn-primary" @onclick="GetRequestsByBorough">Get data by Borough</button>
+</p> *@
+
+@* @if (!RequestService.Requests.Any())
+{
+"Request data is empty. Would you like to refresh it?", "Refresh Confirmation"
+    <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
+} *@
+@* 
+@if (boroughs.Any())
+{
+    <CheckboxDropdown TItem="string"
+                      Label="Select Boroughs"
+                      Options="@boroughs"
+                      @bind-SelectedValues="selectedBoroughs"
+                      OnSelectionChanged="OnBoroughSelectionChanged" />
+} *@
+
+@if (ShowChart)
+{
+    <div>
+        <strong>Selected:</strong> @string.Join(", ", selectedBoroughs)
+    </div>
+    <h3>Total calls and duration by selected boroughs</h3>
+    <div id="chart"></div>
+    <SortableTable Items="requestsByBorough" Title="" />
+}
+
+@code {
+    private List<RequestModel> requests = new List<RequestModel>();
+    private List<BoroughDateTableRow> requestsByBorough = new List<BoroughDateTableRow>();
+    private List<string> boroughs = new();
+    private HashSet<string> selectedBoroughs = new();
+    private ChartOptions chartOptions = new();
+    private string label = "Select Boroughs";
+    //private DotNetObjectReference<RequestsByBorough>? dotNetRef;
+    private string message = "Please refresh data to populate boroughs list!";
+    private int sortOrder = 0;
+    private bool chartNeedsRefresh = false;
+
+    private bool ShowChart => requestsByBorough != null && requestsByBorough.Any() && selectedBoroughs.Any();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RequestService.Boroughs.Count == 0)
+        {
+            SidebarService.SetSidebar(
+            SidebarService.RenderSidebarButton(
+                "Refresh 311 data",
+                "sidebar-btn",
+                EventCallback.Factory.Create(this, () => MessagingService.ShowDialog(message, null))
+            )
+        );
+            return;
+        }
+
+        if (RequestService.RequestsByBoroughDate.Count == 0)
+        {
+            await RefreshRequestsByBorough();
+        }
+        else
+        {
+            requestsByBorough = RequestService.RequestsByBoroughDate;
+        }
+
+        requests = RequestService.Requests;
+        boroughs = RequestService.Boroughs;
+        selectedBoroughs = RequestService.SelectedBoroughs;
+
+        if (!chartOptions.HasData)
+        {
+            chartOptions = GetChartOptions(height: "380");
+        }
+
+        SidebarService.SetSidebar(SidebarService.RenderCustomSidebar(
+             label,
+             boroughs,
+             selectedBoroughs,
+             EventCallback.Factory.Create<HashSet<string>>(this, v => selectedBoroughs = v),
+             OnBoroughSelectionChanged
+         ));
+
+        chartNeedsRefresh = ShowChart;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!chartNeedsRefresh)
+        {
+            return;
+        }
+
+        chartNeedsRefresh = false;
+
+        if (firstRender)
+        {
+            await ChartService.RenderBarChart(chartOptions);
+        }
+        else
+        {
+            await ChartService.RenderBarChart(chartOptions);
+
+            //dotNetRef = DotNetObjectReference.Create(this);
+            //await JS.InvokeVoidAsync("notifyChartDivReady", dotNetRef);
+            //await ChartService.UpdateApexChart(chartOptions);
+        }
+    }
+
+    // [JSInvokable]
+    // public async Task RenderChartFromJS()
+    // {
+    //     await ChartService.RenderBarChart(chartOptions);
+    // }
+
+    private async Task OnBoroughSelectionChanged()
+    {
+        await RefreshRequestsByBorough();
+        chartOptions = GetChartOptions(height: "380");
+        chartNeedsRefresh = ShowChart;
+    }
+
+    protected async Task RefreshRequestsByBorough()
+    {
+        requestsByBorough.Clear();
+        sortOrder = 0;
+
+        var result = RequestService.GenerateAggregateTable();
+        if (result.IsFailure)
+        {
+            return;
+        }
+
+        requestsByBorough = RequestService.RequestsByBoroughDate;
+    }
+
+    protected ChartOptions GetChartOptions(string? width = null, string? height = null)
+    {
+        //chartOptions = new();
+        var totalDurations = selectedBoroughs
+            .Select(b => requestsByBorough.Where(r => r.Borough == b).Sum(r => r.OpenTime))
+            .ToList();
+
+        var totalCounts = selectedBoroughs
+            .Select(b => (double)requests.Count(r => r.Borough == b))
+            .ToList();
+
+        // var totalCountsDouble = totalCounts.Select(x => (double)x).ToList();
+        var series = new List<ApexSeries>
+        {
+            new ApexSeries { Name = "Total Count", Data = totalCounts },
+            new ApexSeries { Name = "Total Duration", Data = totalDurations }
+        };
+
+        var result = ChartService.GetBarChartOptions("boroughs", selectedBoroughs.ToList(), series, height: "380");
+
+        var options = result.IsSuccess ? result.Value : chartOptions;
+
+        return options;
+    }
+
+    public void Dispose()
+    {
+        //dotNetRef?.Dispose();
+        SidebarService.SetSidebar(null);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await ChartService.DisposeApexChart();
+        //SidebarService.SetSidebar(null);
+    }
+}

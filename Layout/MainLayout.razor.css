@@ -1,0 +1,211 @@
+﻿.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.sidebar {
+    /*    --light-checker-color: #fff;
+    --dark-checker-color: #f7b731;
+    background-color: var(--light-checker-color);
+    opacity: 0.8;
+    background-image: repeating-linear-gradient(45deg, var(--dark-checker-color) 25%, transparent 25%, transparent 75%, var(--dark-checker-color) 75%, var(--dark-checker-color)), repeating-linear-gradient(45deg, var(--dark-checker-color) 25%, var(--light-checker-color) 25%, var(--light-checker-color) 75%, var(--dark-checker-color) 75%, var(--dark-checker-color));
+    background-position: 0 0, 50px 50px;
+    background-size: 100px 100px;*/
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-swap-container {
+    flex: 1;  /*Takes up all available space */
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 20px;
+    height: 250px;
+    width: 250px;
+    text-align: center;
+    background-color: var(--top-gradient-color);
+    /*border-bottom: 1px solid #dee2e6;*/
+}
+
+.sidebar-logo {
+    max-width: 80%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.sidebar-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* takes remaining space below header */
+    overflow: hidden;
+    background-image: linear-gradient(180deg, var(--top-gradient-color) 0%, var(--bottom-gradient-color) 70%);
+}
+
+.scroll-to-top-btn {
+    position: sticky; /* Sticks to bottom when scrolling sidebar */
+    bottom: 0;
+}
+
+    .scroll-to-top-btn:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    /*.scroll-to-top-btn i {
+            font-size: 24px;*/ /* Icon size */
+    /*}*/
+
+
+    /* Or use rem for scalability */
+    .scroll-to-top-btn i {
+        font-size: 1.5rem;
+    }
+
+.top-row {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row ::deep a, .top-row ::deep .btn-link {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+    }
+
+    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .top-row ::deep a:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+.dropdown {
+    position: relative;
+}
+
+/* Style the dropdown button */
+.dropbtn {
+    background-color: #3f51b5;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+    /* Links inside dropdown content */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        margin: 0 !important;
+        text-decoration: none;
+        display: block;
+    }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #f1f1f1
+        }
+
+/* Show the dropdown content on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change background color of dropdown button on hover */
+.dropdown:hover .dropbtn {
+    background-color: #CADFF2;
+}
+
+@media (max-width: 640.98px) {
+    .top-row {
+        justify-content: space-between;
+    }
+
+    .top-row ::deep a, .top-row ::deep .btn-link {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: column;
+        display: flex;
+        /*height: 100vh;*/ /* Full viewport height */
+        /*overflow: hidden;*/ /* Prevent scrollbars on root */
+    }
+
+    /* Layout container: use flex for sidebar + content */
+    .layout-root {
+        display: flex;
+        height: 100vh; /* Full viewport height */
+        overflow: hidden; /* Prevent scrollbars on root */
+    }
+
+    .sidebar {
+        width: 250px;
+        min-width: 250px;
+        max-width: 250px;
+        height: 100vh;
+        position: fixed; /* or sticky */
+        left: 0;
+        top: 0;
+        overflow-y: auto;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+    }
+
+
+
+    .content {
+        flex: 1 1 auto;
+        margin-left: 250px; /* Same as sidebar width */
+        /*height: 100vh;*/
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .top-row {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .top-row.auth ::deep a:first-child {
+        flex: 1;
+        text-align: right;
+        width: 0;
+    }
+
+    .top-row, article {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+
+
+}

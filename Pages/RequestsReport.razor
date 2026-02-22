@@ -1,0 +1,153 @@
+﻿@inject IRequestService RequestService
+@inject IChartService ChartService
+@inject IPdfService PdfService
+@page "/requestsreport"
+
+@using CSharpFunctionalExtensions
+@using NYC311Dashboard.Components
+@using NYC311Dashboard.Models
+@using NYC311Dashboard.Services
+@using NYC311Dashboard.Services.Contracts
+@using NYC311Dashboard.Extensions
+@using NYC311Dashboard.Services.Models
+
+<h2>Request Report</h2>
+
+@* <div class="red-background"> *@
+<div>
+    <p>
+        <button class="btn btn-primary" @onclick="SaveAsPdf">Download PDF</button>
+    </p>
+
+    <div id="pdf-content" class="pdf-print-area">
+        @if (ShowZipChart)
+        {
+            <div id="chart"></div>
+            <SortableTable Items="requestsByZipHour" Title="" />
+        }
+        @* @if (!RequestService.Requests.Any())
+    {
+    "Request data is empty. Would you like to refresh it?", "Refresh Confirmation"
+        <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
+    } *@
+    </div>
+</div>
+
+@code {
+    private List<RequestModel> requests = new List<RequestModel>();
+    // private string? Borough;
+    // private string? Zip;
+    private List<ZipHourTableRow> requestsByZipHour = new List<ZipHourTableRow>();
+    private List<string> boroughs = new();
+    private List<string> zipCodes = new();
+    private HashSet<string> selectedBoroughs = new();
+    private HashSet<string> selectedZipCodes = new();
+    private ChartOptions zipChartOptions = new();
+
+    private bool chartNeedsRefresh = false;
+    private int sortOrder = 0;
+
+    private bool ShowZipChart => requestsByZipHour != null && requestsByZipHour.Count != 0 && selectedZipCodes.Any();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RequestService.Boroughs.Count == 0)
+        {
+            return;
+        }
+
+        await RefreshRequestsByZipHour();
+        requests = RequestService.Requests;
+        boroughs = RequestService.Boroughs;
+        zipCodes = RequestService.ZipCodes;
+        selectedBoroughs = RequestService.SelectedBoroughs;
+        selectedZipCodes = RequestService.SelectedZipCodes;
+
+        if (!zipChartOptions.HasData)
+        {
+            zipChartOptions = GetZipChartOptions(height: "380");
+        }
+
+        chartNeedsRefresh = ShowZipChart;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!chartNeedsRefresh)
+        {
+            return;
+        }
+
+        chartNeedsRefresh = false;
+        await ChartService.RenderLineChart(zipChartOptions);
+    }
+
+    private async Task SaveAsPdf()
+    {
+        var options = new PdfOptions
+        {
+            Margin = 20,
+            FileName = "custom.pdf",
+            Image = new ImageOptions
+            {
+                Type = "jpeg",
+                Quality = 0.98
+            },
+            Html2Canvas = new Html2CanvasOptions
+            {
+                Scale = 2
+            },
+            JsPDF = new JsPdfOptions
+            {
+                Unit = "mm",
+                Format = "a4",
+                Orientation = "portrait"
+            }
+        };
+        PdfService.RenderPdfDownload("pdf-content", options);
+        // await JS.InvokeVoidAsync("saveElementAsPdf", "pdf-content", options);
+
+    }
+
+    protected async Task RefreshRequestsByZipHour()
+    {
+        requestsByZipHour.Clear();
+        sortOrder = 0;
+
+        var result = RequestService.GenerateTableByZipHour();
+        if (result.IsFailure)
+        {
+            return;
+        }
+
+        requestsByZipHour = RequestService.RequestsByZipHour;
+    }
+    protected ChartOptions GetZipChartOptions(string? width = null, string? height = null)
+    {
+        //chartOptions = new();
+        var categories = requestsByZipHour
+            .Select(r => r.CreatedDate.ToDateTimeHour())
+            .Distinct()
+            .OrderBy(x => x)
+            .ToList();
+
+        var series = selectedBoroughs
+            .Where(borough => requestsByZipHour.Any(r => r.Borough == borough && selectedZipCodes.Contains(r.Zip)))
+            .Select(borough => new ApexSeries
+            {
+                Name = borough,
+                Data = categories.Select(cat =>
+                    requestsByZipHour
+                        .Where(r => r.Borough == borough && selectedZipCodes.Contains(r.Zip) && r.CreatedDate.ToDateTimeHour() == cat)
+                        .Sum(r => r.OpenTime)
+                ).ToList()
+            })
+            .ToList();
+
+        var result = ChartService.GetBarChartOptions("zip codes", categories, series, height: "380");
+
+        var options = result.IsSuccess ? result.Value : zipChartOptions;
+
+        return options;
+    }
+}

@@ -1,0 +1,26 @@
+﻿@inject IMessagingService MessagingService
+@using NYC311Dashboard.Services
+@using NYC311Dashboard.Services.Contracts
+
+
+
+@if (MessagingService.CurrentType == MessageType.Error)
+{
+    <div class="error-message">@MessagingService.Message</div>
+}
+else if (MessagingService.CurrentType == MessageType.Info)
+{
+    <div class="info-message">@MessagingService.Message</div>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        MessagingService.OnMessageChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MessagingService.OnMessageChanged -= StateHasChanged;
+    }
+}

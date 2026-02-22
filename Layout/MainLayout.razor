@@ -1,0 +1,58 @@
+﻿@using Constants
+@using NYC311Dashboard.Components
+@using NYC311Dashboard.Services.Contracts
+@inherits LayoutComponentBase
+@inject ISidebarService SidebarService
+
+
+
+<div class="">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="images/NYC_311_logo.png" alt="Logo" class="sidebar-logo" />
+        </div>
+        <div class="sidebar-body">
+            <div class="sidebar-swap-container">
+                @if (SidebarService.CustomSidebar != null)
+                {
+                    @SidebarService.CustomSidebar
+                }
+            </div>
+            <button class="sidebar-btn scroll-to-top-btn" @onclick="SidebarService.ScrollToTop">
+                <i class="bi bi-arrow-up-circle-fill"></i>
+                <span>Top</span>
+            </button>
+        </div>
+    </div>
+
+    <main>
+            <NavbarCustom />
+        <GlobalLoadingOverlay />
+        <article class="content">
+            @Body
+            <ErrorBlock />
+        </article>
+    </main>
+</div>
+
+@code {
+    [CascadingParameter(Name = "CustomSidebar")]
+    public RenderFragment? CustomSidebar { get; set; }
+
+    protected override void OnInitialized()
+    {
+        SidebarService.OnSidebarChanged += StateHasChanged;
+    }
+
+
+
+    public void Dispose()
+    {
+        SidebarService.OnSidebarChanged -= StateHasChanged;
+    }
+
+    public async Task MainLayoutStateUpdate()
+    {
+        StateHasChanged();        
+    }
+}

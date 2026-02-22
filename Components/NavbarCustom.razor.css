@@ -1,0 +1,199 @@
+﻿/*ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #333333;
+    display: flex;
+    justify-content: center;
+}
+
+    ul li a {
+        display: block;
+        color: white;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+        ul li a:hover {
+            background-color: #111111;
+        }
+
+@media (min-width: 641px) {
+    .navbar-toggler {
+        display: none;
+    }
+
+    .collapse {*/
+        /* Never collapse the sidebar for wide screens */
+        /*display: block;
+    }
+
+    .nav-scrollable {*/
+        /* Allow sidebar to scroll for tall menus */
+        /*height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}*/
+
+.logo-image {
+    width: 50px;
+    display: inline-flex;
+    float: left;
+}
+
+nav {
+    background-image: linear-gradient(90deg, var(--top-gradient-color) 0%, var(--bottom-gradient-color) 120%);
+    margin-left:250px;
+    display: flex;
+}
+
+    nav ul {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: auto;
+        /* margin: 0;
+        margin-left: auto;*/
+    }
+
+        nav ul li a {
+            display: flex;
+            color: white;
+            min-width: fit-content;
+            text-wrap-mode: nowrap;
+            padding: 16px;
+            text-decoration: none;
+            position: relative;
+            /* width: 100px;*/
+        }
+
+            nav ul li a:hover {
+                color: black;
+                background-color: rgba(173, 229, 246);
+            }
+
+.dropdown-hidden {
+    position: relative;
+    width: calc(100%);
+}
+
+    .dropdown-hidden:hover a {
+        color: black;
+    }
+
+    .dropdown-hidden div {
+        display: none;
+    }
+
+.dropdown {
+    position: relative;
+}
+
+    .dropdown:hover a {
+        color: black;
+    }
+
+    .dropdown div {
+        display: none;
+    }
+
+        .dropdown div a {
+            text-decoration: none;
+            text-wrap-mode: nowrap;
+            width: auto;
+            color: white;
+            background-color: rgb(0, 0, 127);
+        }
+
+    .dropdown:hover {
+        background-color: rgba(173, 229, 246);
+    }
+
+        .dropdown:hover div {
+            position: absolute;
+            display: block;
+        }
+
+            .dropdown:hover div a {
+                text-decoration: none;
+                text-wrap-mode: nowrap;
+                color: white;
+            }
+
+                .dropdown:hover div a:hover {
+                    color: black;
+                }
+
+.checkbtn {
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    display: none;
+}
+
+#checkNav {
+    display: none;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .checkbtn {
+        display: block;
+        order: 1;
+        margin-right: 20px;
+    }
+
+    nav {
+        position: relative;
+        left: 0;
+        width: 100%;
+    }
+
+        nav ul {
+            position: fixed;
+            top: 80px;
+            right: -100%;
+            background-color: rgb(0, 0, 127);
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+            nav ul li {
+                position: relative;
+                margin: 20px 0;
+                width: calc(100%);
+            }
+
+                nav ul li a {
+                    font-size: 20px;
+                    width: calc(100%);
+                    justify-content: center;
+                }
+
+                nav ul li div {
+                    display: none;
+                }
+
+                    nav ul li div a {
+                        display: none;
+                    }
+
+    #checkNav:checked ~ ul {
+        right: 0;
+        align-content: center;
+    }
+
+        #checkNav:checked ~ ul li a {
+            position: relative;
+            width: calc(100%);
+        }
+
+            #checkNav:checked ~ ul li a:hover div {
+                display: none;
+            }
+}
