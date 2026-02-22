@@ -12,6 +12,8 @@ namespace NYC311Dashboard.Services.Contracts
 
         RenderFragment RenderSidebarButton(string buttonText, string classes, EventCallback onClick);
 
+        public RenderFragment RenderInactiveSidebarButton(string buttonText, EventCallback onClick);
+
         public RenderFragment RenderCustomSidebar<TItem>(
             string label,
             IEnumerable<TItem> options,

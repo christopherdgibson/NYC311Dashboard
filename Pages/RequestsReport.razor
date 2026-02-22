@@ -1,6 +1,8 @@
 ﻿@inject IRequestService RequestService
 @inject IChartService ChartService
 @inject IPdfService PdfService
+@inject ISidebarService SidebarService
+@inject IMessagingService MessagingService
 @page "/requestsreport"
 
 @using CSharpFunctionalExtensions
@@ -11,7 +13,7 @@
 @using NYC311Dashboard.Extensions
 @using NYC311Dashboard.Services.Models
 
-<h2>Request Report</h2>
+<h1>Request Report</h1>
 
 @* <div class="red-background"> *@
 <div>
@@ -32,7 +34,7 @@
     } *@
     </div>
 </div>
-
+<ConfirmDialog @ref="MessagingService.confirmDialog" OnClose="MessagingService.OnDialogClosed" />
 @code {
     private List<RequestModel> requests = new List<RequestModel>();
     // private string? Borough;
@@ -44,6 +46,7 @@
     private HashSet<string> selectedZipCodes = new();
     private ChartOptions zipChartOptions = new();
 
+    private string message = "Please refresh data to populate boroughs list!";
     private bool chartNeedsRefresh = false;
     private int sortOrder = 0;
 
@@ -53,6 +56,10 @@
     {
         if (RequestService.Boroughs.Count == 0)
         {
+            SidebarService.SetSidebar(
+                SidebarService.RenderInactiveSidebarButton("No data available",
+                EventCallback.Factory.Create(this, () => MessagingService.ShowErrorDialog(message)))
+        );
             return;
         }
 
@@ -149,5 +156,10 @@
         var options = result.IsSuccess ? result.Value : zipChartOptions;
 
         return options;
+    }
+
+    public void Dispose()
+    {
+        SidebarService.SetSidebar(null);
     }
 }

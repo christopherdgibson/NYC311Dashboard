@@ -241,6 +241,11 @@ a, .btn-link {
     gap: 10px;
 }
 
+.apex-chart-flex-container {
+    width: 80%;
+    margin: auto;
+}
+
 .pdf-print-area {
     width: 190mm;
     min-height: 277mm;
@@ -285,7 +290,7 @@ a, .btn-link {
     padding-top: 1.1rem;
 }
 
-    .content h2 {
+    .content h1 {
         color: var(--top-gradient-color);
     }
 

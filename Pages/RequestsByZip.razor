@@ -1,6 +1,7 @@
 ﻿@inject IRequestService RequestService
 @inject IChartService ChartService
 @inject ISidebarService SidebarService
+@inject IMessagingService MessagingService
 @page "/requestsbyzip"
 
 @using CSharpFunctionalExtensions
@@ -12,7 +13,7 @@
 @using NYC311Dashboard.Services.Models
 
 
-<h2>Requests by Zip Code</h2>
+<h1>Requests by Zip Code</h1>
 
 
 
@@ -23,7 +24,7 @@
     <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
 } *@
 
-@if (zipCodes.Any())
+@* @if (zipCodes.Any())
 {
     <h3>Total calls and duration by selected Zip Codes</h3>
     <CheckboxDropdown TItem="string"
@@ -31,11 +32,11 @@
                       Options="@zipCodes"
                       @bind-SelectedValues="selectedZipCodes"
                       OnSelectionChanged="OnZipSelectionChanged" />
-}
+} *@
 
 @if (ShowChart)
 {
-    <div id="chart"></div>
+    <div id="chart" class="apex-chart-flex-container"></div>
     <div class="chart-flex-container">
         @foreach (var borough in selectedBoroughs)
         {
@@ -48,7 +49,7 @@
         }
     </div>
 }
-
+<ConfirmDialog @ref="MessagingService.confirmDialog" OnClose="MessagingService.OnDialogClosed" />
 @code {
     private List<RequestModel> requests = new List<RequestModel>();
     private List<ZipHourTableRow> requestsByZipHour = new List<ZipHourTableRow>();
@@ -58,7 +59,7 @@
     private HashSet<string> selectedZipCodes = new();
     private string? Zip;
     private string label = "Select Zip Codes";
-
+    private string message = "Please refresh data to populate boroughs list!";
     private ChartOptions chartOptions = new();
 
     private int sortOrder = 0;
@@ -69,6 +70,10 @@
     {
         if (RequestService.Boroughs.Count == 0)
         {
+            SidebarService.SetSidebar(
+                SidebarService.RenderInactiveSidebarButton("No data available",
+                EventCallback.Factory.Create(this, () => MessagingService.ShowErrorDialog(message)))
+        );
             return;
         }
 
@@ -91,7 +96,7 @@
 
         if (!chartOptions.HasData)
         {
-            chartOptions = GetChartOptions(width: "80%", height: "380");
+            chartOptions = GetChartOptions(height: "380");
         }
         SidebarService.SetSidebar(SidebarService.RenderCustomSidebar(
              label,
@@ -163,6 +168,11 @@
         var options = result.IsSuccess ? result.Value : chartOptions;
 
         return options;
+    }
+
+    public void Dispose()
+    {
+        SidebarService.SetSidebar(null);
     }
 
     public async ValueTask DisposeAsync()

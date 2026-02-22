@@ -1,6 +1,7 @@
 ﻿@inject IRequestService RequestService
 @inject IChartService ChartService
 @inject ISidebarService SidebarService
+@inject IMessagingService MessagingService
 
 @page "/requestsbyborough"
 
@@ -11,9 +12,10 @@
 @using NYC311Dashboard.Services.Contracts
 @using System.Text.Json
 @using NYC311Dashboard.Services.Models
-<h2>Requests by Borough</h2>
 
-@layout MainLayout
+<h1>Requests by Borough</h1>
+
+@* @layout MainLayout *@
 
 
 @* <CascadingValue Name="CustomSidebar" Value="CustomSidebar">
@@ -49,10 +51,12 @@
         <strong>Selected:</strong> @string.Join(", ", selectedBoroughs)
     </div>
     <h3>Total calls and duration by selected boroughs</h3>
-    <div id="chart"></div>
-    <SortableTable Items="requestsByBorough" Title="" />
+    <div class="apex-chart-flex-container">
+        <div id="chart"></div>
+        <SortableTable Items="requestsByBorough" Title="" />
+    </div>
 }
-
+<ConfirmDialog @ref="MessagingService.confirmDialog" OnClose="MessagingService.OnDialogClosed" />
 @code {
     private List<RequestModel> requests = new List<RequestModel>();
     private List<BoroughDateTableRow> requestsByBorough = new List<BoroughDateTableRow>();
@@ -72,11 +76,8 @@
         if (RequestService.Boroughs.Count == 0)
         {
             SidebarService.SetSidebar(
-            SidebarService.RenderSidebarButton(
-                "Refresh 311 data",
-                "sidebar-btn",
-                EventCallback.Factory.Create(this, () => MessagingService.ShowDialog(message, null))
-            )
+                SidebarService.RenderInactiveSidebarButton("No data available",
+                EventCallback.Factory.Create(this, () => MessagingService.ShowErrorDialog(message)))
         );
             return;
         }

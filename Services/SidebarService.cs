@@ -27,6 +27,14 @@ namespace NYC311Dashboard.Services
             CustomSidebar = fragment;
             OnSidebarChanged?.Invoke();
         }
+        public RenderFragment RenderInactiveSidebarButton(string buttonText, EventCallback onClick) => builder =>
+        {
+            builder.OpenElement(0, "button");
+            builder.AddAttribute(1, "class", "sidebar-btn");
+            builder.AddAttribute(2, "onclick", onClick);
+            builder.AddContent(3, buttonText);
+            builder.CloseElement();
+        };
 
         public RenderFragment RenderSidebarButton(string buttonText, string classes, EventCallback onClick) => builder =>
         {

@@ -17,7 +17,7 @@ namespace NYC311Dashboard.Services
         public MessageType CurrentType { get; set; } = MessageType.Info;
         public string? Message { get; set; } = "No requests loaded.";
 
-        private Func<Task> _onConfirm;
+        private Func<Task>? _onConfirm;
 
         public void ShowInfo(string? message = null)
         {
@@ -42,6 +42,7 @@ namespace NYC311Dashboard.Services
 
         public void ShowErrorDialog(string message)
         {
+            _onConfirm = null;
             confirmDialog.ShowError(message);
         }
 

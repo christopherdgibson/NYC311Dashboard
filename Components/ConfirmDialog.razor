@@ -1,18 +1,24 @@
-﻿@* ConfirmDialog.razor *@
-@if (IsVisible)
+﻿@if (IsVisible)
 {
     <div class="modal-backdrop" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);z-index:1050;">
         <div class="modal-dialog" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1060;min-width:300px;">
             <div class="modal-content" style="padding:1.5rem;">
-                <div class="modal-header">
+                <div class="modal-header @(isError ? "bg-danger text-white" : "")">
                     <h5 class="modal-title">@Title</h5>
                 </div>
                 <div class="modal-body">
                     @Message
                 </div>
                 <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:1rem;">
-                    <button class="btn btn-secondary" @onclick="OnCancelClicked">Cancel</button>
-                    <button class="btn btn-primary" @onclick="OnConfirmClicked">Confirm</button>
+                    @if (isError)
+                    {
+                        <button class="btn btn-danger" @onclick="OnCancelClicked">Dismiss</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary" @onclick="OnCancelClicked">Cancel</button>
+                        <button class="btn btn-primary" @onclick="OnConfirmClicked">Confirm</button>
+                    }
                 </div>
             </div>
         </div>
@@ -25,9 +31,20 @@
     [Parameter] public EventCallback<bool> OnClose { get; set; }
 
     private bool IsVisible { get; set; }
+    private bool isError { get; set; }
 
     public void Show(string message, string title = "Confirm")
     {
+        isError = false;
+        Message = message;
+        Title = title;
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    public void ShowError(string message, string title = "Error")
+    {
+        isError = true;
         Message = message;
         Title = title;
         IsVisible = true;

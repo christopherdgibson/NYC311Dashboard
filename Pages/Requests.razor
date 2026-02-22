@@ -9,7 +9,7 @@
 @using NYC311Dashboard.Services
 @using NYC311Dashboard.Services.Contracts
 
-<h2 class="blue-class">NYC 311 Requests</h2>
+<h1 class="blue-class">NYC 311 Requests</h1>
 
 <p>Please click below to refresh data.</p>
 
@@ -48,5 +48,10 @@
         await RequestService.GetNYC311RequestsDataAsync();
         requests = RequestService.Requests;
         StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        SidebarService.SetSidebar(null);
     }
 }
