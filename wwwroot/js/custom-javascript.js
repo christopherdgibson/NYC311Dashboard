@@ -9,6 +9,18 @@ function changeClassName(classNameOld, classNameNew) {
     }
 }
 
+function toggleNav() {
+    document.querySelector('nav ul').classList.toggle('nav-open');
+}
+
+function closeNavOnClick() {
+    document.querySelector('nav ul').addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') {
+            this.classList.remove('nav-open');
+        }
+    });
+}
+
 window.saveAsFile = function (fileName, bytesBase64) {
     var link = document.createElement('a');
     link.download = fileName;

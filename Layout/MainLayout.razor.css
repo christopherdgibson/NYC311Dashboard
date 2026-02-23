@@ -141,7 +141,7 @@ main {
     background-color: #CADFF2;
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
     .top-row {
         justify-content: space-between;
     }
@@ -149,7 +149,82 @@ main {
     .top-row ::deep a, .top-row ::deep .btn-link {
         margin-left: 0;
     }
+
+    .sidebar {
+        width: 100vw;
+        height: var(--header-width);
+        position: fixed;
+        left: 0;
+        top: 0;
+        overflow: hidden;
+        z-index: 10;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        background-image:none;
+    }
+
+    .sidebar-header {
+        width: var(--header-width);
+        height: 75px;
+        padding: 10px;
+        flex: 0 0 auto;
+    }
+
+    .sidebar-body {
+        flex: 1;
+        flex-direction: row;
+        align-items: center;
+        overflow: hidden;
+        background: none;
+        padding-left: 10%;
+        height: var(--header-width);
+        background-image: linear-gradient(90deg, var(--top-gradient-color) 0%, var(--bottom-gradient-color) 120%);
+    }
+
+    .sidebar-swap-container {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .sidebar-btn {
+        width: fit-content;
+        padding: 10px;
+    }
+
+    /*.scroll-to-top-btn {
+        position: static;*/ /* override the sticky */
+        /*flex: 0 0 auto;
+    }*/
+    .scroll-to-top-btn {
+        display: none;
+    }
+
+    .scroll-to-top-mobile-btn {
+        display: flex;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 40px;
+        justify-content: center;
+        align-items: center;
+        background: none;
+        border: none;
+    }
+
+    .check-expand-btn {
+        flex: 0 0 auto;
+        margin-right: 20px;
+        background: none;
+        border: none;
+    }
+
 }
+
 
 @media (min-width: 768px) {
     .page {
@@ -183,5 +258,11 @@ main {
         padding-right: 1.5rem !important;
     }
 
+    .check-expand-btn {
+        display: none;
+    }
 
+    .scroll-to-top-mobile-btn {
+        display: none;
+    }
 }

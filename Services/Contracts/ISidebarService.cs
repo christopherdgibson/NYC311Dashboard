@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
 
 namespace NYC311Dashboard.Services.Contracts
 {
@@ -26,5 +27,9 @@ namespace NYC311Dashboard.Services.Contracts
         Task ScrollToTop();
 
         Task ChangeClassName(string oldClassName, string newClassName);
+
+        Task ToggleNavbar(string element = "nav ul", string newClassName = "nav-open");
+
+        Task CloseNavOnClick(string element = "nav ul", string newClassName = "nav-open");
     }
 }
