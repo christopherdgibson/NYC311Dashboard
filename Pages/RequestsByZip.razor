@@ -38,11 +38,13 @@
         @foreach (var borough in selectedBoroughs)
         {
             var request = requestsByZipHour.Where(r => r.Borough == borough);
-
-            @*   <SortableTable Items="requestsByZipHour" Title="" /> *@
-            <div class="chart-flex-item">
-                <SortableTable Items="request" Title=@borough.ToProperCase() />
-            </div>
+            if (request.Any())
+            {
+                @*   <SortableTable Items="requestsByZipHour" Title="" /> *@
+                <div class="chart-flex-item">
+                    <SortableTable Items="request" Title=@borough.ToProperCase() />
+                </div>
+            }
         }
     </div>
 }
