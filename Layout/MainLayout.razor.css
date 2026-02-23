@@ -9,13 +9,13 @@ main {
 }
 
 .sidebar {
-    /*    --light-checker-color: #fff;
-    --dark-checker-color: #f7b731;
-    background-color: var(--light-checker-color);
-    opacity: 0.8;
-    background-image: repeating-linear-gradient(45deg, var(--dark-checker-color) 25%, transparent 25%, transparent 75%, var(--dark-checker-color) 75%, var(--dark-checker-color)), repeating-linear-gradient(45deg, var(--dark-checker-color) 25%, var(--light-checker-color) 25%, var(--light-checker-color) 75%, var(--dark-checker-color) 75%, var(--dark-checker-color));
-    background-position: 0 0, 50px 50px;
-    background-size: 100px 100px;*/
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+    z-index: 10;
     display: flex;
     flex-direction: column;
 }
@@ -27,8 +27,8 @@ main {
 
 .sidebar-header {
     padding: 20px;
-    height: 250px;
-    width: 250px;
+    width: var(--sidebar-width);
+    height: var(--sidebar-width);
     text-align: center;
     background-color: var(--top-gradient-color);
     /*border-bottom: 1px solid #dee2e6;*/
@@ -39,6 +39,7 @@ main {
     height: auto;
     display: block;
     margin: 0 auto;
+    z-index:12;
 }
 
 .sidebar-body {
@@ -140,7 +141,7 @@ main {
     background-color: #CADFF2;
 }
 
-@media (max-width: 640.98px) {
+@media (max-width: 767.98px) {
     .top-row {
         justify-content: space-between;
     }
@@ -150,7 +151,7 @@ main {
     }
 }
 
-@media (min-width: 641px) {
+@media (min-width: 768px) {
     .page {
         flex-direction: column;
         display: flex;
@@ -163,20 +164,6 @@ main {
         display: flex;
         height: 100vh; /* Full viewport height */
         overflow: hidden; /* Prevent scrollbars on root */
-    }
-
-    .sidebar {
-        width: 250px;
-        min-width: 250px;
-        max-width: 250px;
-        height: 100vh;
-        position: fixed; /* or sticky */
-        left: 0;
-        top: 0;
-        overflow-y: auto;
-        z-index: 100;
-        display: flex;
-        flex-direction: column;
     }
 
     .top-row {

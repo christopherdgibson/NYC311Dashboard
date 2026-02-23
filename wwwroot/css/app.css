@@ -4,7 +4,9 @@
     --top-gradient-color: rgb(5, 39, 103);
     --bottom-gradient-color: #f7b731;
     --btn-primary-blue: #007bff;
+    --sidebar-width: clamp(180px, 25vw, 250px);
 }
+
 html, body {
     overscroll-behavior-y: none;
 }

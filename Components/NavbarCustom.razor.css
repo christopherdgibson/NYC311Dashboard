@@ -6,8 +6,9 @@
 
 nav {
     background-image: linear-gradient(90deg, var(--top-gradient-color) 0%, var(--bottom-gradient-color) 120%);
-    margin-left:250px;
+    margin-left: var(--sidebar-width);
     display: flex;
+    min-height: 75px;
 }
 
     nav ul {
@@ -23,17 +24,16 @@ nav {
         nav ul li a {
             display: flex;
             color: white;
-            min-width: fit-content;
+            min-width: 100px;
             text-wrap-mode: nowrap;
             padding: 16px;
             text-decoration: none;
             position: relative;
-            /* width: 100px;*/
+            justify-content: center;
         }
 
             nav ul li a:hover {
                 color: var(--top-gradient-color);
-                /*  background-color: rgba(173, 229, 246);*/
                 background-color: var(--bottom-gradient-color);
             }
 
@@ -71,7 +71,6 @@ nav {
         }
 
     .dropdown:hover {
-        /*   background-color: rgba(173, 229, 246);*/
         background-color: var(--bottom-gradient-color);
     }
 
@@ -106,6 +105,8 @@ nav {
     .checkbtn {
         display: block;
         order: 1;
+        align-self: center;
+        margin-left: auto;
         margin-right: 20px;
     }
 
@@ -113,6 +114,7 @@ nav {
         position: relative;
         left: 0;
         width: 100%;
+        margin-left: 0;
     }
 
         nav ul {
@@ -127,17 +129,20 @@ nav {
             justify-content: center;
             align-items: center;
             transition: all 0.3s;
+            margin:0;
+            z-index:11;
         }
 
             nav ul li {
                 position: relative;
-                margin: 20px 0;
+                margin: 0;
                 width: calc(100%);
             }
 
                 nav ul li a {
                     font-size: 20px;
                     width: calc(100%);
+                    padding: 30px;
                     justify-content: center;
                 }
 
