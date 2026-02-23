@@ -302,7 +302,7 @@ a, .btn-link {
 
 .content-reports-page {
     flex: 1 1 auto;
-    margin-top: 1.5rem;
+    padding: 1.5rem;
     margin-left: var(--sidebar-width);
     /*height: 100vh;*/
     overflow-y: auto;
