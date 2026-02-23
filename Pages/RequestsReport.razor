@@ -2,7 +2,7 @@
 @inject IChartService ChartService
 @inject IPdfService PdfService
 @inject ISidebarService SidebarService
-@inject IMessagingService MessagingService
+@implements IDisposable
 @page "/requestsreport"
 
 @using CSharpFunctionalExtensions
@@ -15,30 +15,29 @@
 
 <h1>Request Report</h1>
 
-@* <div class="red-background"> *@
-<div>
-    <p>
-        <button class="btn btn-primary" @onclick="SaveAsPdf">Download PDF</button>
-    </p>
+<div class="pdf-print-border-area">
+    <div>
+@*         <p>
+            <button class="btn btn-primary" @onclick="SaveAsPdf">Download PDF</button>
+        </p> *@
 
-    <div id="pdf-content" class="pdf-print-area">
-        @if (ShowZipChart)
+        <div id="pdf-content" class="pdf-print-area">
+            @if (ShowZipChart)
+            {
+                <div id="chart"></div>
+                <SortableTable Items="requestsByZipHour" Title="" />
+            }
+            @* @if (!RequestService.Requests.Any())
         {
-            <div id="chart"></div>
-            <SortableTable Items="requestsByZipHour" Title="" />
-        }
-        @* @if (!RequestService.Requests.Any())
-    {
-    "Request data is empty. Would you like to refresh it?", "Refresh Confirmation"
-        <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
-    } *@
+        "Request data is empty. Would you like to refresh it?", "Refresh Confirmation"
+            <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
+        } *@
+        </div>
     </div>
 </div>
-<ConfirmDialog @ref="MessagingService.confirmDialog" OnClose="MessagingService.OnDialogClosed" />
+
 @code {
     private List<RequestModel> requests = new List<RequestModel>();
-    // private string? Borough;
-    // private string? Zip;
     private List<ZipHourTableRow> requestsByZipHour = new List<ZipHourTableRow>();
     private List<string> boroughs = new();
     private List<string> zipCodes = new();
@@ -57,8 +56,7 @@
         if (RequestService.Boroughs.Count == 0)
         {
             SidebarService.SetSidebar(
-                SidebarService.RenderInactiveSidebarButton("No data available",
-                EventCallback.Factory.Create(this, () => MessagingService.ShowErrorDialog(message)))
+                SidebarService.RenderInactiveSidebarButton("No data available", message)
         );
             return;
         }
@@ -74,6 +72,16 @@
         {
             zipChartOptions = GetZipChartOptions(height: "380");
         }
+
+        SidebarService.SetSidebar(
+            SidebarService.RenderSidebarButton(
+                "Download PDF",
+                "sidebar-btn",
+                "Save as PDF?",
+                SaveAsPdf)
+        );
+
+        await SidebarService.ChangeClassName("content", "content-reports-page");
 
         chartNeedsRefresh = ShowZipChart;
     }
@@ -111,7 +119,7 @@
                 Orientation = "portrait"
             }
         };
-        PdfService.RenderPdfDownload("pdf-content", options);
+        await PdfService.RenderPdfDownload("pdf-content", options);
         // await JS.InvokeVoidAsync("saveElementAsPdf", "pdf-content", options);
 
     }
@@ -159,6 +167,11 @@
     }
 
     public void Dispose()
+    {
+        SidebarService.ChangeClassName("content-reports-page", "content");
+    }
+
+    public void DisposeAsync()
     {
         SidebarService.SetSidebar(null);
     }

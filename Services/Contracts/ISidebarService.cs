@@ -10,9 +10,9 @@ namespace NYC311Dashboard.Services.Contracts
 
         void SetSidebar(RenderFragment? fragment);
 
-        RenderFragment RenderSidebarButton(string buttonText, string classes, EventCallback onClick);
+        RenderFragment RenderSidebarButton(string buttonText, string classes, string message, Func<Task>? onConfirm);
 
-        public RenderFragment RenderInactiveSidebarButton(string buttonText, EventCallback onClick);
+        public RenderFragment RenderInactiveSidebarButton(string buttonText, string message);
 
         public RenderFragment RenderCustomSidebar<TItem>(
             string label,
@@ -24,5 +24,7 @@ namespace NYC311Dashboard.Services.Contracts
             Func<TItem, string>? optionLabel = null);
 
         Task ScrollToTop();
+
+        Task ChangeClassName(string oldClassName, string newClassName);
     }
 }

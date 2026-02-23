@@ -2,8 +2,6 @@
 @using NYC311Dashboard.Services
 @using NYC311Dashboard.Services.Contracts
 
-
-
 @if (MessagingService.CurrentType == MessageType.Error)
 {
     <div class="error-message">@MessagingService.Message</div>
@@ -13,10 +11,20 @@ else if (MessagingService.CurrentType == MessageType.Info)
     <div class="info-message">@MessagingService.Message</div>
 }
 
+<ConfirmDialog @ref="confirmDialog" OnClose="MessagingService.OnDialogClosed" />
+
 @code {
+    private ConfirmDialog confirmDialog;
+
     protected override void OnInitialized()
     {
         MessagingService.OnMessageChanged += StateHasChanged;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+            MessagingService.confirmDialog = confirmDialog;
     }
 
     public void Dispose()

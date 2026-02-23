@@ -179,17 +179,6 @@ main {
         flex-direction: column;
     }
 
-
-
-    .content {
-        flex: 1 1 auto;
-        margin-left: 250px; /* Same as sidebar width */
-        /*height: 100vh;*/
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
-
     .top-row {
         position: sticky;
         top: 0;

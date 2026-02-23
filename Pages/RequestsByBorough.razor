@@ -1,7 +1,6 @@
 ﻿@inject IRequestService RequestService
 @inject IChartService ChartService
 @inject ISidebarService SidebarService
-@inject IMessagingService MessagingService
 
 @page "/requestsbyborough"
 
@@ -56,7 +55,7 @@
         <SortableTable Items="requestsByBorough" Title="" />
     </div>
 }
-<ConfirmDialog @ref="MessagingService.confirmDialog" OnClose="MessagingService.OnDialogClosed" />
+
 @code {
     private List<RequestModel> requests = new List<RequestModel>();
     private List<BoroughDateTableRow> requestsByBorough = new List<BoroughDateTableRow>();
@@ -76,8 +75,7 @@
         if (RequestService.Boroughs.Count == 0)
         {
             SidebarService.SetSidebar(
-                SidebarService.RenderInactiveSidebarButton("No data available",
-                EventCallback.Factory.Create(this, () => MessagingService.ShowErrorDialog(message)))
+                SidebarService.RenderInactiveSidebarButton("No data available", message)
         );
             return;
         }

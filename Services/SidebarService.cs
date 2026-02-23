@@ -27,20 +27,20 @@ namespace NYC311Dashboard.Services
             CustomSidebar = fragment;
             OnSidebarChanged?.Invoke();
         }
-        public RenderFragment RenderInactiveSidebarButton(string buttonText, EventCallback onClick) => builder =>
+        public RenderFragment RenderInactiveSidebarButton(string buttonText, string message) => builder =>
         {
             builder.OpenElement(0, "button");
             builder.AddAttribute(1, "class", "sidebar-btn");
-            builder.AddAttribute(2, "onclick", onClick);
+            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, () => _messagingService.ShowErrorDialog(message)));
             builder.AddContent(3, buttonText);
             builder.CloseElement();
         };
 
-        public RenderFragment RenderSidebarButton(string buttonText, string classes, EventCallback onClick) => builder =>
+        public RenderFragment RenderSidebarButton(string buttonText, string classes, string message, Func<Task>? onConfirm) => builder =>
         {
             builder.OpenElement(0, "button");
             builder.AddAttribute(1, "class", classes);
-            builder.AddAttribute(2, "onclick", onClick);
+            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, () => _messagingService.ShowDialog(message, onConfirm)));
             builder.AddContent(3, buttonText);
             builder.CloseElement();
         };
@@ -83,6 +83,11 @@ namespace NYC311Dashboard.Services
             {
                 _loadingService.IsLoading = false;
             }
+        }
+
+        public async Task ChangeClassName(string oldClassName, string newClassName)
+        {
+            await _js.InvokeVoidAsync("changeClassName", oldClassName, newClassName);
         }
 
         public async Task ScrollToTop()

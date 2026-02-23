@@ -5,7 +5,9 @@
     --bottom-gradient-color: #f7b731;
     --btn-primary-blue: #007bff;
 }
-
+html, body {
+    overscroll-behavior-y: none;
+}
 .table-responsive {
     overflow-x: auto;
     min-width: 0;
@@ -251,13 +253,14 @@ a, .btn-link {
     min-height: 277mm;
     margin: 0 auto;
     padding: 0mm;
-    border: 2px dashed #333;
+    /*border: 2px dashed #333;*/
     background: #fff;
     box-sizing: border-box;
 }
 
-.red-background {
-    background-color: grey !important
+.pdf-print-border-area {
+    background-color: grey !important;
+    margin: 20px;
 }
 
 .btn-primary {
@@ -287,12 +290,33 @@ a, .btn-link {
     }
 
 .content {
-    padding-top: 1.1rem;
+    flex: 1 1 auto;
+    margin-left: 250px; /* Same as sidebar width 
+    /*height: 100vh;*/
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overscroll-behavior-y: none;
 }
 
     .content h1 {
         color: var(--top-gradient-color);
     }
+
+.content-reports-page {
+    flex: 1 1 auto;
+    margin-left: 250px; /* Same as sidebar width */
+    /*height: 100vh;*/
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background: grey;
+}
+
+    .content-reports-page h1 {
+        color: white;
+    }
+
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;

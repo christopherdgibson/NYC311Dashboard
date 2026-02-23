@@ -2,6 +2,13 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function changeClassName(classNameOld, classNameNew) {
+    const el = document.querySelector(`.${classNameOld}`);
+    if (el) {
+        el.className = classNameNew;
+    }
+}
+
 window.saveAsFile = function (fileName, bytesBase64) {
     var link = document.createElement('a');
     link.download = fileName;

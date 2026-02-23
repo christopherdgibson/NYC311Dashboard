@@ -1,5 +1,4 @@
 ﻿@inject IRequestService RequestService
-@inject IMessagingService MessagingService
 @inject ISidebarService SidebarService
 @page "/requests"
 
@@ -13,10 +12,9 @@
 
 <p>Please click below to refresh data.</p>
 
-<p>
+@* <p>
     <button class="btn btn-primary" @onclick="() => MessagingService.ShowDialog(message, GetNYC311RequestsData)">Refresh 311 data</button>
-</p>
-<ConfirmDialog @ref="MessagingService.confirmDialog" OnClose="MessagingService.OnDialogClosed" />
+</p> *@
 
 
 @if (requests != null && requests.Count != 0)
@@ -35,12 +33,13 @@
         requests = RequestService.Requests;
 
         SidebarService.SetSidebar(
-            SidebarService.RenderSidebarButton(
-                "Refresh 311 data",
-                "sidebar-btn",
-                EventCallback.Factory.Create(this, () => MessagingService.ShowDialog(message, GetNYC311RequestsData))
-            )
-        );
+             SidebarService.RenderSidebarButton(
+                 "Refresh 311 data",
+                 "sidebar-btn",
+                 message,
+                 GetNYC311RequestsData
+             )
+         );
     }
 
     protected async Task GetNYC311RequestsData()

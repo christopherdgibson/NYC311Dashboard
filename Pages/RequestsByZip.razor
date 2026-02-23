@@ -12,10 +12,7 @@
 @using NYC311Dashboard.Extensions
 @using NYC311Dashboard.Services.Models
 
-
 <h1>Requests by Zip Code</h1>
-
-
 
 
 @* @if (!RequestService.Requests.Any())
@@ -49,7 +46,7 @@
         }
     </div>
 }
-<ConfirmDialog @ref="MessagingService.confirmDialog" OnClose="MessagingService.OnDialogClosed" />
+
 @code {
     private List<RequestModel> requests = new List<RequestModel>();
     private List<ZipHourTableRow> requestsByZipHour = new List<ZipHourTableRow>();
@@ -71,8 +68,7 @@
         if (RequestService.Boroughs.Count == 0)
         {
             SidebarService.SetSidebar(
-                SidebarService.RenderInactiveSidebarButton("No data available",
-                EventCallback.Factory.Create(this, () => MessagingService.ShowErrorDialog(message)))
+                SidebarService.RenderInactiveSidebarButton("No data available", message)
         );
             return;
         }
