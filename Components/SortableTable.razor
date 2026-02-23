@@ -14,7 +14,7 @@
                         @foreach (var prop in Properties)
                         {
                             <th>
-                                @prop.Name.FromCamelCaseToSpacedString()
+                                @prop.Name.FromCamelCaseToProperSpaced()
                                 <button class="icon-btn" @onclick="() => OnSort(prop)">
                                     <i class="bi @(SortColumn == prop ? (SortAscending ? "bi-sort-up" : "bi-sort-down") : "bi-arrow-down-up")"></i>
                                 </button>
@@ -35,7 +35,7 @@
                                     {
                                         @Math.Round(d, 2)
                                     }
-                                    else if (value is string s && s.Length > 100)
+                                    else if (value is string s && s.Length > 100)   
                                     {
                                         <ExpandableCell Text="@s" MaxLength="100" />
                                     }

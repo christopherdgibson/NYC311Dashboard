@@ -5,7 +5,7 @@ namespace NYC311Dashboard.Extensions
 {
     public static class StringExtensions
     {
-        public static string? FromCamelCaseToSpacedString(this string? target) =>
+        public static string? FromCamelCaseToProperSpaced(this string? target) =>
             target == null ? target :
             string.Concat(
                 target.Select((x, i) =>

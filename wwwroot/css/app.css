@@ -260,11 +260,6 @@ a, .btn-link {
     box-sizing: border-box;
 }
 
-.pdf-print-border-area {
-    background-color: grey !important;
-    margin: 20px;
-}
-
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
@@ -280,7 +275,6 @@ a, .btn-link {
     border: none;
     padding: 0 4px;
     margin: 0;
-    /*color: inherit;*/ /* Use parent text color */
     color: #007bff;
     cursor: pointer;
     vertical-align: middle;
@@ -293,7 +287,8 @@ a, .btn-link {
 
 .content {
     flex: 1 1 auto;
-    margin-left: 250px; /* Same as sidebar width 
+    padding: 1.5rem;
+    margin-left: var(--sidebar-width);
     /*height: 100vh;*/
     overflow-y: auto;
     display: flex;
@@ -307,7 +302,8 @@ a, .btn-link {
 
 .content-reports-page {
     flex: 1 1 auto;
-    margin-left: 250px; /* Same as sidebar width */
+    margin-top: 1.5rem;
+    margin-left: var(--sidebar-width);
     /*height: 100vh;*/
     overflow-y: auto;
     display: flex;
@@ -326,19 +322,17 @@ a, .btn-link {
 
 .dropdown-content {
     position: absolute;
-    left: 0; /* Anchor to the left */
-    top: 100%; /* Directly below the button */
-    min-width: 220px; /* Optional: set a minimum width */
+    left: 0;
+    top: 100%;
+    min-width: 220px;
     background: white;
     border: 1px solid #ccc;
     z-index: 1000;
     padding: 10px;
-    /*    cursor: pointer;*/
-    max-height: 250px; /* Set your desired max height */
-    overflow-y: auto; /* Enable vertical scrollbar if needed */
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Optional: subtle shadow */
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-/* To replace inline styles:  style="position: absolute; background: white; border: 1px solid #ccc; z-index: 1000; padding: 10px;" */
 
 .dropdown-row {
     display: flex;

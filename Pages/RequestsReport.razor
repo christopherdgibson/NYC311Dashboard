@@ -15,24 +15,22 @@
 
 <h1>Request Report</h1>
 
-<div class="pdf-print-border-area">
-    <div>
+<div>
 @*         <p>
-            <button class="btn btn-primary" @onclick="SaveAsPdf">Download PDF</button>
-        </p> *@
+        <button class="btn btn-primary" @onclick="SaveAsPdf">Download PDF</button>
+    </p> *@
 
-        <div id="pdf-content" class="pdf-print-area">
-            @if (ShowZipChart)
-            {
-                <div id="chart"></div>
-                <SortableTable Items="requestsByZipHour" Title="" />
-            }
-            @* @if (!RequestService.Requests.Any())
+    <div id="pdf-content" class="pdf-print-area">
+        @if (ShowZipChart)
         {
-        "Request data is empty. Would you like to refresh it?", "Refresh Confirmation"
-            <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
-        } *@
-        </div>
+            <div id="chart"></div>
+            <SortableTable Items="requestsByZipHour" Title="" />
+        }
+        @* @if (!RequestService.Requests.Any())
+    {
+    "Request data is empty. Would you like to refresh it?", "Refresh Confirmation"
+        <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
+    } *@
     </div>
 </div>
 
