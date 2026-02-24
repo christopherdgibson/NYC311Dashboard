@@ -2,69 +2,28 @@
 @using NYC311Dashboard.Extensions
 
 @typeparam TItem
+@* @typeparam TGroup *@
 
 <h4>@Title</h4>
 @* todo: May turn off borders on table-responsive or v-wrapper. Otherwise change margins so they do not fill *@
-<div class="table-responsive v-wrapper">
-    <table class="table table-sm fixed-width-table">
-        <thead>
-            <tr>
-                @foreach (var prop in Properties)
-                {
-                    <th>
-                        @prop.Name.FromCamelCaseToProperSpaced()
-                        <button class="icon-btn" @onclick="() => OnSort(prop)">
-                            <i class="bi @(SortColumn == prop ? (SortAscending ? "bi-sort-up" : "bi-sort-down") : "bi-arrow-down-up")"></i>
-                        </button>
-                    </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in SortedItems)
-            {
-                <tr>
-                    @foreach (var prop in Properties)
-                    {
-                        var value = prop.GetValue(item);
 
-                        <td>
-                            @if (value is double d)
-                            {
-                                @Math.Round(d, 2)
-                            }
-                            else if (value is string s && s.Length > 100)   
-                            {
-                                <ExpandableCell Text="@s" MaxLength="100" />
-                            }
-                            else if (value is DateTime?)
-                            {
-                                DateTime? dateTime;
-                                if (value == null)
-                                {
-                                    dateTime = null;
-                                }
-                                else
-                                {
-                                    dateTime = (DateTime)value;
-                                }
-
-                                @dateTime.ToDateTimeHour()
-                            ;
-                            }
-                            else
-                            {
-                                @value
-                            }
-                        </td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="chart-flex-container">
+    @foreach (var group in GetGroups())
+    {
+        <div class="chart-flex-item">
+        @if (GroupBy != null)
+        {
+            <h4>@group.Key</h4>
+        }
+        
+            @RenderTable(group)
+        </div>
+    }
 </div>
 
+
 @code {
+    [Parameter] public Func<TItem, string>? GroupBy { get; set; }
     [Parameter] public IEnumerable<TItem> Items { get; set; }
     [Parameter] public string Title { get; set; }
     private List<TItem> SortedItems => GetSortedItems();
@@ -74,11 +33,20 @@
     private PropertyInfo SortColumn { get; set; }
     private bool SortAscending { get; set; } = true;
 
-    // Filter properties with all empty values
-    private PropertyInfo[] GetProperties()
+    private IEnumerable<IGrouping<string, TItem>> GetGroups()
     {
+        if (GroupBy != null)
+            return Items.GroupBy(GroupBy);
+        else
+            return Items.GroupBy(_ => string.Empty);
+    }
+
+    // Filter properties with all empty values
+    private PropertyInfo[] GetProperties(IEnumerable<TItem>? items = null)
+    {
+        var source = items ?? Items;
         return typeof(TItem).GetProperties()
-            .Where(p => Items.Any(item =>
+            .Where(p => source.Any(item =>
             {
                 var value = p.GetValue(item);
                 if (value is string s) return !string.IsNullOrEmpty(s);
@@ -105,15 +73,86 @@
         }
     }
 
-    private List<TItem> GetSortedItems()
+    private List<TItem> GetSortedItems(IEnumerable<TItem>? items = null)
     {
+        var source = items ?? Items;
+        var filtered = source.Where(item =>
+            GetProperties(source).Any(p =>
+            {
+                var value = p.GetValue(item);
+                if (value is string s) return !string.IsNullOrEmpty(s);
+                return value != null;
+            })
+        );
         if (SortAscending)
-        {
-            return Items.OrderBy(x => SortColumn.GetValue(x)).ToList();
-        }
+            return filtered.OrderBy(x => SortColumn.GetValue(x)).ToList();
         else
-        {
-            return Items.OrderByDescending(x => SortColumn.GetValue(x)).ToList();
-        }
+            return filtered.OrderByDescending(x => SortColumn.GetValue(x)).ToList();
     }
+
+    private RenderFragment RenderTable<TGroup>(TGroup group) => __builder =>
+    {
+        var groupItems = group as IEnumerable<TItem>;
+        var properties = GetProperties(groupItems);
+        var sortedItems = GetSortedItems(groupItems);
+
+        <div class="table-responsive v-wrapper">
+            <table class="table table-sm fixed-width-table">
+                <thead>
+                    <tr>
+                        @foreach (var prop in properties)
+                        {
+                            <th>
+                                @prop.Name.FromCamelCaseToProperSpaced()
+                                <button class="icon-btn" @onclick="() => OnSort(prop)">
+                                    <i class="bi @(SortColumn == prop ? (SortAscending ? "bi-sort-up" : "bi-sort-down") : "bi-arrow-down-up")"></i>
+                                </button>
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in sortedItems)
+                    {
+                        <tr>
+                            @foreach (var prop in properties)
+                            {
+                                var value = prop.GetValue(item);
+
+                                <td>
+                                    @if (value is double d)
+                                    {
+                                        @Math.Round(d, 2)
+                                    }
+                                    else if (value is string s && s.Length > 100)
+                                    {
+                                        <ExpandableCell Text="@s" MaxLength="100" />
+                                    }
+                                    else if (value is DateTime?)
+                                    {
+                                        DateTime? dateTime;
+                                        if (value == null)
+                                        {
+                                            dateTime = null;
+                                        }
+                                        else
+                                        {
+                                            dateTime = (DateTime)value;
+                                        }
+
+                                        @dateTime.ToDateTimeHour()
+                                    ;
+                                    }
+                                    else
+                                    {
+                                        @value
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    };
 }

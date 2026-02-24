@@ -23,18 +23,7 @@
         <div id="chart" class="apex-chart-flex-container"></div>
 
         <h2>Table: Total requests by date for selected boroughs</h2>
-        <div class="chart-flex-container">
-            @foreach (var borough in selectedBoroughs)
-            {
-                var request = requestsByBorough.Where(r => r.Borough == borough);
-                if (request.Any())
-                {
-                    <div class="chart-flex-item">
-                        <SortableTable Items="request" Title=@borough.ToProperCase() />
-                    </div>
-                }
-            }
-        </div>
+        <SortableTable Items="requestsByBorough" Title="" GroupBy="r => r.Borough" />
     </div>
 }
 
