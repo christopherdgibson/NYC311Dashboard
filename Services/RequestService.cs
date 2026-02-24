@@ -1,6 +1,9 @@
-﻿using CSharpFunctionalExtensions;
+﻿using AutoMapper;
+using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging.Abstractions;
 using NYC311Dashboard.Extensions;
 using NYC311Dashboard.Intrastructure.Contracts;
+using NYC311Dashboard.Mapping;
 using NYC311Dashboard.Models;
 using NYC311Dashboard.Services.Contracts;
 
@@ -38,33 +41,55 @@ namespace NYC311Dashboard.Services
             _loadingService.LoadingMessage = "I'm loading here!";
             _loadingService.IsLoading = true;
 
-            url ??= sampleUrl;
-            var result = await LoadData<RequestModel>(url);
-            if (result.IsFailure)
+            try
             {
-                _messagingService.ShowError(string.Join(" ", "Failed to get data.", result.Error));
-                _loadingService.IsLoading = false;
-                return;
+                url ??= sampleUrl;
+                var result = await LoadData<RequestModel>(url);
+                if (result.IsFailure)
+                {
+                    _messagingService.ShowError(string.Join(" ", "Failed to get data.", result.Error));
+                    _loadingService.IsLoading = false;
+                    return;
+                }
+
+                //     requests.Clear();
+                //     sortOrder = 0;
+
+                Requests = result.Value.Where(r => r.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)).ToList();
+                Console.WriteLine("Before automapper");
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.AddProfile<RequestsMappingProfile>();
+                }, NullLoggerFactory.Instance);
+
+                var mapper = config.CreateMapper();
+
+                var output = mapper.Map<List<RequestTableRow>>(Requests);
+
+                Boroughs = output
+                .Where(r => !string.IsNullOrWhiteSpace(r.Borough) && !r.Borough.Equals("unspecified", StringComparison.OrdinalIgnoreCase))
+                .Select(r => r.Borough.ToProperCase())
+                .Distinct()
+                .OrderBy(b => b)
+                .ToList();
+
+                SelectedBoroughs ??= new HashSet<string>(Boroughs, StringComparer.OrdinalIgnoreCase);
+                _messagingService.Clear();
             }
-
-            //     requests.Clear();
-            //     sortOrder = 0;
-
-            Requests = result.Value.Where(r => r.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)).ToList();
-
-            Boroughs = Requests
-            .Where(r => !string.IsNullOrWhiteSpace(r.Borough) && !r.Borough.Equals("unspecified", StringComparison.OrdinalIgnoreCase))
-            .Select(r => r.Borough)
-            .Distinct()
-            .OrderBy(b => b)
-            .ToList();
-
-            SelectedBoroughs ??= Boroughs.ToHashSet();
-            _messagingService.Clear();
-            _loadingService.IsLoading = false;
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR: " + ex.Message);
+                Console.WriteLine(ex.ToString());
+                _messagingService.ShowError("An error occurred. Please try again.!");
+            }
+            finally
+            {
+                
+                _loadingService.IsLoading = false;
+            }
         }
 
-        public Result GenerateAggregateTable()
+        public Result GenerateTableByBoroughDay()
         {
             if (SelectedBoroughs == null)
             {
@@ -79,12 +104,14 @@ namespace NYC311Dashboard.Services
                 .GroupBy(row => new
                 {
                     row.Borough,
+                    CreatedDate = DateOnly.FromDateTime(row.CreatedDate.Value)
                 })
                 .Select(g =>
                 {
                     var aggDictionary = new BoroughDateTableRow
                     {
-                        Borough = g.Key.Borough,
+                        Borough = g.Key.Borough.ToProperCase(),
+                        CreatedDate = g.Key.CreatedDate,
                         Count = g.Count(),
                         OpenTime = g.Sum(row => (row.ClosedDate.Value - row.CreatedDate.Value).TotalMinutes)
                     };
@@ -120,7 +147,7 @@ namespace NYC311Dashboard.Services
                                         && row.ClosedDate.HasValue)
                     .GroupBy(row => new
                     {
-                        row.Borough,
+                        Borough = row.Borough.ToProperCase(),
                         Zip = row.IncidentZip,
                         CreatedDate = row.CreatedDate.TruncateToHour()
                     })
@@ -198,10 +225,10 @@ namespace NYC311Dashboard.Services
                 }
             }
 
-            SelectedZipBoroughs = SelectedBoroughs.ToHashSet();
+            SelectedZipBoroughs = new HashSet<string>(SelectedBoroughs, StringComparer.OrdinalIgnoreCase);
 
             // If SelectedZipCodes is null (first load), set to all zip codes
-            SelectedZipCodes ??= ZipCodes.ToHashSet();
+            SelectedZipCodes ??= new HashSet<string>(ZipCodes, StringComparer.OrdinalIgnoreCase);
 
             if (SelectedZipCodes == null || SelectedZipCodes.Count == 0)
             {

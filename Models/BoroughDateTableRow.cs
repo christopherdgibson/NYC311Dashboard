@@ -3,7 +3,7 @@
     public class BoroughDateTableRow
     {
         public string Borough { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateOnly? CreatedDate { get; set; }
         public int Count { get; set; }
         public double OpenTime { get; set; }
     }

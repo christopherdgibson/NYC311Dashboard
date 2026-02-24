@@ -6,6 +6,7 @@
 
 @using CSharpFunctionalExtensions
 @using NYC311Dashboard.Components
+@using NYC311Dashboard.Extensions
 @using NYC311Dashboard.Models
 @using NYC311Dashboard.Services
 @using NYC311Dashboard.Services.Contracts
@@ -23,9 +24,16 @@
 
         <h2>Table: Total requests by date for selected boroughs</h2>
         <div class="chart-flex-container">
-            <div class="chart-flex-item">
-                <SortableTable Items="requestsByBorough" Title="" />
-            </div>
+            @foreach (var borough in selectedBoroughs)
+            {
+                var request = requestsByBorough.Where(r => r.Borough == borough);
+                if (request.Any())
+                {
+                    <div class="chart-flex-item">
+                        <SortableTable Items="request" Title=@borough.ToProperCase() />
+                    </div>
+                }
+            }
         </div>
     </div>
 }
@@ -124,7 +132,7 @@
         requestsByBorough.Clear();
         sortOrder = 0;
 
-        var result = RequestService.GenerateAggregateTable();
+        var result = RequestService.GenerateTableByBoroughDay();
         if (result.IsFailure)
         {
             return;
@@ -137,11 +145,11 @@
     {
         //chartOptions = new();
         var totalDurations = selectedBoroughs
-            .Select(b => requestsByBorough.Where(r => r.Borough == b).Sum(r => r.OpenTime))
+            .Select(b => requestsByBorough.Where(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)).Sum(r => r.OpenTime))
             .ToList();
 
         var totalCounts = selectedBoroughs
-            .Select(b => (double)requests.Count(r => r.Borough == b))
+            .Select(b => (double)requests.Count(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         // var totalCountsDouble = totalCounts.Select(x => (double)x).ToList();

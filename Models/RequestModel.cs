@@ -106,8 +106,8 @@ namespace NYC311Dashboard.Models
         [JsonPropertyName("longitude")]
         public string Longitude { get; set; }
 
-        [JsonPropertyName("location")]
-        public Location Location { get; set; }
+        //[JsonPropertyName("location")]
+        //public Location Location { get; set; }
 
         [JsonPropertyName("park_facility_name")]
         public string ParkFacilityName { get; set; }
@@ -137,12 +137,12 @@ namespace NYC311Dashboard.Models
         public string BridgeHighwaySegment { get; set; }
     }
 
-    public class Location
-    {
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+    //public class Location
+    //{
+    //    [JsonPropertyName("type")]
+    //    public string Type { get; set; }
 
-        [JsonPropertyName("coordinates")]
-        public List<double> Coordinates { get; set; }
-    }
+    //    [JsonPropertyName("coordinates")]
+    //    public List<double> Coordinates { get; set; }
+    //}
 }

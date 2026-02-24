@@ -20,7 +20,7 @@ namespace NYC311Dashboard.Services.Contracts
 
         Task GetNYC311RequestsDataAsync(string? url = null);
 
-        Result GenerateAggregateTable();
+        Result GenerateTableByBoroughDay();
 
         Result GenerateTableByZipHour();
     }
