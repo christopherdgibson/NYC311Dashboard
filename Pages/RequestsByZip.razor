@@ -14,38 +14,25 @@
 
 <h1>Requests by Zip Code</h1>
 
-
-@* @if (!RequestService.Requests.Any())
-{
-"Request data is empty. Would you like to refresh it?", "Refresh Confirmation"
-    <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
-} *@
-
-@* @if (zipCodes.Any())
-{
-    <h3>Total calls and duration by selected Zip Codes</h3>
-    <CheckboxDropdown TItem="string"
-                      Label="Select Zip Codes"
-                      Options="@zipCodes"
-                      @bind-SelectedValues="selectedZipCodes"
-                      OnSelectionChanged="OnZipSelectionChanged" />
-} *@
-
 @if (ShowChart)
 {
-    <div id="chart" class="apex-chart-flex-container"></div>
-    <div class="chart-flex-container">
-        @foreach (var borough in selectedBoroughs)
-        {
-            var request = requestsByZipHour.Where(r => r.Borough == borough);
-            if (request.Any())
+    <div class="content-block">
+        <h2>Chart: Requests per hour by selected boroughs</h2>
+        <div id="chart" class="apex-chart-flex-container"></div>
+
+        <h2>Table: Requests per hour for selected zip codes</h2>
+        <div class="chart-flex-container">
+            @foreach (var borough in selectedBoroughs)
             {
-                @*   <SortableTable Items="requestsByZipHour" Title="" /> *@
-                <div class="chart-flex-item">
-                    <SortableTable Items="request" Title=@borough.ToProperCase() />
-                </div>
+                var request = requestsByZipHour.Where(r => r.Borough == borough);
+                if (request.Any())
+                {
+                    <div class="chart-flex-item">
+                        <SortableTable Items="request" Title=@borough.ToProperCase() />
+                    </div>
+                }
             }
-        }
+        </div>
     </div>
 }
 
@@ -56,7 +43,6 @@
     private List<string> zipCodes = new();
     private HashSet<string> selectedBoroughs = new();
     private HashSet<string> selectedZipCodes = new();
-    private string? Zip;
     private string label = "Select Zip Codes";
     private string message = "Please refresh data to populate boroughs list!";
     private ChartOptions chartOptions = new();
@@ -76,6 +62,7 @@
         }
 
         await RefreshRequestsByZipHour();
+
 
         // if (RequestService.RequestsByZipHour.Count == 0)
         // {

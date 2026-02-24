@@ -14,45 +14,19 @@
 
 <h1>Requests by Borough</h1>
 
-@* @layout MainLayout *@
-
-
-@* <CascadingValue Name="CustomSidebar" Value="CustomSidebar">
-    <h1>Page Content Here</h1>
- *@
-
-@* 
-<h2 class="blue-class">NYC 311 Requests by Borough</h2>
- *@
-
-@* <p>
-    <button class="btn btn-primary" @onclick="GetRequestsByBorough">Get data by Borough</button>
-</p> *@
-
-@* @if (!RequestService.Requests.Any())
-{
-"Request data is empty. Would you like to refresh it?", "Refresh Confirmation"
-    <ConfirmDialog @ref="RequestSerivce.confirmDialog" OnClose="RequestService.OnDialogClosed" />
-} *@
-@* 
-@if (boroughs.Any())
-{
-    <CheckboxDropdown TItem="string"
-                      Label="Select Boroughs"
-                      Options="@boroughs"
-                      @bind-SelectedValues="selectedBoroughs"
-                      OnSelectionChanged="OnBoroughSelectionChanged" />
-} *@
 
 @if (ShowChart)
 {
-    <div>
-        <strong>Selected:</strong> @string.Join(", ", selectedBoroughs)
-    </div>
-    <h3>Total calls and duration by selected boroughs</h3>
-    <div class="apex-chart-flex-container">
-        <div id="chart"></div>
-        <SortableTable Items="requestsByBorough" Title="" />
+    <div class="content-block">
+        <h2>Chart: Total requests and duration for selected boroughs</h2>
+        <div id="chart" class="apex-chart-flex-container"></div>
+
+        <h2>Table: Total requests by date for selected boroughs</h2>
+        <div class="chart-flex-container">
+            <div class="chart-flex-item">
+                <SortableTable Items="requestsByBorough" Title="" />
+            </div>
+        </div>
     </div>
 }
 

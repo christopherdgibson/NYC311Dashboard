@@ -8,18 +8,13 @@
 @using NYC311Dashboard.Services
 @using NYC311Dashboard.Services.Contracts
 
-<h1 class="blue-class">NYC 311 Requests</h1>
-
-<p>Please click below to refresh data.</p>
-
-@* <p>
-    <button class="btn btn-primary" @onclick="() => MessagingService.ShowDialog(message, GetNYC311RequestsData)">Refresh 311 data</button>
-</p> *@
-
+<h1>NYC 311 Requests</h1>
 
 @if (requests != null && requests.Count != 0)
 {
-    <SortableTable Items="requests" Title="" />
+    <div class="content-block"> @* todo: remove if settled on indenting *@
+        <SortableTable Items="requests" Title="" />
+    </div>
 }
 
 @code {

@@ -153,7 +153,7 @@ main {
 
     .sidebar {
         width: 100vw;
-        height: var(--header-width);
+        height: var(--header-height);
         position: fixed;
         left: 0;
         top: 0;
@@ -166,7 +166,7 @@ main {
     }
 
     .sidebar-header {
-        width: var(--header-width);
+        width: var(--header-height);
         height: 75px;
         padding: 10px;
         flex: 0 0 auto;
@@ -179,7 +179,7 @@ main {
         overflow: visible;
         background: none;
         padding-left: 10%;
-        height: var(--header-width);
+        height: var(--header-height);
         background-image: linear-gradient(90deg, var(--top-gradient-color) 0%, var(--bottom-gradient-color) 120%);
     }
 

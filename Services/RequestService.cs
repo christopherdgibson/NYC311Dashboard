@@ -62,7 +62,6 @@ namespace NYC311Dashboard.Services
             SelectedBoroughs ??= Boroughs.ToHashSet();
             _messagingService.Clear();
             _loadingService.IsLoading = false;
-            //return Result.Success();
         }
 
         public Result GenerateAggregateTable()
