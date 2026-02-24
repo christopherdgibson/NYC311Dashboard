@@ -501,12 +501,11 @@ nav {
         .dropdown:hover a {
             color: var(--top-gradient-color);
         }
-
-        .dropdown div {
+        nav .dropdown div {
             display: none;
         }
 
-            .dropdown div a {
+           nav .dropdown div a {
                 text-decoration: none;
                 text-wrap-mode: nowrap;
                 width: auto;
@@ -514,22 +513,22 @@ nav {
                 background-color: var(--top-gradient-color);
             }
 
-        .dropdown:hover {
+        nav .dropdown:hover {
             background-color: var(--bottom-gradient-color);
         }
 
-            .dropdown:hover div {
-                position: absolute;
+            nav .dropdown:hover div {
+/*                position: absolute;*/
                 display: block;
             }
 
-                .dropdown:hover div a {
+        /*        .dropdown:hover div a {
                     text-decoration: none;
                     text-wrap-mode: nowrap;
                     color: white;
-                }
+                }*/
 
-                    .dropdown:hover div a:hover {
+                    nav .dropdown:hover div a:hover {
                         color: var(--top-gradient-color);
                     }
 
