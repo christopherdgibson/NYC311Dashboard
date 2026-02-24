@@ -6,6 +6,7 @@
     --btn-primary-blue: #007bff;
     --sidebar-width: clamp(180px, 25vw, 250px);
     --header-width: 75px;
+    --btn-hover-color: #0056b3;
 }
 
 html, body {
@@ -182,6 +183,9 @@ html, body {
         transition: background-color 0.3s;
         box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     }
+        .sidebar-btn:hover {
+            background-color: var(--btn-hover-color);
+        }
 
 
     .expand-btn .bi-chevron-down {
@@ -413,14 +417,14 @@ html, body {
             }
 
     .loading-progress-text {
-        position: absolute;
-        text-align: center;
+/*        position: absolute;
+        text-align: center;*/
         font-weight: bold;
         inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
     }
 
         .loading-progress-text:after {
-            content: var(--blazor-load-percentage-text, "Loading");
+            content: var(--blazor-load-percentage-text, "I'm loading here!");
         }
 
     code {

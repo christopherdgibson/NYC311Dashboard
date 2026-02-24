@@ -31,6 +31,7 @@ main {
     height: var(--sidebar-width);
     text-align: center;
     background-color: var(--top-gradient-color);
+    align-content: center;
     /*border-bottom: 1px solid #dee2e6;*/
 }
 
@@ -51,12 +52,12 @@ main {
 }
 
 .scroll-to-top-btn {
-    position: sticky; /* Sticks to bottom when scrolling sidebar */
+    position: sticky;
     bottom: 0;
 }
 
     .scroll-to-top-btn:hover {
-        background-color: #0056b3; /* Darker blue on hover */
+        background-color: var(--btn-hover-color); /* Darker blue on hover */
     }
 
     /*.scroll-to-top-btn i {
@@ -216,13 +217,16 @@ main {
         border: none;
     }
 
-    .check-expand-btn {
+    .nav-expand-btn {
         flex: 0 0 auto;
         margin-right: 20px;
         background: none;
         border: none;
+        color: var(--top-gradient-color);
     }
-
+        .nav-expand-btn svg {
+            vertical-align: unset;
+        }
 }
 
 
@@ -258,7 +262,7 @@ main {
         padding-right: 1.5rem !important;
     }
 
-    .check-expand-btn {
+    .nav-expand-btn {
         display: none;
     }
 
