@@ -69,10 +69,28 @@
     [Parameter] public string Title { get; set; }
     private List<TItem> SortedItems => GetSortedItems();
 
-    private static PropertyInfo[] Properties = typeof(TItem).GetProperties();
+    private PropertyInfo[] Properties => GetProperties();
 
-    private PropertyInfo SortColumn { get; set; } = Properties.First();
+    private PropertyInfo SortColumn { get; set; }
     private bool SortAscending { get; set; } = true;
+
+    // Filter properties with all empty values
+    private PropertyInfo[] GetProperties()
+    {
+        return typeof(TItem).GetProperties()
+            .Where(p => Items.Any(item =>
+            {
+                var value = p.GetValue(item);
+                if (value is string s) return !string.IsNullOrEmpty(s);
+                return value != null;
+            }))
+            .ToArray();
+    }
+
+    protected override void OnParametersSet()
+    {
+        SortColumn ??= GetProperties().First();
+    }
 
     private void OnSort(PropertyInfo prop)
     {
@@ -90,8 +108,12 @@
     private List<TItem> GetSortedItems()
     {
         if (SortAscending)
+        {
             return Items.OrderBy(x => SortColumn.GetValue(x)).ToList();
+        }
         else
+        {
             return Items.OrderByDescending(x => SortColumn.GetValue(x)).ToList();
+        }
     }
 }
