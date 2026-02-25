@@ -21,7 +21,10 @@
         <div id="chart" class="apex-chart-flex-container"></div>
 
         <h2>Table: Requests per hour for selected zip codes</h2>
-        <SortableTable Items="requestsByZipHour" Title="" GroupBy="r => r.Borough" />
+        <div class="chart-flex-container">
+            <SortableTable Items="requestsByZipHour" Options=@GetTableOptions() />
+        </div>
+        
     </div>
 }
 
@@ -113,6 +116,17 @@
         }
 
         requestsByZipHour = RequestService.RequestsByZipHour;
+    }
+
+    protected TableOptions<ZipHourTableRow> GetTableOptions()
+    {
+        var options = new TableOptions<ZipHourTableRow>
+            {
+                GroupBy = r => r.Borough,
+                TableStyles = "chart-flex-item"
+            };
+
+            return options;
     }
 
     protected ChartOptions GetChartOptions(string? width = null, string? height = null)

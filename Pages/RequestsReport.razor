@@ -30,16 +30,7 @@
 
             <h3>Table: Requests per hour for selected zip codes</h3>
             <div class="chart-flex-container">
-                @foreach (var borough in selectedBoroughs)
-                {
-                    var request = requestsByZipHour.Where(r => r.Borough == borough);
-                    if (request.Any())
-                    {
-                        <div class="chart-flex-item">
-                            <SortableTable Items="request" Title=@borough.ToProperCase() />
-                        </div>
-                    }
-                }
+                <SortableTable Items="requestsByZipHour" Options=@zipHourOptions />
             </div>
     }
     </div>
@@ -61,6 +52,16 @@
 
     private bool ShowBoroughChart => requestsByBorough != null && requestsByBorough.Count != 0 && selectedBoroughs.Any();
     private bool ShowZipChart => requestsByZipHour != null && requestsByZipHour.Count != 0 && selectedZipCodes.Any();
+
+    private TableOptions<BoroughDateTableRow>? boroughDateOptions;
+    private TableOptions<ZipHourTableRow>? zipHourOptions;
+
+    protected override void OnInitialized()
+    {
+        boroughDateOptions = GetTableOptions<BoroughDateTableRow>(r => r.Borough);
+        zipHourOptions = GetTableOptions<ZipHourTableRow>(r => r.Borough);
+    }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -136,6 +137,17 @@
             }
         };
         await PdfService.RenderPdfDownload("pdf-content", options);
+    }
+
+    protected TableOptions<T> GetTableOptions<T>(Func<T, string>? groupBy)
+    {
+        var options = new TableOptions<T>
+        {
+            GroupBy = groupBy,
+            TableStyles = "chart-flex-item"
+        };
+
+        return options;
     }
 
     protected async Task RefreshRequestsByZipHour()

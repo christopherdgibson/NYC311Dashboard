@@ -1,37 +1,35 @@
 ﻿@using System.Reflection
 @using NYC311Dashboard.Extensions
+@using NYC311Dashboard.Services.Models
 
 @typeparam TItem
-@* @typeparam TGroup *@
 
-<h4>@Title</h4>
 @* todo: May turn off borders on table-responsive or v-wrapper. Otherwise change margins so they do not fill *@
 
-<div class="chart-flex-container">
+
     @foreach (var group in GetGroups())
     {
-        <div class="chart-flex-item">
-        @if (GroupBy != null)
-        {
-            <h4>@group.Key</h4>
-        }
-        
+        <div class="@TableStyles">
+            @if (GroupBy != null)
+            {
+                <h4>@group.Key</h4>
+            }
             @RenderTable(group)
         </div>
     }
-</div>
-
 
 @code {
-    [Parameter] public Func<TItem, string>? GroupBy { get; set; }
+    [Parameter] public TableOptions<TItem>? Options { get; set; }
     [Parameter] public IEnumerable<TItem> Items { get; set; }
-    [Parameter] public string Title { get; set; }
+
     private List<TItem> SortedItems => GetSortedItems();
-
     private PropertyInfo[] Properties => GetProperties();
-
     private PropertyInfo SortColumn { get; set; }
     private bool SortAscending { get; set; } = true;
+
+    // Options
+    private string? TableStyles;
+    private Func<TItem, string>? GroupBy;
 
     private IEnumerable<IGrouping<string, TItem>> GetGroups()
     {
@@ -54,10 +52,12 @@
             }))
             .ToArray();
     }
-
+    
     protected override void OnParametersSet()
     {
         SortColumn ??= GetProperties().First();
+        TableStyles = Options?.TableStyles;
+        GroupBy = Options?.GroupBy;
     }
 
     private void OnSort(PropertyInfo prop)

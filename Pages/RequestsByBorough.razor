@@ -23,7 +23,9 @@
         <div id="chart" class="apex-chart-flex-container"></div>
 
         <h2>Table: Total requests by date for selected boroughs</h2>
-        <SortableTable Items="requestsByBorough" Title="" GroupBy="r => r.Borough" />
+        <div class="chart-flex-container">
+            <SortableTable Items="requestsByBorough" Options=@GetTableOptions() />
+        </div>
     </div>
 }
 
@@ -128,6 +130,18 @@
         }
 
         requestsByBorough = RequestService.RequestsByBoroughDate;
+    }
+
+
+    protected TableOptions<BoroughDateTableRow> GetTableOptions()
+    {
+        var options = new TableOptions<BoroughDateTableRow>
+        {
+            GroupBy = r => r.Borough,
+            TableStyles = "chart-flex-item"
+        };
+
+        return options;
     }
 
     protected ChartOptions GetChartOptions(string? width = null, string? height = null)
