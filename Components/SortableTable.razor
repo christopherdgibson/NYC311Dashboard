@@ -1,6 +1,7 @@
 ﻿@using System.Reflection
 @using NYC311Dashboard.Extensions
 @using NYC311Dashboard.Services.Models
+@using System.Linq.Expressions
 
 @typeparam TItem
 
@@ -29,7 +30,7 @@
 
     // Options
     private string? TableStyles;
-    private Func<TItem, string>? GroupBy;
+    private Expression<Func<TItem, string>>? GroupBy;
 
     protected override void OnParametersSet()
     {
@@ -55,7 +56,7 @@
     {
         if (GroupBy != null)
         {
-            return Items.OrderBy(GroupBy).GroupBy(GroupBy);
+            return Items.OrderBy(GroupBy.Compile()).GroupBy(GroupBy.Compile());
         }
         else
         {
@@ -63,27 +64,35 @@
         }
     }
 
-    // Filter properties with all empty values
-    private PropertyInfo[] GetProperties(IGrouping<string, TItem>? group = null)
+    private string? GetGroupByPropertyName()
     {
-        var items = group as IEnumerable<TItem>;
+        //if (GroupBy == null) return null;
+        if (GroupBy?.Body is MemberExpression member)
+            return member.Member.Name; // returns "Borough"
+        return null;
+    }
+
+    // Filter properties with all empty values
+    private PropertyInfo[] GetProperties(IEnumerable<TItem>? items = null)
+    {
         var source = items ?? Items;
+        var groupByName = GetGroupByPropertyName();
         return typeof(TItem).GetProperties()
-            .Where(p => source.Any(item =>
+            .Where(p => !string.Equals(p.Name, groupByName, StringComparison.OrdinalIgnoreCase) && source.Any(item =>
             {
                 var value = p.GetValue(item);
-                if (value is string s) return (!string.IsNullOrEmpty(s) && !s.Equals(group?.Key,StringComparison.OrdinalIgnoreCase));
+                if (value is string s) return (!string.IsNullOrEmpty(s));
                 return value != null;
             }))
             .ToArray();
     }
 
-    private List<TItem> GetSortedItems(IGrouping<string, TItem>? group = null)
+    private List<TItem> GetSortedItems(IEnumerable<TItem>? items = null)
     {
-        var items = group as IEnumerable<TItem>;
         var source = items ?? Items;
+        var properties = GetProperties(items);
         var filtered = source.Where(item =>
-            GetProperties(group).Any(p =>
+            properties.Any(p =>
             {
                 var value = p.GetValue(item);
                 if (value is string s) return !string.IsNullOrEmpty(s);
@@ -102,9 +111,9 @@
 
     private RenderFragment RenderTable(IGrouping<string, TItem> group) => __builder =>
     {
-        //var groupItems = group as IEnumerable<TItem>; <-- remove if no further changes
-        var properties = GetProperties(group);
-        var sortedItems = GetSortedItems(group);
+        var groupItems = group as IEnumerable<TItem>;
+        var properties = GetProperties(groupItems);
+        var sortedItems = GetSortedItems(groupItems);
 
         <div class="table-responsive v-wrapper">
             <table class="table table-sm fixed-width-table">
