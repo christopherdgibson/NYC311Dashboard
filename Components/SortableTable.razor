@@ -36,7 +36,7 @@
     private IEnumerable<IGrouping<string, TItem>> GetGroups()
     {
         if (GroupBy != null)
-            return Items.GroupBy(GroupBy);
+            return Items.OrderBy(GroupBy).GroupBy(GroupBy);
         else
             return Items.GroupBy(_ => string.Empty);
     }
