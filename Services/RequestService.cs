@@ -56,7 +56,7 @@ namespace NYC311Dashboard.Services
 
                 Boroughs = Requests
                 .Where(r => !string.IsNullOrWhiteSpace(r.Borough) && !r.Borough.Equals("unspecified", StringComparison.OrdinalIgnoreCase))
-                .Select(r => r.Borough)
+                .Select(r => r.Borough.ToProperCase())
                 .Distinct()
                 .OrderBy(b => b)
                 .ToList();

@@ -161,7 +161,7 @@
             .ToList();
 
         var series = selectedBoroughs
-            .Where(borough => requestsByZipHour.Any(r => r.Borough == borough && selectedZipCodes.Contains(r.Zip)))
+            .Where(borough => requestsByZipHour.Any(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && selectedZipCodes.Contains(r.Zip)))
             .Select(borough => new ApexSeries
             {
                 Name = borough,
