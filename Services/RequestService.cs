@@ -14,6 +14,7 @@ namespace NYC311Dashboard.Services
         private readonly IHttpService _httpService;
         private readonly ILoadingService _loadingService;
         private readonly IMessagingService _messagingService;
+        private readonly IMapper _mapper;
         //private readonly string baseUrl = "https://data.cityofnewyork.us/resource/erm2-nwe9.json";
         private readonly string sampleUrl = "sample-data/NYC311Requests.json";
         private readonly string sampleUrlAbbr = "sample-data/NYC311RequestsAbr.json";
@@ -29,11 +30,12 @@ namespace NYC311Dashboard.Services
         public List<BoroughDateTableRow> RequestsByBoroughDate { get; private set; } = new();
         public List<ZipHourTableRow> RequestsByZipHour { get; private set; } = new();
 
-        public RequestService(IHttpService httpService, ILoadingService loadingService, IMessagingService messagingService)
+        public RequestService(IHttpService httpService, ILoadingService loadingService, IMessagingService messagingService, IMapper mapper)
         {
             _httpService = httpService;
             _loadingService = loadingService;
             _messagingService = messagingService;
+            _mapper = mapper;
         }
 
         public async Task GetNYC311RequestsDataAsync(string? url = null)
@@ -56,15 +58,8 @@ namespace NYC311Dashboard.Services
                 //     sortOrder = 0;
 
                 Requests = result.Value.Where(r => r.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)).ToList();
-                Console.WriteLine("Before automapper");
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.AddProfile<RequestsMappingProfile>();
-                }, NullLoggerFactory.Instance);
 
-                var mapper = config.CreateMapper();
-
-                var output = mapper.Map<List<RequestTableRow>>(Requests);
+                var output = _mapper.Map<List<RequestTableRow>>(Requests);
 
                 Boroughs = output
                 .Where(r => !string.IsNullOrWhiteSpace(r.Borough) && !r.Borough.Equals("unspecified", StringComparison.OrdinalIgnoreCase))

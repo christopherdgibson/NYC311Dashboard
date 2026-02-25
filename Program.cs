@@ -5,6 +5,8 @@ using NYC311Dashboard.Intrastructure.Contracts;
 using NYC311Dashboard.Services;
 using NYC311Dashboard.Services.Contracts;
 using System.Text.Json;
+using AutoMapper;
+using NYC311Dashboard.Mapping;
 
 namespace NYC311Dashboard
 {
@@ -24,6 +26,7 @@ namespace NYC311Dashboard
             builder.Services.AddScoped<IMessagingService, MessagingService>();
             builder.Services.AddScoped<ILoadingService, LoadingService>();
             builder.Services.AddScoped<IPdfService, PdfService>();
+            builder.Services.AddAutoMapper(cfg => { }, typeof(RequestsMappingProfile));
             builder.Services.Configure<JsonSerializerOptions>(options =>
             {
                 options.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
