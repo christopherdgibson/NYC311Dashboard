@@ -37,28 +37,26 @@ window.saveElementAsPdf = function (elementId, options) {
     var opt = {
         margin: options.margin,
         filename: options.fileName,
-        image: { type: options.image.type, quality: options.image.quality },
-        html2canvas: { scale: options.html2canvas.scale },
-        jsPDF: { unit: options.jsPDF.unit, format: options.jsPDF.format, orientation: options.jsPDF.orientation }
+        image: {
+            type: options.image.type,
+            quality: options.image.quality
+        },
+        html2canvas: {
+            scale: options.html2canvas.scale
+        },
+        jsPDF: {
+            unit: options.jsPDF.unit,
+            format: options.jsPDF.format,
+            orientation: options.jsPDF.orientation
+        },
+        pagebreak: {
+            mode: options.pagebreak.mode,
+            avoid: options.pagebreak.avoid
+        }
     };
     html2pdf().set(opt).from(element).save();
 }
 
-//window.saveElementAsPdf = function (elementId, fileName) {
-//    var element = document.getElementById(elementId);
-//        var opt = {
-//            margin: 100,
-//            filename: fileName,
-//            image: { type: 'jpeg', quality: 0.98 },
-//            html2canvas: { scale: 2 },
-//            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-//        };
-//    var originalBorder = element.style.border;
-//    element.style.border = "none";
-//    html2pdf().from(element).save(fileName).then(() => {
-//        element.style.border = originalBorder;
-//    });
-//}
 
 window.setIndeterminateSelection = (element, indeterminate) => {
     if (element) {

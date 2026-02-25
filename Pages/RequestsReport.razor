@@ -112,7 +112,7 @@
     {
         var options = new PdfOptions
         {
-            Margin = 20,
+            Margin = [10, 10, 10, 10],
             FileName = "custom.pdf",
             Image = new ImageOptions
             {
@@ -121,18 +121,21 @@
             },
             Html2Canvas = new Html2CanvasOptions
             {
-                Scale = 2
+                Scale =2
             },
             JsPDF = new JsPdfOptions
             {
                 Unit = "mm",
                 Format = "a4",
                 Orientation = "portrait"
+            },
+            PageBreak = new PageBreak
+            {
+                Mode = ["css", "avoid-all"],
+                Avoid = ["tr", "td", "h2", "h3", "h4"]
             }
         };
         await PdfService.RenderPdfDownload("pdf-content", options);
-        // await JS.InvokeVoidAsync("saveElementAsPdf", "pdf-content", options);
-
     }
 
     protected async Task RefreshRequestsByZipHour()

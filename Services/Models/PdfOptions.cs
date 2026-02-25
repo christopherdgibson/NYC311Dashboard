@@ -5,7 +5,7 @@ namespace NYC311Dashboard.Services.Models
     public class PdfOptions
     {
         [JsonPropertyName("margin")]
-        public int Margin { get; set; } = 10;
+        public int[] Margin { get; set; } = [10, 10, 10, 10];
 
         [JsonPropertyName("fileName")]
         public string FileName { get; set; } = "fileName.pdf";
@@ -14,10 +14,13 @@ namespace NYC311Dashboard.Services.Models
         public ImageOptions Image { get; set; } = new ImageOptions { Type = "jpeg", Quality = 0.98 };
 
         [JsonPropertyName("html2canvas")]
-        public Html2CanvasOptions Html2Canvas { get; set; } = new Html2CanvasOptions { Scale = 2 };
+        public Html2CanvasOptions Html2Canvas { get; set; } = new Html2CanvasOptions { Scale = 2, WindowWidth = 794 }; // A4 at 96dpi
 
         [JsonPropertyName("jsPDF")]
         public JsPdfOptions JsPDF { get; set; } = new JsPdfOptions { Unit = "mm", Format = "a4", Orientation = "portrait" };
+
+        [JsonPropertyName("pagebreak")]
+        public PageBreak PageBreak { get; set; } = new PageBreak { Mode = ["css", "avoid-all"] };
     }
 
     public class ImageOptions
@@ -33,6 +36,8 @@ namespace NYC311Dashboard.Services.Models
     {
         [JsonPropertyName("scale")]
         public int Scale { get; set; }
+        [JsonPropertyName("windowWidth")]
+        public int WindowWidth { get; set; }
     }
 
     public class JsPdfOptions
@@ -45,5 +50,14 @@ namespace NYC311Dashboard.Services.Models
 
         [JsonPropertyName("orientation")]
         public string Orientation { get; set; }
+    }
+
+    public class PageBreak
+    {
+        [JsonPropertyName("mode")]
+        public string[] Mode { get; set; }
+
+        [JsonPropertyName("avoid")]
+        public string[] Avoid { get; set; }
     }
 }

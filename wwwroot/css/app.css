@@ -261,11 +261,64 @@ html, body {
         width: 190mm;
         min-height: 220mm;
         margin: 0 auto;
-        padding: 20mm;
+        padding: 0; /* let html2pdf handle margins */
         /*border: 2px dashed #333;*/
         background: #fff;
         box-sizing: border-box;
     }
+
+        .pdf-print-area tr,
+        .pdf-print-area td,
+        .pdf-print-area h2,
+        .pdf-print-area h3,
+        .pdf-print-area h4,
+        .pdf-print-area .chart-flex-item
+        {
+            break-inside: avoid;
+            page-break-inside: avoid; /* keep as fallback */
+        }
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .pdf-print-area, .pdf-print-area * {
+        visibility: visible;
+    }
+
+    .pdf-print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+        /* Convert flex layouts to block for print */
+        .pdf-print-area .chart-flex-container,
+        .pdf-print-area .chart-flex-item,
+        .pdf-print-area .table-responsive {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        .pdf-print-area tr,
+        .pdf-print-area td,
+        .pdf-print-area th,
+        .pdf-print-area h2,
+        .pdf-print-area h3,
+        .pdf-print-area h4 {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .pdf-print-area h2,
+        .pdf-print-area h3,
+        .pdf-print-area h4 {
+            break-after: avoid; /* keeps header with following table */
+            page-break-after: avoid;
+        }
+}
 
     .btn-primary {
         color: #fff;
