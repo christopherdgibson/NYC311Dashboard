@@ -125,13 +125,13 @@
             .ToList();
 
         var series = selectedBoroughs
-            .Where(borough => requestsByZipHour.Any(r => r.Borough == borough && selectedZipCodes.Contains(r.Zip)))
+            .Where(borough => requestsByZipHour.Any(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && selectedZipCodes.Contains(r.Zip)))
             .Select(borough => new ApexSeries
             {
                 Name = borough,
                 Data = categories.Select(cat =>
                     requestsByZipHour
-                        .Where(r => r.Borough == borough && selectedZipCodes.Contains(r.Zip) && r.CreatedDate.ToDateTimeHour() == cat)
+                        .Where(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && selectedZipCodes.Contains(r.Zip) && r.CreatedDate.ToDateTimeHour() == cat)
                         .Sum(r => r.OpenTime)
                 ).ToList()
             })

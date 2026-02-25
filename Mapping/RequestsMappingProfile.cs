@@ -1,16 +1,11 @@
-﻿using AutoMapper;
-using NYC311Dashboard.Extensions;
-using NYC311Dashboard.Models;
-using System.IO.Compression;
-
-namespace NYC311Dashboard.Mapping
+﻿namespace NYC311Dashboard.Mapping
 {
-    public class RequestsMappingProfile : Profile
+    public class RequestsMappingProfile
     {
         public RequestsMappingProfile()
         {
-            CreateMap<RequestModel, RequestTableRow>()
-                 .ForMember(dest => dest.Borough, opt => opt.MapFrom(src => src.Borough.ToProperCase("en-GB")));
+            //CreateMap<RequestModel, RequestTableRow>()
+            //     .ForMember(dest => dest.Borough, opt => opt.MapFrom(src => src.Borough.ToProperCase("en-GB")));
         }
 
 

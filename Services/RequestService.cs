@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using CSharpFunctionalExtensions;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using CSharpFunctionalExtensions;
 using NYC311Dashboard.Extensions;
 using NYC311Dashboard.Intrastructure.Contracts;
-using NYC311Dashboard.Mapping;
 using NYC311Dashboard.Models;
 using NYC311Dashboard.Services.Contracts;
 
@@ -14,7 +11,6 @@ namespace NYC311Dashboard.Services
         private readonly IHttpService _httpService;
         private readonly ILoadingService _loadingService;
         private readonly IMessagingService _messagingService;
-        private readonly IMapper _mapper;
         //private readonly string baseUrl = "https://data.cityofnewyork.us/resource/erm2-nwe9.json";
         private readonly string sampleUrl = "sample-data/NYC311Requests.json";
         private readonly string sampleUrlAbbr = "sample-data/NYC311RequestsAbr.json";
@@ -30,12 +26,11 @@ namespace NYC311Dashboard.Services
         public List<BoroughDateTableRow> RequestsByBoroughDate { get; private set; } = new();
         public List<ZipHourTableRow> RequestsByZipHour { get; private set; } = new();
 
-        public RequestService(IHttpService httpService, ILoadingService loadingService, IMessagingService messagingService, IMapper mapper)
+        public RequestService(IHttpService httpService, ILoadingService loadingService, IMessagingService messagingService)
         {
             _httpService = httpService;
             _loadingService = loadingService;
             _messagingService = messagingService;
-            _mapper = mapper;
         }
 
         public async Task GetNYC311RequestsDataAsync(string? url = null)
@@ -59,11 +54,9 @@ namespace NYC311Dashboard.Services
 
                 Requests = result.Value.Where(r => r.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)).ToList();
 
-                var output = _mapper.Map<List<RequestTableRow>>(Requests);
-
-                Boroughs = output
+                Boroughs = Requests
                 .Where(r => !string.IsNullOrWhiteSpace(r.Borough) && !r.Borough.Equals("unspecified", StringComparison.OrdinalIgnoreCase))
-                .Select(r => r.Borough.ToProperCase())
+                .Select(r => r.Borough)
                 .Distinct()
                 .OrderBy(b => b)
                 .ToList();
@@ -79,7 +72,7 @@ namespace NYC311Dashboard.Services
             }
             finally
             {
-                
+
                 _loadingService.IsLoading = false;
             }
         }
@@ -98,14 +91,14 @@ namespace NYC311Dashboard.Services
                                     && row.ClosedDate.HasValue)
                 .GroupBy(row => new
                 {
-                    row.Borough,
+                    Borough = row.Borough.ToProperCase(),
                     CreatedDate = DateOnly.FromDateTime(row.CreatedDate.Value)
                 })
                 .Select(g =>
                 {
                     var aggDictionary = new BoroughDateTableRow
                     {
-                        Borough = g.Key.Borough.ToProperCase(),
+                        Borough = g.Key.Borough,
                         CreatedDate = g.Key.CreatedDate,
                         Count = g.Count(),
                         OpenTime = g.Sum(row => (row.ClosedDate.Value - row.CreatedDate.Value).TotalMinutes)
@@ -136,7 +129,7 @@ namespace NYC311Dashboard.Services
 
                 var requestsTable = Requests
                     .Where(row => row.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)
-                                        && SelectedBoroughs.Contains(row.Borough)
+                                        && SelectedBoroughs.Contains(row.Borough.ToProperCase())
                                         && SelectedZipCodes.Contains(row.IncidentZip)
                                         && row.CreatedDate.HasValue
                                         && row.ClosedDate.HasValue)
@@ -190,7 +183,7 @@ namespace NYC311Dashboard.Services
 
             ZipCodes = Requests
             .Where(r => !string.IsNullOrWhiteSpace(r.Borough)
-                && SelectedBoroughs.Contains(r.Borough)
+                && SelectedBoroughs.Contains(r.Borough.ToProperCase())
                 && !r.Borough.Equals("unspecified", StringComparison.OrdinalIgnoreCase)
                 && !string.IsNullOrEmpty(r.IncidentZip))
             .Select(r => r.IncidentZip)
