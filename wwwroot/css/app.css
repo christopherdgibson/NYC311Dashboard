@@ -11,7 +11,166 @@
 
 html, body {
     overscroll-behavior-y: none;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+    h1:focus {
+        outline: none;
+    }
+
+    a, .btn-link {
+        color: #0071c1;
+    }
+
+    .sidebar .collapseNavbar {
+        display: block;
+    }
+
+    .nav-item {
+        text-wrap-mode: nowrap !important;
+    }
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+.blazor-error-boundary {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
+    padding: 1rem 1rem 1rem 3.7rem;
+    color: white;
+}
+
+    .blazor-error-boundary::after {
+        content: "An error has occurred."
+    }
+
+
+code {
+    color: #c02d76;
+}
+
+/* ────────────────────────── Layout styles ────────────────────────── */
+
+.content {
+    flex: 1 1 auto;
+    padding: 2.5rem;
+    margin-left: var(--sidebar-width);
+    /*height: 100vh;*/
+    overflow-y: visible;
+    display: flex;
+    flex-direction: column;
+    overscroll-behavior-y: none;
+}
+
+    .content h1, h2, h3 {
+        color: var(--top-gradient-color);
+        margin-bottom: 2rem;
+    }
+
+    .content h2, h3 {
+        color: var(--top-gradient-color);
+        margin-left: 2rem;
+    }
+
+.pageview-block {
+        margin: 0 3rem;
+    }
+
+.content-reports-page {
+    flex: 1 1 auto;
+    padding: 2.5rem;
+    margin-left: var(--sidebar-width);
+    /*height: 100vh;*/
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background: grey;
+}
+
+    .content-reports-page h1 {
+        color: white;
+    }
+
+/* ─── Charts and tables ─── */
+
+.apex-chart-flex-container {
+    width: 80%;
+    margin: auto;
+}
+
+.table-flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Centers all items including orphan */
+}
+
+.table-flex-item {
+    flex: 0 1 calc(33.333% - 20px); /* Three per row with gap */
+    /*min-width: 350px;*/ /* Forces wrap on small screens */
+    /*max-width: 400px;*/
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    /*    text-align: center;*/
+    gap: 10px;
+}
+
+/* ─── Shared sidebar btn styles ─── */
+
+.sidebar-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--btn-primary-blue);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+    .sidebar-btn:hover {
+        background-color: var(--btn-hover-color);
+    }
+
+/* ────────────────────────── Sortable table styles ────────────────────────── */
 
 .table-responsive {
     overflow-x: auto;
@@ -33,13 +192,11 @@ html, body {
         max-width: 500px; /* Or whatever max you want */
     }
 
-    /* Optional: trim very long unbroken strings with ellipsis instead of overflowing */
+    /* Trim very long unbroken strings with ellipsis instead of overflowing */
     .table.fixed-width-table .truncate {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
-
 
 /* Horizontal scrolling container */
 .v-wrapper {
@@ -47,7 +204,7 @@ html, body {
     max-width: 100%;
     min-width: 0;
     width: min-content;
-/*    padding-right: 20px;*/
+    /*    padding-right: 20px;*/
     -webkit-overflow-scrolling: touch;
     border: 1px solid #ddd; /* optional for visibility */
 }
@@ -57,7 +214,7 @@ html, body {
     border-collapse: collapse;
     table-layout: fixed; /* enforce colgroup widths */
     width: max-content; /* allow table to exceed wrapper width */
-    font: inherit; /* blend with your site font */
+    font: inherit;
 }
 
     /* Cell styling */
@@ -86,7 +243,7 @@ html, body {
     word-break: break-word;
 }
 
-/* Optional: visually trim extremely long single tokens (URLs, GUIDs) */
+/* Trim extremely long single tokens (URLs, GUIDs) */
 .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -144,353 +301,82 @@ html, body {
         top: 2px;
     }
 
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255,255,255,0.7);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center horizontally */
-    justify-content: center; /* Center vertically */
+.icon-btn {
+    background: none;
+    border: none;
+    padding: 0 4px;
+    margin: 0;
+    color: #007bff;
+    cursor: pointer;
+    vertical-align: middle;
+    float: right;
 }
 
-    .loading-overlay img {
-        width: 8rem;
-        height: 8rem;
-        object-fit: contain;
-    }
-
-    .loading-overlay div {
-        overflow: visible;
-    }
-
-    /*Shared sidebar btn*/
-    .sidebar-btn {
-        width: 100%;
-        padding: 15px;
-        background-color: var(--btn-primary-blue);
-        color: white;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        font-size: 16px;
-        transition: background-color 0.3s;
-        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-    }
-        .sidebar-btn:hover {
-            background-color: var(--btn-hover-color);
-        }
-
-
-    .expand-btn .bi-chevron-down {
-        color: #007bff;
-        transition: color 0.2s;
-    }
-
-    .expand-btn:hover .bi-chevron-down {
-        color: #0056b3;
-        /* Optionally swap icon to filled version */
-    }
-
-    .expand-btn .hover-icon {
-        display: none;
-    }
-
-    .expand-btn:hover .default-icon {
-        display: none;
-    }
-
-    .expand-btn:hover .hover-icon {
-        display: inline;
-    }
-
-    .error-message {
-        color: red;
-    }
-
-    html, body {
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-
-    h1:focus {
+    .icon-btn:focus {
         outline: none;
     }
 
-    a, .btn-link {
-        color: #0071c1;
-    }
-
-    .sidebar .collapseNavbar {
-        display: block;
-    }
-
-    .nav-item {
-        text-wrap-mode: nowrap !important;
-    }
-
-    .chart-flex-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: space-evenly; /* Centers all items including orphan */
-    }
-
-    .chart-flex-item {
-        flex: 0 1 calc(33.333% - 20px); /* Three per row with gap */
-        /*min-width: 350px;*/ /* Forces wrap on small screens */
-        /*max-width: 400px;*/
-        display: grid;
-        grid-template-rows: auto auto 1fr;
-        /*    text-align: center;*/
-        gap: 10px;
-    }
-
-    .apex-chart-flex-container {
-        width: 80%;
-        margin: auto;
-    }
-
-    .pdf-print-area {
-        width: 190mm;
-        min-height: 220mm;
-        margin: 0 auto;
-        padding: 0; /* let html2pdf handle margins */
-        /*border: 2px dashed #333;*/
-        background: #fff;
-        box-sizing: border-box;
-    }
-
-        .pdf-print-area tr,
-        .pdf-print-area td,
-        .pdf-print-area h2,
-        .pdf-print-area h3,
-        .pdf-print-area h4,
-        .pdf-print-area .chart-flex-item
-        {
-            break-inside: avoid;
-            page-break-inside: avoid; /* keep as fallback */
-        }
-
-@media print {
-    body * {
-        visibility: hidden;
-    }
-
-    .pdf-print-area, .pdf-print-area * {
-        visibility: visible;
-    }
-
-    .pdf-print-area {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
-
-        /* Convert flex layouts to block for print */
-        .pdf-print-area .chart-flex-container,
-        .pdf-print-area .chart-flex-item,
-        .pdf-print-area .table-responsive {
-            display: block !important;
-            width: 100% !important;
-        }
-
-        .pdf-print-area tr,
-        .pdf-print-area td,
-        .pdf-print-area th,
-        .pdf-print-area h2,
-        .pdf-print-area h3,
-        .pdf-print-area h4 {
-            break-inside: avoid;
-            page-break-inside: avoid;
-        }
-
-        .pdf-print-area h2,
-        .pdf-print-area h3,
-        .pdf-print-area h4 {
-            break-after: avoid; /* keeps header with following table */
-            page-break-after: avoid;
-        }
+.expand-btn .bi-chevron-down {
+    color: #007bff;
+    transition: color 0.2s;
 }
 
-    .btn-primary {
-        color: #fff;
-        background-color: #1b6ec2;
-        border-color: #1861ac;
-    }
+.expand-btn:hover .bi-chevron-down {
+    color: #0056b3;
+    /* Swap icon to filled version? */
+}
 
-    .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-        box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-    }
+.expand-btn .hover-icon {
+    display: none;
+}
 
-    .icon-btn {
-        background: none;
-        border: none;
-        padding: 0 4px;
-        margin: 0;
-        color: #007bff;
+.expand-btn:hover .default-icon {
+    display: none;
+}
+
+.expand-btn:hover .hover-icon {
+    display: inline;
+}
+
+/* ────────────────────────── Checkbox dropdown styles ────────────────────────── */
+
+.dropdown-content {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    min-width: 220px;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    padding: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.dropdown-row {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s;
+}
+
+    .dropdown-row * {
         cursor: pointer;
-        vertical-align: middle;
-        float: right;
     }
 
-        .icon-btn:focus {
-            outline: none;
-        }
-
-    .content {
-        flex: 1 1 auto;
-        padding: 2.5rem;
-        margin-left: var(--sidebar-width);
-        /*height: 100vh;*/
-        overflow-y: visible;
-        display: flex;
-        flex-direction: column;
-        overscroll-behavior-y: none;
+    .dropdown-row:hover {
+        background: #f0f4fa;
     }
 
-        .content h1, h2, h3 {
-            color: var(--top-gradient-color);
-            margin-bottom: 2rem;
-        }
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
 
-        .content h2, h3 {
-            color: var(--top-gradient-color);
-            margin-left: 2rem;
-        }
+/* ────────────────────────── Navbar styles ────────────────────────── */
 
-    .content-reports-page {
-        flex: 1 1 auto;
-        padding: 2.5rem;
-        margin-left: var(--sidebar-width);
-        /*height: 100vh;*/
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        background: grey;
-    }
-
-        .content-reports-page h1 {
-            color: white;
-        }
-
-    .valid.modified:not([type=checkbox]) {
-        outline: 1px solid #26b050;
-    }
-
-    .dropdown-content {
-        position: absolute;
-        left: 0;
-        top: 100%;
-        min-width: 220px;
-        background: white;
-        border: 1px solid #ccc;
-        z-index: 1000;
-        padding: 10px;
-        max-height: 250px;
-        overflow-y: auto;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
-
-    .dropdown-row {
-        display: flex;
-        align-items: center;
-        padding: 4px 8px;
-        cursor: pointer;
-        border-radius: 4px;
-        transition: background 0.15s;
-    }
-
-        .dropdown-row * {
-            cursor: pointer;
-        }
-
-        .dropdown-row:hover {
-            background: #f0f4fa;
-        }
-
-    .invalid {
-        outline: 1px solid red;
-    }
-
-    .validation-message {
-        color: red;
-    }
-
-    #blazor-error-ui {
-        background: lightyellow;
-        bottom: 0;
-        box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-        display: none;
-        left: 0;
-        padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-        position: fixed;
-        width: 100%;
-        z-index: 1000;
-    }
-
-        #blazor-error-ui .dismiss {
-            cursor: pointer;
-            position: absolute;
-            right: 0.75rem;
-            top: 0.5rem;
-        }
-
-    .blazor-error-boundary {
-        background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
-        padding: 1rem 1rem 1rem 3.7rem;
-        color: white;
-    }
-
-        .blazor-error-boundary::after {
-            content: "An error has occurred."
-        }
-
-    .loading-progress {
-        position: relative;
-        display: block;
-        width: 8rem;
-        height: 8rem;
-        margin: 20vh auto 1rem auto;
-    }
-
-        .loading-progress circle {
-            fill: none;
-            stroke: #e0e0e0;
-            stroke-width: 0.6rem;
-            transform-origin: 50% 50%;
-            transform: rotate(-90deg);
-        }
-
-            .loading-progress circle:last-child {
-                stroke: #1b6ec2;
-                stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
-                transition: stroke-dasharray 0.05s ease-in-out;
-            }
-
-    .loading-progress-text {
-/*        position: absolute;
-        text-align: center;*/
-        font-weight: bold;
-        inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
-    }
-
-        .loading-progress-text:after {
-            content: var(--blazor-load-percentage-text, "I'm loading here!");
-        }
-
-    code {
-        color: #c02d76;
-    }
-
-/* Navbar */
 .logo-image {
     width: 50px;
     display: inline-flex;
@@ -528,7 +414,7 @@ nav {
                     color: white;
                     min-width: 100px;
                     text-wrap-mode: nowrap;
-                    padding: 0 1rem 0 1rem;
+                    padding: 0 1.5rem;
                     text-decoration: none;
                     position: relative;
                     justify-content: center;
@@ -539,8 +425,6 @@ nav {
                     nav ul li a:hover {
                         color: var(--top-gradient-color);
                     }
-
-
 
     .dropdown-hidden {
         position: relative;
@@ -579,7 +463,7 @@ nav {
         }
 
             nav .dropdown:hover div {
-/*                position: absolute;*/
+            /* position: absolute;*/
                 display: block;
             }
 
@@ -587,18 +471,8 @@ nav {
                         color: var(--top-gradient-color);
                     }
 
-    .checkbtn {
-        font-size: 30px;
-        color: white;
-        cursor: pointer;
-        display: none;
-    }
+/* ────────────────────────── Mobile styles ────────────────────────── */
 
-    #checkNav {
-        display: none;
-    }
-
-/* ── Mobile ── */
 @media (max-width: 768px) {
     .content {
         margin-left: 0;
@@ -614,7 +488,6 @@ nav {
     }
 
     nav {
-/*      display: none;*/
         position: relative;
         left: 0;
         width: 100%;
@@ -672,4 +545,133 @@ nav {
             nav ul.nav-open li a:hover div {
                 display: none;
             }
+}
+
+/* ────────────────────────── Loading styles ────────────────────────── */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.7);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+}
+
+    .loading-overlay img {
+        width: 8rem;
+        height: 8rem;
+        object-fit: contain;
+    }
+
+    .loading-overlay div {
+        overflow: visible;
+    }
+
+.error-message {
+    color: red;
+}
+
+/* ─── Blazor native loading styles ─── */
+
+.loading-progress {
+    position: relative;
+    display: block;
+    width: 8rem;
+    height: 8rem;
+    margin: 20vh auto 1rem auto;
+}
+
+    .loading-progress circle {
+        fill: none;
+        stroke: #e0e0e0;
+        stroke-width: 0.6rem;
+        transform-origin: 50% 50%;
+        transform: rotate(-90deg);
+    }
+
+        .loading-progress circle:last-child {
+            stroke: #1b6ec2;
+            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+            transition: stroke-dasharray 0.05s ease-in-out;
+        }
+
+.loading-progress-text {
+    /*        position: absolute;
+        text-align: center;*/
+    font-weight: bold;
+    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+}
+
+    .loading-progress-text:after {
+        content: var(--blazor-load-percentage-text, "I'm loading here!");
+    }
+
+/* ────────────────────────── Printing styles ────────────────────────── */
+
+.pdf-print-area {
+    width: 190mm;
+    min-height: 220mm;
+    margin: 0 auto;
+    padding: 0; /* let html2pdf handle margins */
+    /*border: 2px dashed #333;*/
+    background: #fff;
+    box-sizing: border-box;
+}
+
+    .pdf-print-area tr,
+    .pdf-print-area td,
+    .pdf-print-area h2,
+    .pdf-print-area h3,
+    .pdf-print-area h4,
+    .pdf-print-area .table-flex-item {
+        break-inside: avoid;
+        page-break-inside: avoid; /* keep as fallback */
+    }
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .pdf-print-area, .pdf-print-area * {
+        visibility: visible;
+    }
+
+    .pdf-print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+        /* Convert flex layouts to block for print */
+        .pdf-print-area .chart-flex-container,
+        .pdf-print-area .table-flex-item,
+        .pdf-print-area .table-responsive {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        .pdf-print-area tr,
+        .pdf-print-area td,
+        .pdf-print-area th,
+        .pdf-print-area h2,
+        .pdf-print-area h3,
+        .pdf-print-area h4 {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .pdf-print-area h2,
+        .pdf-print-area h3,
+        .pdf-print-area h4 {
+            break-after: avoid; /* keeps header with following table */
+            page-break-after: avoid;
+        }
 }
