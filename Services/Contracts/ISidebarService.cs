@@ -3,11 +3,15 @@ using System.Threading.Tasks;
 
 namespace NYC311Dashboard.Services.Contracts
 {
-    public interface ISidebarService
+    public interface ILayoutService
     {
-        RenderFragment? CustomSidebar { get; set; }
+        RenderFragment? CustomSidebar { get; }
+
+        public string? Title { get; }
 
         event Action? OnSidebarChanged;
+
+        void SetTitle(string? title);
 
         void SetSidebar(RenderFragment? fragment);
 

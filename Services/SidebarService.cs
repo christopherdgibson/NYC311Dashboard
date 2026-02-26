@@ -5,22 +5,30 @@ using NYC311Dashboard.Services.Contracts;
 
 namespace NYC311Dashboard.Services
 {
-    public class SidebarService : ISidebarService
+    public class LayoutService : ILayoutService
     {
         private readonly IJSRuntime _js;
         private readonly ILoadingService _loadingService;
         private readonly IMessagingService _messagingService;
 
-        public RenderFragment? CustomSidebar { get; set; }
+        public RenderFragment? CustomSidebar { get; private set; }
 
-        public SidebarService(IJSRuntime js, ILoadingService loadingService, IMessagingService messagingService)
+        public LayoutService(IJSRuntime js, ILoadingService loadingService, IMessagingService messagingService)
         {
             _js = js;
             _loadingService = loadingService;
             _messagingService = messagingService;
         }
 
+        public string? Title { get; private set; }
+
         public event Action? OnSidebarChanged;
+
+        public void SetTitle(string? title)
+        {
+            Title = title;
+            OnSidebarChanged?.Invoke(); // reuse existing event
+        }
 
         public void SetSidebar(RenderFragment? fragment)
         {

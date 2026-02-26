@@ -1,8 +1,9 @@
 ﻿@inject IRequestService RequestService
 @inject IChartService ChartService
 @inject IPdfService PdfService
-@inject ISidebarService SidebarService
+@inject ILayoutService LayoutService
 @implements IDisposable
+
 @page "/requestsreport"
 
 @using CSharpFunctionalExtensions
@@ -13,9 +14,6 @@
 @using NYC311Dashboard.Extensions
 @using NYC311Dashboard.Services.Models
 @using System.Linq.Expressions
-
-
-<h1>Requests Report</h1>
 
 @if (ShowBoroughChart || ShowZipChart)
 {
@@ -59,6 +57,7 @@
 
     protected override void OnInitialized()
     {
+        LayoutService.SetTitle("Requests Report");
         boroughDateOptions = GetTableOptions<BoroughDateTableRow>(r => r.Borough);
         zipHourOptions = GetTableOptions<ZipHourTableRow>(r => r.Borough);
     }
@@ -68,8 +67,8 @@
     {
         if (RequestService.Boroughs.Count == 0)
         {
-            SidebarService.SetSidebar(
-                SidebarService.RenderInactiveSidebarButton("No data available", message)
+            LayoutService.SetSidebar(
+                LayoutService.RenderInactiveSidebarButton("No data available", message)
         );
             return;
         }
@@ -86,15 +85,15 @@
             zipChartOptions = GetZipChartOptions(height: "380");
         }
 
-        SidebarService.SetSidebar(
-            SidebarService.RenderSidebarButton(
+        LayoutService.SetSidebar(
+            LayoutService.RenderSidebarButton(
                 "Download PDF",
                 "sidebar-btn",
                 "Save as PDF?",
                 SaveAsPdf)
         );
 
-        await SidebarService.ChangeClassName("content", "content-reports-page");
+        await LayoutService.ChangeClassName("content", "content-reports-page");
 
         chartNeedsRefresh = ShowZipChart;
     }
@@ -195,11 +194,6 @@
 
     public void Dispose()
     {
-        SidebarService.ChangeClassName("content-reports-page", "content");
-    }
-
-    public void DisposeAsync()
-    {
-        SidebarService.SetSidebar(null);
+        LayoutService.ChangeClassName("content-reports-page", "content");
     }
 }

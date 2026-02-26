@@ -1,6 +1,6 @@
 ﻿@inject IRequestService RequestService
 @inject IChartService ChartService
-@inject ISidebarService SidebarService
+@inject ILayoutService LayoutService
 
 @page "/requestsbyborough"
 
@@ -12,9 +12,6 @@
 @using NYC311Dashboard.Services.Contracts
 @using System.Text.Json
 @using NYC311Dashboard.Services.Models
-
-<h1>Requests by Borough</h1>
-
 
 @if (ShowChart)
 {
@@ -43,12 +40,17 @@
 
     private bool ShowChart => requestsByBorough != null && requestsByBorough.Any() && selectedBoroughs.Any();
 
+    protected override void OnInitialized()
+    {
+        LayoutService.SetTitle("Requests by Borough");
+    }
+
     protected override async Task OnInitializedAsync()
     {
         if (RequestService.Boroughs.Count == 0)
         {
-            SidebarService.SetSidebar(
-                SidebarService.RenderInactiveSidebarButton("No data available", message)
+            LayoutService.SetSidebar(
+                LayoutService.RenderInactiveSidebarButton("No data available", message)
         );
             return;
         }
@@ -71,7 +73,7 @@
             chartOptions = GetChartOptions(height: "380");
         }
 
-        SidebarService.SetSidebar(SidebarService.RenderCustomSidebar(
+        LayoutService.SetSidebar(LayoutService.RenderCustomSidebar(
              label,
              boroughs,
              selectedBoroughs,
@@ -172,12 +174,11 @@
     public void Dispose()
     {
         //dotNetRef?.Dispose();
-        SidebarService.SetSidebar(null);
     }
 
     public async ValueTask DisposeAsync()
     {
         await ChartService.DisposeApexChart();
-        //SidebarService.SetSidebar(null);
+        //LayoutService.SetSidebar(null);
     }
 }

@@ -2,8 +2,8 @@
 @using NYC311Dashboard.Components
 @using NYC311Dashboard.Services.Contracts
 @inherits LayoutComponentBase
-@inject ISidebarService SidebarService
-
+@inject ILayoutService LayoutService
+@inject NavigationManager Navigation
 
 
 <div class="">
@@ -13,16 +13,16 @@
         </div>
         <div class="sidebar-body">
             <div class="sidebar-swap-container">
-                @if (SidebarService.CustomSidebar != null)
+                @if (LayoutService.CustomSidebar != null)
                 {
-                    @SidebarService.CustomSidebar
+                    @LayoutService.CustomSidebar
                 }
             </div>
-            <button class="sidebar-btn scroll-to-top-btn" @onclick="SidebarService.ScrollToTop">
+            <button class="sidebar-btn scroll-to-top-btn" @onclick="LayoutService.ScrollToTop">
                 <i class="bi bi-arrow-up-circle-fill"></i>
                 <span>Top</span>
             </button>
-            <button class="nav-expand-btn" @onclick='() => SidebarService.ToggleNavbar()'>
+            <button class="nav-expand-btn" @onclick='() => LayoutService.ToggleNavbar()'>
                 <svg width="40"
                      height="40"
                      xmlns="http://www.w3.org/2000/svg"
@@ -35,12 +35,19 @@
     </div>
 
     <main>
-            <NavbarCustom />
+        <NavbarCustom />
         <GlobalLoadingOverlay />
         <article class="content">
+            @if (!string.IsNullOrEmpty(LayoutService.Title))
+            {
+                <h1>@LayoutService.Title</h1>
+            }
+            @if (Navigation.ToBaseRelativePath(Navigation.Uri) != "")
+            {
+                <ErrorBlock />
+            }
             @Body
-            <ErrorBlock />
-            <button class="scroll-to-top-mobile-btn icon-btn" @onclick="SidebarService.ScrollToTop">
+            <button class="scroll-to-top-mobile-btn icon-btn" @onclick="LayoutService.ScrollToTop">
                 <i class="bi bi-arrow-up-circle-fill"></i>
             </button>
         </article>
@@ -53,20 +60,20 @@
 
     protected override void OnInitialized()
     {
-        SidebarService.OnSidebarChanged += StateHasChanged;
+        LayoutService.OnSidebarChanged += StateHasChanged;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await SidebarService.CloseNavOnClick("nav ul", "nav-open");
+            await LayoutService.CloseNavOnClick("nav ul", "nav-open");
         }
     }
 
     public void Dispose()
     {
-        SidebarService.OnSidebarChanged -= StateHasChanged;
+        LayoutService.OnSidebarChanged -= StateHasChanged;
     }
 
     public async Task MainLayoutStateUpdate()

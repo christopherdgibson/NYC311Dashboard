@@ -1,7 +1,8 @@
 ﻿@inject IRequestService RequestService
 @inject IChartService ChartService
-@inject ISidebarService SidebarService
+@inject ILayoutService LayoutService
 @inject IMessagingService MessagingService
+
 @page "/requestsbyzip"
 
 @using CSharpFunctionalExtensions
@@ -11,8 +12,6 @@
 @using NYC311Dashboard.Services.Contracts
 @using NYC311Dashboard.Extensions
 @using NYC311Dashboard.Services.Models
-
-<h1>Requests by Zip Code</h1>
 
 @if (ShowChart)
 {
@@ -24,7 +23,6 @@
         <div class="chart-flex-container">
             <SortableTable Items="requestsByZipHour" Options=@GetTableOptions() />
         </div>
-        
     </div>
 }
 
@@ -43,12 +41,17 @@
     private bool chartNeedsRefresh = false;
     private bool ShowChart => requestsByZipHour != null && requestsByZipHour.Count != 0 && selectedZipCodes.Any();
 
+    protected override void OnInitialized()
+    {
+        LayoutService.SetTitle("Requests by Zip Code");
+    }
+
     protected override async Task OnInitializedAsync()
     {
         if (RequestService.Boroughs.Count == 0)
         {
-            SidebarService.SetSidebar(
-                SidebarService.RenderInactiveSidebarButton("No data available", message)
+            LayoutService.SetSidebar(
+                LayoutService.RenderInactiveSidebarButton("No data available", message)
         );
             return;
         }
@@ -75,7 +78,7 @@
         {
             chartOptions = GetChartOptions(height: "380");
         }
-        SidebarService.SetSidebar(SidebarService.RenderCustomSidebar(
+        LayoutService.SetSidebar(LayoutService.RenderCustomSidebar(
              label,
              zipCodes,
              selectedZipCodes,
@@ -156,11 +159,6 @@
         var options = result.IsSuccess ? result.Value : chartOptions;
 
         return options;
-    }
-
-    public void Dispose()
-    {
-        SidebarService.SetSidebar(null);
     }
 
     public async ValueTask DisposeAsync()

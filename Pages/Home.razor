@@ -1,16 +1,19 @@
-﻿@inject ISidebarService SidebarService
+﻿@inject ILayoutService LayoutService
 @page "/"
 @using NYC311Dashboard.Services.Contracts
 
 <PageTitle>Home</PageTitle>
 
-<h1>NYC 311 Dashboard!</h1>
-
 Welcome to the NYC 311 Dashboard!
 
 @code {
+
+    protected override void OnInitialized()
+    {
+        LayoutService.SetTitle("NYC 311 Dashboard");
+    }
     protected override async Task OnInitializedAsync()
     {
-        SidebarService.SetSidebar(null);
+        LayoutService.SetSidebar(null);
     }
 }

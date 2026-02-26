@@ -18,7 +18,7 @@ namespace NYC311Dashboard
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddScoped<IHttpService, HttpService>();
-            builder.Services.AddScoped<ISidebarService, SidebarService>();
+            builder.Services.AddScoped<ILayoutService, LayoutService>();
             builder.Services.AddScoped<IRequestService, RequestService>();
             builder.Services.AddScoped<IChartService, ChartService>();
             builder.Services.AddScoped<IMessagingService, MessagingService>();

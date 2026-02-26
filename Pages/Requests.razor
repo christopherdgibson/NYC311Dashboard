@@ -1,5 +1,5 @@
 ﻿@inject IRequestService RequestService
-@inject ISidebarService SidebarService
+@inject ILayoutService LayoutService
 @page "/requests"
 
 @using CSharpFunctionalExtensions
@@ -7,8 +7,6 @@
 @using NYC311Dashboard.Models
 @using NYC311Dashboard.Services
 @using NYC311Dashboard.Services.Contracts
-
-<h1>NYC 311 Requests</h1>
 
 @if (requests != null && requests.Count != 0)
 {
@@ -23,12 +21,17 @@
 
     private int sortOrder = 0;
 
+    protected override void OnInitialized()
+    {
+        LayoutService.SetTitle("NYC 311 Requests");
+    }
+
     protected override async Task OnInitializedAsync()
     {
         requests = RequestService.Requests;
 
-        SidebarService.SetSidebar(
-             SidebarService.RenderSidebarButton(
+        LayoutService.SetSidebar(
+             LayoutService.RenderSidebarButton(
                  "Refresh 311 data",
                  "sidebar-btn",
                  message,
@@ -42,10 +45,5 @@
         await RequestService.GetNYC311RequestsDataAsync();
         requests = RequestService.Requests;
         StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        SidebarService.SetSidebar(null);
     }
 }
