@@ -95,11 +95,11 @@
 
         if (firstRender)
         {
-            await ChartService.RenderBarChart(chartOptions);
+            await ChartService.RenderBarChart("#chart", chartOptions);
         }
         else
         {
-            await ChartService.RenderBarChart(chartOptions);
+            await ChartService.RenderBarChart("#chart", chartOptions);
 
             //dotNetRef = DotNetObjectReference.Create(this);
             //await JS.InvokeVoidAsync("notifyChartDivReady", dotNetRef);

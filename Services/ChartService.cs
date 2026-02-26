@@ -78,15 +78,21 @@ namespace NYC311Dashboard.Services
             }
         }
 
-        public async Task RenderBarChart(ChartOptions options)
+        public async Task RenderBarChart(string elementSelector, ChartOptions options)
         {
             try
             {
                 _loadingService.LoadingMessage = "I'm loading here!";
                 _loadingService.IsLoading = true;
 
-                await _js.InvokeVoidAsync("renderApexBarChart", options);
                 BarChartByBorough = options;
+
+                var error = await _js.InvokeAsync<string?>("renderApexBarChart", elementSelector, options);
+                if (error != null)
+                {
+                    _messagingService.ShowError(error);
+                }
+
             }
             catch
             {
@@ -98,15 +104,19 @@ namespace NYC311Dashboard.Services
             }
         }
 
-        public async Task RenderLineChart(ChartOptions options)
+        public async Task RenderLineChart(string elementSelector,ChartOptions options)
         {
             try
             {
                 _loadingService.LoadingMessage = "I'm loading here!";
                 _loadingService.IsLoading = true;
-
-                await _js.InvokeVoidAsync("renderApexChartMulti", options);
                 LineChartByZipHour = options;
+
+                var error = await _js.InvokeAsync<string?>("renderApexChartMulti", elementSelector, options);
+                if (error != null)
+                {
+                    _messagingService.ShowError(error);
+                }
             }
             catch
             {

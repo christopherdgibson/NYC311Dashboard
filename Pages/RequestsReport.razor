@@ -25,7 +25,7 @@
         @if (ShowZipChart)
         {
             <h3>Chart: Requests per hour by selected boroughs</h3>
-            <div id="chart" class="apex-chart-flex-container"></div>
+            <div id="chart-zip" class="apex-chart-flex-container"></div>
 
             <h3>Table: Requests per hour for selected zip codes</h3>
             <div class="table-flex-container">
@@ -43,10 +43,12 @@
     private List<string> zipCodes = new();
     private HashSet<string> selectedBoroughs = new();
     private HashSet<string> selectedZipCodes = new();
+    private ChartOptions boroughChartOptions = new();
     private ChartOptions zipChartOptions = new();
 
     private string message = "Please refresh data to populate boroughs list!";
-    private bool chartNeedsRefresh = false;
+    private bool zipChartNeedsRefresh = false;
+    private bool boroughChartNeedsRefresh = false;
     private int sortOrder = 0;
 
     private bool ShowBoroughChart => requestsByBorough != null && requestsByBorough.Count != 0 && selectedBoroughs.Any();
@@ -95,18 +97,23 @@
 
         await LayoutService.ChangeClassName("content", "content-reports-page");
 
-        chartNeedsRefresh = ShowZipChart;
+        boroughChartNeedsRefresh = ShowBoroughChart;
+        zipChartNeedsRefresh = ShowZipChart;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!chartNeedsRefresh)
+        if (zipChartNeedsRefresh)
         {
-            return;
+            zipChartNeedsRefresh = false;
+            await ChartService.RenderLineChart("#chart-zip", zipChartOptions);
         }
 
-        chartNeedsRefresh = false;
-        await ChartService.RenderLineChart(zipChartOptions);
+        if (boroughChartNeedsRefresh)
+        {
+            boroughChartNeedsRefresh = false;
+            await ChartService.RenderBarChart("#chart-zip", boroughChartOptions);
+        }
     }
 
     private async Task SaveAsPdf()

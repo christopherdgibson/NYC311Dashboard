@@ -97,7 +97,7 @@
         }
 
         chartNeedsRefresh = false;
-        await ChartService.RenderLineChart(chartOptions);
+        await ChartService.RenderLineChart("#chart", chartOptions);
     }
 
     private async Task OnZipSelectionChanged()

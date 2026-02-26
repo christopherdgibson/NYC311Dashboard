@@ -74,7 +74,7 @@ window.renderApexChart = function (seriesData, categories, width = "100%", heigh
     chart.render();
 }
 
-window.renderApexChartMulti = function (options) {
+window.renderApexChartMulti = function (elementSelector, options) {
     var options = {
         chart: {
             type: options.chart.type,
@@ -105,11 +105,17 @@ window.renderApexChartMulti = function (options) {
     if (window.chartInstance) {
         window.chartInstance.destroy();
     }
-    window.chartInstance = new ApexCharts(document.querySelector("#chart"), options);
+
+    var chartDiv = document.querySelector(elementSelector);
+    if (chartDiv) {
+        window.chartInstance = new ApexCharts(chartDiv, options);
     window.chartInstance.render();
+    } else {
+        return `Chart element '${elementSelector}' not found`;
+    }
 }
 
-window.renderApexBarChart = function (options) {
+window.renderApexBarChart = function (elementSelector, options) {
     var options = {
         chart: {
             type: options.chart.type,
@@ -171,8 +177,14 @@ window.renderApexBarChart = function (options) {
     if (window.chartInstance) {
         window.chartInstance.destroy();
     }
-    window.chartInstance = new ApexCharts(document.querySelector("#chart"), options);
+
+    var chartDiv = document.querySelector(elementSelector);
+    if (chartDiv) {
+        window.chartInstance = new ApexCharts(chartDiv, options);
     window.chartInstance.render();
+    } else {
+        return `Chart element '${elementSelector}' not found`;
+    }
 }
 
 window.updateApexChart = function (options) {

@@ -580,6 +580,8 @@ nav {
 
 .error-message {
     color: red;
+    background-color: white;
+    width: fit-content;
 }
 
 /* ─── Blazor native loading styles ─── */

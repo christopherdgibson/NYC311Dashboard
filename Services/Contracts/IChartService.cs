@@ -10,9 +10,9 @@ namespace NYC311Dashboard.Services.Contracts
 
         Result<ChartOptions> GetBarChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null);
 
-        Task RenderBarChart(ChartOptions options);
+        Task RenderBarChart(string elementSelector, ChartOptions options);
 
-        Task RenderLineChart(ChartOptions options);
+        Task RenderLineChart(string elementSelector, ChartOptions options);
 
         Task UpdateApexChart(ChartOptions options);
 
