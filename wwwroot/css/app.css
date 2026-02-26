@@ -306,7 +306,7 @@ code {
     border: none;
     padding: 0 4px;
     margin: 0;
-    color: #007bff;
+    color: var(--btn-primary-blue);
     cursor: pointer;
     vertical-align: middle;
     float: right;
@@ -316,13 +316,17 @@ code {
         outline: none;
     }
 
+    .icon-btn:hover {
+        color: var(--btn-hover-color)
+    }
+
 .expand-btn .bi-chevron-down {
-    color: #007bff;
+    color: var(--btn-primary-blue);
     transition: color 0.2s;
 }
 
 .expand-btn:hover .bi-chevron-down {
-    color: #0056b3;
+    color: var(--btn-hover-color)
     /* Swap icon to filled version? */
 }
 

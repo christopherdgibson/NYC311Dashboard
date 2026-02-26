@@ -44,11 +44,12 @@ namespace NYC311Dashboard.Services
                     return Result.Failure<ChartOptions>("No boroughs selected!");
                 }
 
+                categories.Sort();
                 var options = new ChartOptions
                 {
                     Chart = new Chart { Type = type },
                     XAxis = new XAxis { Categories = categories },
-                    Series = series,
+                    Series = series.OrderBy(r => r.Name).ToList(),
                     Width = width,
                     Height = height
                 };
