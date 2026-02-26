@@ -350,7 +350,7 @@ html, body {
         padding: 2.5rem;
         margin-left: var(--sidebar-width);
         /*height: 100vh;*/
-        overflow-y: auto;
+        overflow-y: visible;
         display: flex;
         flex-direction: column;
         overscroll-behavior-y: none;
