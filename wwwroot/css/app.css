@@ -144,7 +144,7 @@ code {
     /*min-width: 350px;*/ /* Forces wrap on small screens */
     /*max-width: 400px;*/
     display: grid;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto;
     /*    text-align: center;*/
     gap: 10px;
 }
@@ -629,15 +629,20 @@ nav {
     box-sizing: border-box;
 }
 
-    /*.pdf-print-area tr,
+    .pdf-print-area tr,
     .pdf-print-area td,
     .pdf-print-area h2,
     .pdf-print-area h3,
     .pdf-print-area h4,
     .pdf-print-area .table-flex-item {
         break-inside: avoid;
-        page-break-inside: avoid;*/ /* keep as fallback */
-    /*}*/
+        page-break-inside: avoid; /* keep as fallback */
+    }
+
+    .pdf-print-area h4 {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
 
     .pdf-print-area .fixed-width-table {
         font-size: 0.5rem;

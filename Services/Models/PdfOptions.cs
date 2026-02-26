@@ -55,9 +55,9 @@ namespace NYC311Dashboard.Services.Models
     public class PageBreak
     {
         [JsonPropertyName("mode")]
-        public string[] Mode { get; set; }
+        public string[]? Mode { get; set; }
 
         [JsonPropertyName("avoid")]
-        public string[] Avoid { get; set; }
+        public string[]? Avoid { get; set; }
     }
 }
