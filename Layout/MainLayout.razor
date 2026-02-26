@@ -61,6 +61,7 @@
     protected override void OnInitialized()
     {
         LayoutService.OnSidebarChanged += StateHasChanged;
+        LayoutService.OnLocationChanged += StateHasChanged;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -74,10 +75,6 @@
     public void Dispose()
     {
         LayoutService.OnSidebarChanged -= StateHasChanged;
-    }
-
-    public async Task MainLayoutStateUpdate()
-    {
-        StateHasChanged();        
+        LayoutService.OnLocationChanged -= StateHasChanged;
     }
 }

@@ -1,28 +1,34 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using NYC311Dashboard.Components;
 using NYC311Dashboard.Services.Contracts;
 
 namespace NYC311Dashboard.Services
 {
-    public class LayoutService : ILayoutService
+    public class LayoutService : ILayoutService, IDisposable
     {
+        private readonly NavigationManager _navigation;
         private readonly IJSRuntime _js;
         private readonly ILoadingService _loadingService;
         private readonly IMessagingService _messagingService;
 
         public RenderFragment? CustomSidebar { get; private set; }
 
-        public LayoutService(IJSRuntime js, ILoadingService loadingService, IMessagingService messagingService)
+        public LayoutService(NavigationManager navigation, IJSRuntime js, ILoadingService loadingService, IMessagingService messagingService)
         {
+            _navigation = navigation;
             _js = js;
             _loadingService = loadingService;
             _messagingService = messagingService;
+
+            _navigation.LocationChanged += OnNavigationChanged;
         }
 
         public string? Title { get; private set; }
 
         public event Action? OnSidebarChanged;
+        public event Action? OnLocationChanged;
 
         public void SetTitle(string? title)
         {
@@ -92,6 +98,20 @@ namespace NYC311Dashboard.Services
                 _loadingService.IsLoading = false;
             }
         }
+        private async void OnNavigationChanged(object? sender, LocationChangedEventArgs e)
+        {
+            try
+            {
+                //SetTitle(null); if needed later
+                await ScrollToTop();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Navigation handler failed: {ex.Message}");
+            }
+
+            OnLocationChanged?.Invoke();
+        }
 
         public async Task ChangeClassName(string oldClassName, string newClassName)
         {
@@ -111,6 +131,10 @@ namespace NYC311Dashboard.Services
         public async Task ScrollToTop()
         {
             await _js.InvokeVoidAsync("scrollToTop");
+        }
+        public void Dispose()
+        {
+            _navigation.LocationChanged -= OnNavigationChanged;
         }
     }
 }

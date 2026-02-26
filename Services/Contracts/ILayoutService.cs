@@ -11,6 +11,8 @@ namespace NYC311Dashboard.Services.Contracts
 
         event Action? OnSidebarChanged;
 
+        event Action? OnLocationChanged;
+
         void SetTitle(string? title);
 
         void SetSidebar(RenderFragment? fragment);
