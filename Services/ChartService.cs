@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
+using NYC311Dashboard.Extensions;
 using NYC311Dashboard.Services.Contracts;
 using NYC311Dashboard.Services.Models;
 
@@ -9,19 +10,21 @@ namespace NYC311Dashboard.Services
     public class ChartService : IChartService
     {
         private readonly IJSRuntime _js;
+        private readonly IRequestService _requestService;
         private readonly ILoadingService _loadingService;
         private readonly IMessagingService _messagingService;
         public ChartOptions BarChartByBorough { get; private set; }
         public ChartOptions LineChartByZipHour { get; private set; }
 
-        public ChartService(IJSRuntime js, ILoadingService loadingService, IMessagingService messagingService)
+        public ChartService(IJSRuntime js, IRequestService requestService, ILoadingService loadingService, IMessagingService messagingService)
         {
             _js = js;
+            _requestService = requestService;
             _loadingService = loadingService;
             _messagingService = messagingService;
         }
 
-        public Result<ChartOptions> GetBarChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null)
+        public Result<ChartOptions> GetChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null)
         {
             try
             {
@@ -104,12 +107,39 @@ namespace NYC311Dashboard.Services
             }
         }
 
-        public async Task RenderLineChart(string elementSelector,ChartOptions options)
+        public async Task RenderLineChart(string elementSelector, ChartOptions options = null)
         {
             try
             {
                 _loadingService.LoadingMessage = "I'm loading here!";
                 _loadingService.IsLoading = true;
+
+                if (options == null)
+                {
+                    var categories = _requestService.RequestsByZipHour
+                    .Select(r => r.CreatedDate.ToDateTimeHour())
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+
+                    var series = _requestService.SelectedBoroughs
+                        .Where(borough => _requestService.RequestsByZipHour.Any(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && _requestService.SelectedZipCodes.Contains(r.Zip)))
+                        .Select(borough => new ApexSeries
+                        {
+                            Name = borough,
+                            Data = categories.Select(cat =>
+                                _requestService.RequestsByZipHour
+                                    .Where(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && _requestService.SelectedZipCodes.Contains(r.Zip) && r.CreatedDate.ToDateTimeHour() == cat)
+                                    .Sum(r => r.OpenTime)
+                            ).ToList()
+                        })
+                        .ToList();
+
+                    var result = GetChartOptions("zip codes", categories, series, height: "380");
+
+                    options = result.IsSuccess ? result.Value : LineChartByZipHour;
+                }
+
                 LineChartByZipHour = options;
 
                 var error = await _js.InvokeAsync<string?>("renderApexChartMulti", elementSelector, options);

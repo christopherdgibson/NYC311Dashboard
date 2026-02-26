@@ -43,8 +43,8 @@
     private List<string> zipCodes = new();
     private HashSet<string> selectedBoroughs = new();
     private HashSet<string> selectedZipCodes = new();
-    private ChartOptions boroughChartOptions = new();
-    private ChartOptions zipChartOptions = new();
+    private ChartOptions? boroughChartOptions;
+    private ChartOptions? zipChartOptions;
 
     private string message = "Please refresh data to populate boroughs list!";
     private bool zipChartNeedsRefresh = false;
@@ -82,10 +82,15 @@
         selectedBoroughs = RequestService.SelectedBoroughs;
         selectedZipCodes = RequestService.SelectedZipCodes;
 
-        if (!zipChartOptions.HasData)
-        {
-            zipChartOptions = GetZipChartOptions(height: "380");
-        }
+        // if (!boroughChartOptions.HasData)
+        // {
+        //     boroughChartOptions = GetBoroughChartOptions(height: "380");
+        // }
+
+        // if (!zipChartOptions.HasData)
+        // {
+        //     zipChartOptions = GetZipChartOptions(height: "380");
+        // }
 
         LayoutService.SetSidebar(
             LayoutService.RenderSidebarButton(
@@ -169,34 +174,6 @@
         }
 
         requestsByZipHour = RequestService.RequestsByZipHour;
-    }
-    protected ChartOptions GetZipChartOptions(string? width = null, string? height = null)
-    {
-        //chartOptions = new();
-        var categories = requestsByZipHour
-            .Select(r => r.CreatedDate.ToDateTimeHour())
-            .Distinct()
-            .OrderBy(x => x)
-            .ToList();
-
-        var series = selectedBoroughs
-            .Where(borough => requestsByZipHour.Any(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && selectedZipCodes.Contains(r.Zip)))
-            .Select(borough => new ApexSeries
-            {
-                Name = borough,
-                Data = categories.Select(cat =>
-                    requestsByZipHour
-                        .Where(r => r.Borough == borough && selectedZipCodes.Contains(r.Zip) && r.CreatedDate.ToDateTimeHour() == cat)
-                        .Sum(r => r.OpenTime)
-                ).ToList()
-            })
-            .ToList();
-
-        var result = ChartService.GetBarChartOptions("zip codes", categories, series, height: "380");
-
-        var options = result.IsSuccess ? result.Value : zipChartOptions;
-
-        return options;
     }
 
     public void Dispose()

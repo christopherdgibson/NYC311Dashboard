@@ -8,7 +8,7 @@ namespace NYC311Dashboard.Services.Contracts
         ChartOptions BarChartByBorough { get; }
         ChartOptions LineChartByZipHour { get; }
 
-        Result<ChartOptions> GetBarChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null);
+        Result<ChartOptions> GetChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null);
 
         Task RenderBarChart(string elementSelector, ChartOptions options);
 

@@ -154,7 +154,7 @@
             })
             .ToList();
 
-        var result = ChartService.GetBarChartOptions("zip codes", categories, series, height: "380");
+        var result = ChartService.GetChartOptions("zip codes", categories, series, height: "380");
 
         var options = result.IsSuccess ? result.Value : chartOptions;
 

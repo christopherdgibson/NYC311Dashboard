@@ -164,7 +164,7 @@
             new ApexSeries { Name = "Total Duration", Data = totalDurations }
         };
 
-        var result = ChartService.GetBarChartOptions("boroughs", selectedBoroughs.ToList(), series, height: "380");
+        var result = ChartService.GetChartOptions("boroughs", selectedBoroughs.ToList(), series, height: "380");
 
         var options = result.IsSuccess ? result.Value : chartOptions;
 
