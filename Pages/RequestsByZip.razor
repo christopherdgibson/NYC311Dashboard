@@ -35,9 +35,7 @@
     private HashSet<string> selectedZipCodes = new();
     private string label = "Select Zip Codes";
     private string message = "Please refresh data to populate boroughs list!";
-    private ChartOptions chartOptions = new();
 
-    private int sortOrder = 0;
     private bool chartNeedsRefresh = false;
     private bool ShowChart => requestsByZipHour != null && requestsByZipHour.Count != 0 && selectedZipCodes.Any();
 
@@ -59,7 +57,7 @@
         await RefreshRequestsByZipHour();
 
 
-        // if (RequestService.RequestsByZipHour.Count == 0)
+        // if (RequestService.RequestsByZipHour.Count == 0) // would need to also condition on borough selection changed to keep this but maybe not worth it
         // {
         //     await RefreshRequestsByZipHour();
         // }
@@ -74,10 +72,6 @@
         selectedBoroughs = RequestService.SelectedBoroughs;
         selectedZipCodes = RequestService.SelectedZipCodes;
 
-        if (!chartOptions.HasData)
-        {
-            chartOptions = GetChartOptions(height: "380");
-        }
         LayoutService.SetSidebar(LayoutService.RenderCustomSidebar(
              label,
              zipCodes,
@@ -97,20 +91,18 @@
         }
 
         chartNeedsRefresh = false;
-        await ChartService.RenderLineChart("#chart", chartOptions);
+        await ChartService.RenderLineChart("#chart");
     }
 
     private async Task OnZipSelectionChanged()
     {
         await RefreshRequestsByZipHour();
-        chartOptions = GetChartOptions(height: "380");
         chartNeedsRefresh = ShowChart;
     }
 
     protected async Task RefreshRequestsByZipHour()
     {
         requestsByZipHour.Clear();
-        sortOrder = 0;
 
         var result = RequestService.GenerateTableByZipHour();
         if (result.IsFailure)
@@ -130,35 +122,6 @@
             };
 
             return options;
-    }
-
-    protected ChartOptions GetChartOptions(string? width = null, string? height = null)
-    {
-        //chartOptions = new();
-        var categories = requestsByZipHour
-            .Select(r => r.CreatedDate.ToDateTimeHour())
-            .Distinct()
-            .OrderBy(x => x)
-            .ToList();
-
-        var series = selectedBoroughs
-            .Where(borough => requestsByZipHour.Any(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && selectedZipCodes.Contains(r.Zip)))
-            .Select(borough => new ApexSeries
-            {
-                Name = borough,
-                Data = categories.Select(cat =>
-                    requestsByZipHour
-                        .Where(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && selectedZipCodes.Contains(r.Zip) && r.CreatedDate.ToDateTimeHour() == cat)
-                        .Sum(r => r.OpenTime)
-                ).ToList()
-            })
-            .ToList();
-
-        var result = ChartService.GetChartOptions("zip codes", categories, series, height: "380");
-
-        var options = result.IsSuccess ? result.Value : chartOptions;
-
-        return options;
     }
 
     public async ValueTask DisposeAsync()

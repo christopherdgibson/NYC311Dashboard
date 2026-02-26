@@ -13,8 +13,8 @@ namespace NYC311Dashboard.Services
         private readonly IRequestService _requestService;
         private readonly ILoadingService _loadingService;
         private readonly IMessagingService _messagingService;
-        public ChartOptions BarChartByBorough { get; private set; }
-        public ChartOptions LineChartByZipHour { get; private set; }
+        public ChartOptions? BarChartByBorough { get; private set; }
+        public ChartOptions? LineChartByZipHour { get; private set; }
 
         public ChartService(IJSRuntime js, IRequestService requestService, ILoadingService loadingService, IMessagingService messagingService)
         {
@@ -107,7 +107,7 @@ namespace NYC311Dashboard.Services
             }
         }
 
-        public async Task RenderLineChart(string elementSelector, ChartOptions options = null)
+        public async Task RenderLineChart(string elementSelector, ChartOptions? options = null)
         {
             try
             {
