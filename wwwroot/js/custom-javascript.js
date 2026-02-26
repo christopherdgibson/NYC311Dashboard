@@ -49,10 +49,10 @@ window.saveElementAsPdf = function (elementId, options) {
             format: options.jsPDF.format,
             orientation: options.jsPDF.orientation
         },
-        pagebreak: {
-            mode: options.pagebreak.mode,
-            avoid: options.pagebreak.avoid
-        }
+        //pagebreak: {
+        //    mode: options.pagebreak.mode,
+        //    avoid: options.pagebreak.avoid
+        //}
     };
     html2pdf().set(opt).from(element).save();
 }

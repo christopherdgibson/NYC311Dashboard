@@ -136,6 +136,7 @@ code {
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center; /* Centers all items including orphan */
+    align-items: flex-start;
 }
 
 .table-flex-item {
@@ -628,19 +629,27 @@ nav {
     box-sizing: border-box;
 }
 
-    .pdf-print-area tr,
+    /*.pdf-print-area tr,
     .pdf-print-area td,
     .pdf-print-area h2,
     .pdf-print-area h3,
     .pdf-print-area h4,
     .pdf-print-area .table-flex-item {
         break-inside: avoid;
-        page-break-inside: avoid; /* keep as fallback */
+        page-break-inside: avoid;*/ /* keep as fallback */
+    /*}*/
+
+    .pdf-print-area .fixed-width-table {
+        font-size: 0.5rem;
     }
 
-@media print {
+/*@media print {
     body * {
         visibility: hidden;
+    }
+
+    .fixed-width-table {
+        font-size: 0.5rem;
     }
 
     .pdf-print-area, .pdf-print-area * {
@@ -654,7 +663,7 @@ nav {
         width: 100%;
     }
 
-        /* Convert flex layouts to block for print */
+         Convert flex layouts to block for print 
         .pdf-print-area .chart-flex-container,
         .pdf-print-area .table-flex-item,
         .pdf-print-area .table-responsive {
@@ -675,7 +684,7 @@ nav {
         .pdf-print-area h2,
         .pdf-print-area h3,
         .pdf-print-area h4 {
-            break-after: avoid; /* keeps header with following table */
+            break-after: avoid;  keeps header with following table 
             page-break-after: avoid;
         }
-}
+}*/
