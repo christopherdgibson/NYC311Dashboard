@@ -8,6 +8,36 @@ main {
     flex: 1;
 }
 
+.top-row {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row ::deep a, .top-row ::deep .btn-link {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+    }
+
+        .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        .top-row ::deep a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+.dropdown {
+    position: relative;
+}
+
+/* ────────────────────────── Sidebar styles ────────────────────────── */
+
 .sidebar {
     width: var(--sidebar-width);
     height: 100vh;
@@ -18,11 +48,6 @@ main {
     z-index: 10;
     display: flex;
     flex-direction: column;
-}
-
-.sidebar-swap-container {
-    flex: 1;  /*Takes up all available space */
-    overflow-y: auto;
 }
 
 .sidebar-header {
@@ -40,7 +65,7 @@ main {
     height: auto;
     display: block;
     margin: 0 auto;
-    z-index:12;
+    z-index: 12;
 }
 
 .sidebar-body {
@@ -49,6 +74,11 @@ main {
     flex: 1; /* takes remaining space below header */
     overflow: hidden;
     background-image: linear-gradient(180deg, var(--top-gradient-color) 0%, var(--bottom-gradient-color) 70%);
+}
+
+.sidebar-swap-container {
+    flex: 1;  /*Takes up all available space */
+    overflow-y: auto;
 }
 
 .scroll-to-top-btn {
@@ -60,45 +90,12 @@ main {
         background-color: var(--btn-hover-color); /* Darker blue on hover */
     }
 
-    /*.scroll-to-top-btn i {
-            font-size: 24px;*/ /* Icon size */
-    /*}*/
-
-
-    /* Or use rem for scalability */
+    /* Icon size; rem for scalability */
     .scroll-to-top-btn i {
         font-size: 1.5rem;
     }
 
-.top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
-}
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
-
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
-
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-.dropdown {
-    position: relative;
-}
-
-/* Style the dropdown button */
+/* ─── Dropdown menu styles ─── */
 .dropbtn {
     background-color: #3f51b5;
     color: white;
@@ -108,7 +105,6 @@ main {
     cursor: pointer;
 }
 
-/* Dropdown content */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -118,7 +114,6 @@ main {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
-    /* Links inside dropdown content */
     .dropdown-content a {
         color: black;
         padding: 12px 16px;
@@ -127,30 +122,22 @@ main {
         display: block;
     }
 
-        /* Change color of dropdown links on hover */
         .dropdown-content a:hover {
             background-color: #f1f1f1
         }
 
-/* Show the dropdown content on hover */
+/* Show dropdown content on hover */
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-/* Change background color of dropdown button on hover */
 .dropdown:hover .dropbtn {
     background-color: #CADFF2;
 }
 
+/* ────────────────────────── Mobile styles ────────────────────────── */
+
 @media (max-width: 768px) {
-    .top-row {
-        justify-content: space-between;
-    }
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
-
     .sidebar {
         width: 100vw;
         height: var(--header-height);
@@ -193,10 +180,6 @@ main {
         padding: 10px;
     }
 
-    /*.scroll-to-top-btn {
-        position: static;*/ /* override the sticky */
-        /*flex: 0 0 auto;
-    }*/
     .scroll-to-top-btn {
         display: none;
     }
@@ -217,32 +200,42 @@ main {
         border: none;
     }
 
-    .nav-expand-btn {
+    .nav-expand-menu {
         flex: 0 0 auto;
         margin-right: 20px;
         background: none;
         border: none;
         color: var(--top-gradient-color);
     }
-        .nav-expand-btn svg {
+        .nav-expand-menu svg {
             vertical-align: unset;
+        }
+
+    .top-row {
+        justify-content: space-between;
+    }
+
+        .top-row ::deep a, .top-row ::deep .btn-link {
+            margin-left: 0;
         }
 }
 
+/* ────────────────────────── Desktop styles ────────────────────────── */
 
 @media (min-width: 768px) {
+    .nav-expand-menu {
+        display: none;
+    }
+
+    .scroll-to-top-mobile-btn {
+        display: none;
+    }
+
     .page {
         flex-direction: column;
         display: flex;
         /*height: 100vh;*/ /* Full viewport height */
         /*overflow: hidden;*/ /* Prevent scrollbars on root */
-    }
-
-    /* Layout container: use flex for sidebar + content */
-    .layout-root {
-        display: flex;
-        height: 100vh; /* Full viewport height */
-        overflow: hidden; /* Prevent scrollbars on root */
     }
 
     .top-row {
@@ -260,13 +253,5 @@ main {
     .top-row, article {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
-    }
-
-    .nav-expand-btn {
-        display: none;
-    }
-
-    .scroll-to-top-mobile-btn {
-        display: none;
     }
 }

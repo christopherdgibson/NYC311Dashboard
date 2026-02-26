@@ -17,10 +17,10 @@
 {
     <div class="content-block">
         <h2>Chart: Total requests and duration for selected boroughs</h2>
-        <div id="chart" class="apex-chart-flex-container"></div>
+        <div id="chart" class="apex-chart-flex-container pageview-block"></div>
 
         <h2>Table: Total requests by date for selected boroughs</h2>
-        <div class="chart-flex-container">
+        <div class="table-flex-container pageview-block">
             <SortableTable Items="requestsByBorough" Options=@GetTableOptions() />
         </div>
     </div>
@@ -140,7 +140,7 @@
         var options = new TableOptions<BoroughDateTableRow>
         {
             GroupBy = r => r.Borough,
-            TableStyles = "chart-flex-item"
+            TableStyles = "table-flex-item"
         };
 
         return options;
