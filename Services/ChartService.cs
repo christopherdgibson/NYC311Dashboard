@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using NYC311Dashboard.Extensions;
+using NYC311Dashboard.Pages;
 using NYC311Dashboard.Services.Contracts;
 using NYC311Dashboard.Services.Models;
 
@@ -24,69 +25,35 @@ namespace NYC311Dashboard.Services
             _messagingService = messagingService;
         }
 
-        public Result<ChartOptions> GetChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null)
+        public async Task RenderBarChart(string elementSelector, ChartOptions? options = null)
         {
             try
             {
                 _loadingService.LoadingMessage = "I'm loading here!";
                 _loadingService.IsLoading = true;
-                string type;
-                if (selection == "boroughs")
-                {
-                    type = "bar";
-                }
-                else
-                {
-                    type = "line";
-                }
 
-                if (!categories.Any())
+                if (options == null)
                 {
-                    _messagingService.ShowInfo($"No {selection} selected!");
-                    _loadingService.IsLoading = false;
-                    return Result.Failure<ChartOptions>("No boroughs selected!");
+                    var categories = _requestService.SelectedBoroughs.ToList();
+
+                    var totalDurations = _requestService.SelectedBoroughs
+                        .Select(b => _requestService.RequestsByBoroughDate.Where(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)).Sum(r => r.OpenTime))
+                        .ToList();
+
+                    var totalCounts = _requestService.SelectedBoroughs
+                        .Select(b => (double)_requestService.Requests.Count(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+
+                    var series = new List<ApexSeries>
+                    {
+                        new ApexSeries { Name = "Total Count", Data = totalCounts },
+                        new ApexSeries { Name = "Total Duration", Data = totalDurations }
+                    };
+
+                    var result = GetChartOptions("boroughs", categories, series, height: "380");
+
+                    options = result.IsSuccess ? result.Value : BarChartByBorough;
                 }
-
-                categories.Sort();
-                var options = new ChartOptions
-                {
-                    Chart = new Chart { Type = type },
-                    XAxis = new XAxis { Categories = categories },
-                    Series = series.OrderBy(r => r.Name).ToList(),
-                    Width = width,
-                    Height = height
-                };
-
-                if (type == "bar")
-                {
-                    BarChartByBorough = options;
-                }
-                if (type == "line")
-                {
-                    LineChartByZipHour = options;
-                }
-                // set to no error here?
-
-                _messagingService.Clear();
-                return Result.Success(options);
-            }
-            catch
-            {
-                _messagingService.ShowError("Failed to get chart options.");
-                return Result.Failure<ChartOptions>("Failed to get chart options.");
-            }
-            finally
-            {
-                _loadingService.IsLoading = false;
-            }
-        }
-
-        public async Task RenderBarChart(string elementSelector, ChartOptions options)
-        {
-            try
-            {
-                _loadingService.LoadingMessage = "I'm loading here!";
-                _loadingService.IsLoading = true;
 
                 BarChartByBorough = options;
 
@@ -161,6 +128,62 @@ namespace NYC311Dashboard.Services
         public async Task UpdateApexChart(ChartOptions options)
         {
             await _js.InvokeVoidAsync("updateApexChart", options);
+        }
+
+        public Result<ChartOptions> GetChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null)
+        {
+            try
+            {
+                _loadingService.LoadingMessage = "I'm loading here!";
+                _loadingService.IsLoading = true;
+                string type;
+                if (selection == "boroughs")
+                {
+                    type = "bar";
+                }
+                else
+                {
+                    type = "line";
+                }
+
+                if (!categories.Any())
+                {
+                    _messagingService.ShowInfo($"No {selection} selected!");
+                    _loadingService.IsLoading = false;
+                    return Result.Failure<ChartOptions>("No boroughs selected!");
+                }
+
+                categories.Sort();
+                var options = new ChartOptions
+                {
+                    Chart = new Chart { Type = type },
+                    XAxis = new XAxis { Categories = categories },
+                    Series = series.OrderBy(r => r.Name).ToList(),
+                    Width = width,
+                    Height = height
+                };
+
+                if (type == "bar")
+                {
+                    BarChartByBorough = options;
+                }
+                if (type == "line")
+                {
+                    LineChartByZipHour = options;
+                }
+
+                _messagingService.Clear();
+                return Result.Success(options);
+            }
+            catch
+            {
+                _messagingService.ShowError("Failed to get chart options.");
+                return Result.Failure<ChartOptions>("Failed to get chart options.");
+            }
+            finally
+            {
+                _loadingService.IsLoading = false;
+            }
         }
 
         public async Task DisposeApexChart()

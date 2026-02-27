@@ -46,10 +46,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (RequestService.Boroughs.Count == 0)
+        if (RequestService.Boroughs.Count == 0) // selected boroughs check necessary for checkbox null error. Always the case?
         {
             LayoutService.SetSidebar(
                 LayoutService.RenderInactiveSidebarButton("No data available", message)
+        );
+            return;
+        }
+
+        if (RequestService.SelectedBoroughs.Count == 0) // selected boroughs check necessary for checkbox null error. Always the case?
+        {
+            LayoutService.SetSidebar(
+                LayoutService.RenderInactiveSidebarButton("No data available", "No boroughs selected! Please select one or more boroughs to see zip code data.")
         );
             return;
         }

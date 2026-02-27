@@ -35,7 +35,7 @@
     private string label = "Select Boroughs";
     //private DotNetObjectReference<RequestsByBorough>? dotNetRef;
     private string message = "Please refresh data to populate boroughs list!";
-    private int sortOrder = 0;
+
     private bool chartNeedsRefresh = false;
 
     private bool ShowChart => requestsByBorough != null && requestsByBorough.Any() && selectedBoroughs.Any();
@@ -68,11 +68,6 @@
         boroughs = RequestService.Boroughs;
         selectedBoroughs = RequestService.SelectedBoroughs;
 
-        if (!chartOptions.HasData)
-        {
-            chartOptions = GetChartOptions(height: "380");
-        }
-
         LayoutService.SetSidebar(LayoutService.RenderCustomSidebar(
              label,
              boroughs,
@@ -92,19 +87,15 @@
         }
 
         chartNeedsRefresh = false;
+        await ChartService.RenderBarChart("#chart");
 
-        if (firstRender)
-        {
-            await ChartService.RenderBarChart("#chart", chartOptions);
-        }
-        else
-        {
-            await ChartService.RenderBarChart("#chart", chartOptions);
-
-            //dotNetRef = DotNetObjectReference.Create(this);
-            //await JS.InvokeVoidAsync("notifyChartDivReady", dotNetRef);
-            //await ChartService.UpdateApexChart(chartOptions);
-        }
+        // if (firstRender)
+        // {
+        //     await ChartService.RenderBarChart("#chart", chartOptions);
+        //     dotNetRef = DotNetObjectReference.Create(this);
+        //     await JS.InvokeVoidAsync("notifyChartDivReady", dotNetRef);
+        //     await ChartService.UpdateApexChart(chartOptions);
+        // }
     }
 
     // [JSInvokable]
@@ -116,14 +107,12 @@
     private async Task OnBoroughSelectionChanged()
     {
         await RefreshRequestsByBorough();
-        chartOptions = GetChartOptions(height: "380");
         chartNeedsRefresh = ShowChart;
     }
 
     protected async Task RefreshRequestsByBorough()
     {
         requestsByBorough.Clear();
-        sortOrder = 0;
 
         var result = RequestService.GenerateTableByBoroughDay();
         if (result.IsFailure)
@@ -134,7 +123,6 @@
         requestsByBorough = RequestService.RequestsByBoroughDate;
     }
 
-
     protected TableOptions<BoroughDateTableRow> GetTableOptions()
     {
         var options = new TableOptions<BoroughDateTableRow>
@@ -142,31 +130,6 @@
             GroupBy = r => r.Borough,
             TableStyles = "table-flex-item"
         };
-
-        return options;
-    }
-
-    protected ChartOptions GetChartOptions(string? width = null, string? height = null)
-    {
-        //chartOptions = new();
-        var totalDurations = selectedBoroughs
-            .Select(b => requestsByBorough.Where(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)).Sum(r => r.OpenTime))
-            .ToList();
-
-        var totalCounts = selectedBoroughs
-            .Select(b => (double)requests.Count(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
-
-        // var totalCountsDouble = totalCounts.Select(x => (double)x).ToList();
-        var series = new List<ApexSeries>
-        {
-            new ApexSeries { Name = "Total Count", Data = totalCounts },
-            new ApexSeries { Name = "Total Duration", Data = totalDurations }
-        };
-
-        var result = ChartService.GetChartOptions("boroughs", selectedBoroughs.ToList(), series, height: "380");
-
-        var options = result.IsSuccess ? result.Value : chartOptions;
 
         return options;
     }
