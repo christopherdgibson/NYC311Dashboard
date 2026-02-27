@@ -22,22 +22,38 @@
         <h2>NYC 311 Requests Report</h2>
         <p>This report shows New York City 311 requests selected zip codes within the borougs @string.Join(", ", selectedBoroughs).</p>
 
-        @if (ShowZipChart)
+        @if (ShowBoroughChart)
         {
             <h3>Chart: Requests per hour by selected boroughs</h3>
-            <div id="chart-zip" class="apex-chart-flex-container"></div>
+            <div id="chart-boroughs" class="apex-chart-flex-container"></div>
 
-            <h3>Table: Requests per hour for selected zip codes</h3>
-            <div class="table-flex-container">
-                <SortableTable Items="requestsByZipHour" Options=@zipHourOptions />
-            </div>
-    }
+            @if (ShowZipChart)
+            {
+                <div id="chart-zip" class="apex-chart-flex-container"></div>
+
+                <h3>Table: Total requests by date for selected boroughs</h3>
+                <div class="table-flex-container">
+                    <SortableTable Items="requestsByBoroughDate" Options=@boroughDateOptions />
+                </div>
+                <h3>Table: Total requests per hour for selected zip codes</h3>
+                <div class="table-flex-container">
+                    <SortableTable Items="requestsByZipHour" Options=@zipHourOptions />
+                </div>
+            }
+            else
+            {
+                <h3>Table: Total requests by date for selected boroughs</h3>
+                <div class="table-flex-container">
+                    <SortableTable Items="requestsByBoroughDate" Options=@boroughDateOptions />
+                </div>
+            }
+        }
     </div>
 }
 
 @code {
     private List<RequestModel> requests = new List<RequestModel>();
-    private List<BoroughDateTableRow> requestsByBorough = new List<BoroughDateTableRow>();
+    private List<BoroughDateTableRow> requestsByBoroughDate = new List<BoroughDateTableRow>();
     private List<ZipHourTableRow> requestsByZipHour = new List<ZipHourTableRow>();
     private List<string> boroughs = new();
     private List<string> zipCodes = new();
@@ -51,7 +67,7 @@
     private bool boroughChartNeedsRefresh = false;
     private int sortOrder = 0;
 
-    private bool ShowBoroughChart => requestsByBorough != null && requestsByBorough.Count != 0 && selectedBoroughs.Any();
+    private bool ShowBoroughChart => requestsByBoroughDate != null && requestsByBoroughDate.Count != 0 && selectedBoroughs.Any();
     private bool ShowZipChart => requestsByZipHour != null && requestsByZipHour.Count != 0 && selectedZipCodes.Any();
 
     private TableOptions<BoroughDateTableRow>? boroughDateOptions;
@@ -108,17 +124,54 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (zipChartNeedsRefresh)
-        {
-            zipChartNeedsRefresh = false;
-            await ChartService.RenderLineChart("#chart-zip", zipChartOptions);
-        }
-
+        Console.WriteLine($"boroughChartNeedsRefresh: {boroughChartNeedsRefresh}");
         if (boroughChartNeedsRefresh)
         {
             boroughChartNeedsRefresh = false;
-            await ChartService.RenderBarChart("#chart-zip", boroughChartOptions);
+            await ChartService.RenderBarChart("#chart-boroughs", ChartService.BarChartByBorough);  // only one error displays; consider errorList
         }
+
+        if (zipChartNeedsRefresh)
+        {
+            zipChartNeedsRefresh = false;
+            await ChartService.RenderLineChart("#chart-zip", ChartService.LineChartByZipHour);
+        }
+
+    }   
+
+    protected TableOptions<T> GetTableOptions<T>(Expression<Func<T, string>>? groupBy)
+    {
+        var options = new TableOptions<T>
+        {
+            GroupBy = groupBy,
+            TableStyles = "table-flex-item"
+        };
+
+        return options;
+    }
+
+    protected async Task RefreshRequestsByZipHour()
+    {
+        requestsByBoroughDate.Clear();
+        requestsByZipHour.Clear();
+
+        var resultBorough = RequestService.GenerateTableByBoroughDay();
+        if (resultBorough.IsSuccess)
+        {
+            requestsByBoroughDate = RequestService.RequestsByBoroughDate;
+
+        }
+        var resultZip = RequestService.GenerateTableByZipHour();
+        if (resultZip.IsSuccess)
+        {
+            requestsByZipHour = RequestService.RequestsByZipHour;
+        }
+
+        // if (resultBorough.IsFailure || resultZip.IsFailure) // should this access messagingService? Decide when consolidating errors
+        // {
+        //     _messagingService
+        // }
+
     }
 
     private async Task SaveAsPdf()
@@ -134,7 +187,7 @@
             },
             Html2Canvas = new Html2CanvasOptions
             {
-                Scale =2
+                Scale = 2
             },
             JsPDF = new JsPdfOptions
             {
@@ -149,31 +202,6 @@
             }
         };
         await PdfService.RenderPdfDownload("pdf-content", options);
-    }
-
-    protected TableOptions<T> GetTableOptions<T>(Expression<Func<T, string>>? groupBy)
-    {
-        var options = new TableOptions<T>
-        {
-            GroupBy = groupBy,
-            TableStyles = "table-flex-item"
-        };
-
-        return options;
-    }
-
-    protected async Task RefreshRequestsByZipHour()
-    {
-        requestsByZipHour.Clear();
-        sortOrder = 0;
-
-        var result = RequestService.GenerateTableByZipHour();
-        if (result.IsFailure)
-        {
-            return;
-        }
-
-        requestsByZipHour = RequestService.RequestsByZipHour;
     }
 
     public void Dispose()

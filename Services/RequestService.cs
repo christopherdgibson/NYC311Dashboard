@@ -89,6 +89,8 @@ namespace NYC311Dashboard.Services
                     return Result.Failure("No boroughs selected for table!");
                 }
 
+                _messagingService.Clear(); // Clear old error if no boroughs selected
+
                 var requestsTable = Requests
                     .Where(row => row.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)
                                         && SelectedBoroughs.Contains(row.Borough)
@@ -140,6 +142,10 @@ namespace NYC311Dashboard.Services
 
             try
             {
+                if (!RequestsByZipHour.Any()) // Otherwise error will persist, but check if this clears borough errors (should return before it can?)
+                {
+                    _messagingService.Clear();
+                }
                 var result = PopulateZipCodes();
                 if (result.IsFailure)
                 {

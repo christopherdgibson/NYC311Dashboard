@@ -101,15 +101,17 @@ window.renderApexChartMulti = function (elementSelector, options) {
         }
     };
 
-    // Destroy existing chart if present
-    if (window.chartInstance) {
-        window.chartInstance.destroy();
-    }
+    window.chartInstances = window.chartInstances || {};
 
     var chartDiv = document.querySelector(elementSelector);
     if (chartDiv) {
-        window.chartInstance = new ApexCharts(chartDiv, options);
-    window.chartInstance.render();
+        // destroy existing instance if re-rendering
+        if (window.chartInstances[elementSelector]) {
+            window.chartInstances[elementSelector].destroy();
+        }
+        window.chartInstances[elementSelector] = new ApexCharts(chartDiv, options);
+        window.chartInstances[elementSelector].render();
+        return null;
     } else {
         return `Chart element '${elementSelector}' not found`;
     }
@@ -173,15 +175,18 @@ window.renderApexBarChart = function (elementSelector, options) {
             categories: options.xaxis.categories
         }
     };
-    // Destroy existing chart if present
-    if (window.chartInstance) {
-        window.chartInstance.destroy();
-    }
+
+    window.chartInstances = window.chartInstances || {};
 
     var chartDiv = document.querySelector(elementSelector);
     if (chartDiv) {
-        window.chartInstance = new ApexCharts(chartDiv, options);
-    window.chartInstance.render();
+        // destroy existing instance if re-rendering
+        if (window.chartInstances[elementSelector]) {
+            window.chartInstances[elementSelector].destroy();
+        }
+        window.chartInstances[elementSelector] = new ApexCharts(chartDiv, options);
+        window.chartInstances[elementSelector].render();
+        return null;
     } else {
         return `Chart element '${elementSelector}' not found`;
     }

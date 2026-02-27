@@ -172,7 +172,7 @@ namespace NYC311Dashboard.Services
                     LineChartByZipHour = options;
                 }
 
-                _messagingService.Clear();
+                //_messagingService.Clear();
                 return Result.Success(options);
             }
             catch
