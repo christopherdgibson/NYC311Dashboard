@@ -79,38 +79,58 @@ namespace NYC311Dashboard.Services
 
         public Result GenerateTableByBoroughDay()
         {
-            if (SelectedBoroughs == null)
+            _loadingService.LoadingMessage = "I'm loading here!";
+            _loadingService.IsLoading = true;
+            try
             {
-                return Result.Failure("No boroughs selected for table!");
-            }
+                if (SelectedBoroughs == null || SelectedBoroughs.Count == 0) // bring this error up to page level and zip too?
+                {
+                    _messagingService.ShowError("No boroughs selected for table!");
+                    return Result.Failure("No boroughs selected for table!");
+                }
 
-            var requestsTable = Requests
-                .Where(row => row.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)
-                                    && SelectedBoroughs.Contains(row.Borough)
-                                    && row.CreatedDate.HasValue
-                                    && row.ClosedDate.HasValue)
-                .GroupBy(row => new
-                {
-                    Borough = row.Borough.ToProperCase(),
-                    CreatedDate = DateOnly.FromDateTime(row.CreatedDate.Value)
-                })
-                .Select(g =>
-                {
-                    var aggDictionary = new BoroughDateTableRow
+                var requestsTable = Requests
+                    .Where(row => row.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)
+                                        && SelectedBoroughs.Contains(row.Borough)
+                                        && row.CreatedDate.HasValue
+                                        && row.ClosedDate.HasValue)
+                    .GroupBy(row => new
                     {
-                        Borough = g.Key.Borough,
-                        CreatedDate = g.Key.CreatedDate,
-                        Count = g.Count(),
-                        OpenTime = g.Sum(row => (row.ClosedDate.Value - row.CreatedDate.Value).TotalMinutes)
-                    };
+                        Borough = row.Borough.ToProperCase(),
+                        CreatedDate = DateOnly.FromDateTime(row.CreatedDate.Value)
+                    })
+                    .Select(g =>
+                    {
+                        var aggDictionary = new BoroughDateTableRow
+                        {
+                            Borough = g.Key.Borough,
+                            CreatedDate = g.Key.CreatedDate,
+                            Count = g.Count(),
+                            OpenTime = g.Sum(row => (row.ClosedDate.Value - row.CreatedDate.Value).TotalMinutes)
+                        };
 
-                    return aggDictionary;
-                })
-                .ToList();
+                        return aggDictionary;
+                    })
+                    .ToList();
 
-            RequestsByBoroughDate = requestsTable;
+                RequestsByBoroughDate = requestsTable;
 
-            return Result.Success();
+                if (!requestsTable.Any())
+                {
+                    _messagingService.ShowInfo();
+                }
+
+                return Result.Success();
+            }
+            catch
+            {
+                _messagingService.ShowError("An error occurred. Please try again.!");
+                return Result.Failure("An error occurred. Please try again.!");
+            }
+            finally
+            {
+                _loadingService.IsLoading = false;
+            }
         }
 
         public Result GenerateTableByZipHour()
@@ -176,7 +196,7 @@ namespace NYC311Dashboard.Services
 
         private Result PopulateZipCodes()
         {
-            if (SelectedBoroughs == null)
+            if (SelectedBoroughs == null || SelectedBoroughs.Count == 0)
             {
                 return Result.Failure("No boroughs selected for table!");
             }
