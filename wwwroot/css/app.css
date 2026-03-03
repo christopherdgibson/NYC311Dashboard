@@ -174,8 +174,96 @@ code {
     gap: 10px;
 }
 
-/* ─── Shared sidebar btn styles ─── */
+/* ────────────────────────── Sidebar styles ────────────────────────── */
 
+.sidebar-header {
+    padding: 10px;
+    width: var(--header-height);
+    height: var(--header-height);
+    text-align: center;
+    background-color: var(--theme-main-color);
+    align-content: center;
+    /*border-bottom: 1px solid #dee2e6;*/
+}
+
+.sidebar-logo {
+    max-width: 80%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    z-index: 12;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 80px;
+    left: 0; /* always anchored to left: 0 */
+    transform: translateX(calc(-1 * var(--sidebar-width))); /* hidden by default */
+    transition: transform 0.3s ease;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-open {
+    transform: translateX(0); /* slide in */
+}
+
+.sidebar-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* takes remaining space below header */
+    overflow-y: auto;
+    background-image: linear-gradient(180deg, var(--theme-main-color) 50%, var(--theme-accent-color) 80%);
+}
+
+.sidebar-body-container {
+    display: flex;
+    position: relative;
+    height: 100%;
+}
+
+.sidebar-swap-container {
+    flex: 1; /*Takes up all available space */
+    overflow-y: auto;
+}
+
+.sidebar-open-btn {
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    width: 30px;
+    height: 60px;
+    background-color: var(--theme-main-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 0 8px 8px 0; /* flat on left, rounded on right */
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+    z-index: 10;
+}
+
+    .sidebar-open-btn i {
+        display: inline-block;
+        color: white;
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+    }
+
+        .sidebar-open-btn i::before {
+            font-weight: bold !important;
+        }
+
+.sidebar-open .sidebar-open-btn i {
+    transform: rotate(180deg);
+
+}
+    
 .sidebar-btn {
     /* color: white;*/
     /* background-color: unset;*/
