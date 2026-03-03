@@ -745,7 +745,8 @@ nav {
 
             nav ul li {
                 display: flex;
-                align-content: center;
+                align-items: center;
+                color: white
             }
                 nav ul li:hover {
                     color: var(--theme-main-color);
@@ -768,6 +769,15 @@ nav {
                     nav ul li a:hover {
                         color: var(--theme-main-color);
                     }
+
+                nav ul li .nav-icon {
+                    display: inline-block;
+                    font-size: 3rem;
+                    width: 0; /* hidden by default */
+                    opacity: 0;
+                    transition: font-size 0.3s ease, width 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+                    overflow: hidden;
+                }
 
     .dropdown-hidden {
         position: relative;
@@ -895,7 +905,7 @@ nav {
                 nav ul li a {
                     font-size: 20px;
                     width: calc(100%);
-                    padding: 5vh;
+                    padding: 3vh;
                     justify-content: center;
                 }
 
@@ -920,6 +930,7 @@ nav {
             nav ul.nav-open li a:hover div {
                 display: none;
             }
+
         #checkNav:checked ~ ul {
             right: 0;
             align-content: center;
@@ -931,14 +942,18 @@ nav {
                 border-right: none;
             }
 
+                #checkNav:checked ~ ul li a:hover .nav-icon {
+                    width: 3rem;
+                    opacity: 1;
+                    margin-right: 20px;
+                }
+
                 #checkNav:checked ~ ul li.has-dropdown .dropdown-label {
                     display: block;
                 }
 
 /*                #checkNav:checked ~ ul li a:hover {
-                    padding-left: 10px;
-                    border-left: 2px solid #3ca0e7;
-                    transition: all 0.3s ease;
+                    transition: all 0.9s ease;
                 }*/
 }
 
