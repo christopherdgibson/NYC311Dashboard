@@ -10,22 +10,26 @@
     <div class="home-page-title">Welcome to the NYC 311 Dashboard!</div>
     <img class="nyc-home-image" src="images/nyc_background.png" alt="New York City" />
 </div>
-@* <div class="home-page-info">
-    Here you can view information on New York City non-emergency 311 calls broken down by
-</div> *@
 <div class="home-page-content">
-    Here you can view information on New York City non-emergency 311 calls broken down by
-    <div class="home-page-info-container">
-        <div class="home-page-info">
-       
-            <ul>
-                <li>Borough</li>
-                <li>Zip code</li>
-                <li>Precinct</li>
-            </ul>
+    <p class="home-page-intro">
+        Explore New York City's non-emergency 311 service requests —
+        visualised and broken down across the five boroughs.
+    </p>
+    <div class="home-page-cards">
+        <div class="home-page-card">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>Borough</span>
         </div>
-        <div>button</div>
+        <div class="home-page-card">
+            <i class="bi bi-mailbox"></i>
+            <span>Zip Code</span>
+        </div>
+        <div class="home-page-card">
+            <i class="bi bi-shield-fill"></i>
+            <span>Precinct</span>
+        </div>
     </div>
+    <a href="/boroughs" class="home-page-cta">Explore the data</a>
 </div>
 
 @code {
