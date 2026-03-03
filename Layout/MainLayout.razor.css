@@ -92,19 +92,6 @@ main {
     overflow-y: auto;
 }
 
-.scroll-to-top-btn {
-    position: sticky;
-    bottom: 0;
-}
-
-    .scroll-to-top-btn:hover {
-        background-color: var(--btn-hover-color);
-    }
-
-    .scroll-to-top-btn i {
-        font-size: 1.5rem;
-    }
-
 .sidebar-open-btn {
     position: absolute;
     right: -30px;
@@ -138,7 +125,7 @@ main {
         transform: rotate(180deg);
     }
 
-.scroll-to-top-mobile-btn {
+.scroll-to-top-btn {
     display: flex;
     position: fixed;
     bottom: 20px;
@@ -237,13 +224,9 @@ main {
     .sidebar-btn {
         width: fit-content;
         padding: 10px;
-    }
-
-    .scroll-to-top-btn {
-        display: none;
     }*/
 
-/*    .scroll-to-top-mobile-btn {
+/*    .scroll-to-top-btn {
         display: flex;
         position: fixed;
         bottom: 20px;
