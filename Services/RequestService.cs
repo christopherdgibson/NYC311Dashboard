@@ -1,8 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
-using NYC311Dashboard.Extensions;
+using NYC311Dashboard.Constants;
 using NYC311Dashboard.Intrastructure.Contracts;
-using NYC311Dashboard.Models;
 using NYC311Dashboard.Services.Contracts;
+using NYC311Dashboard.Extensions;
+using NYC311Dashboard.Models;
+
 
 namespace NYC311Dashboard.Services
 {
@@ -11,9 +13,9 @@ namespace NYC311Dashboard.Services
         private readonly IHttpService _httpService;
         private readonly ILoadingService _loadingService;
         private readonly IMessagingService _messagingService;
-        //private readonly string baseUrl = "https://data.cityofnewyork.us/resource/erm2-nwe9.json";
-        private readonly string sampleUrl = "sample-data/NYC311Requests.json";
-        private readonly string sampleUrlAbbr = "sample-data/NYC311RequestsAbr.json";
+        //private readonly string baseUrl = UrlConstants.BaseUrl;
+        private readonly string sampleUrl = UrlConstants.SampleUrl;
+        private readonly string sampleUrlAbbr = UrlConstants.SampleUrlAbbr;
         public List<RequestModel> Requests { get; private set; } = new();
 
         public List<string> Boroughs { get; private set; } = new();
@@ -85,14 +87,14 @@ namespace NYC311Dashboard.Services
             {
                 if (SelectedBoroughs == null || SelectedBoroughs.Count == 0) // bring this error up to page level and zip too?
                 {
-                    _messagingService.ShowError("No boroughs selected for table!");
-                    return Result.Failure("No boroughs selected for table!");
+                    _messagingService.ShowError(string.Join(" ", string.Format(Resources.empty_selction_table, Resources.groupy_category_boroughs)));
+                    return Result.Failure(string.Join(" ", string.Format(Resources.empty_selction_table, Resources.groupy_category_boroughs)));
                 }
 
                 _messagingService.Clear(); // Clear old error if no boroughs selected
 
                 var requestsTable = Requests
-                    .Where(row => row.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)
+                    .Where(row => row.Status.Equals(Resources.request_status_closed, StringComparison.OrdinalIgnoreCase)
                                         && SelectedBoroughs.Contains(row.Borough)
                                         && row.CreatedDate.HasValue
                                         && row.ClosedDate.HasValue)
@@ -154,7 +156,7 @@ namespace NYC311Dashboard.Services
                 }
 
                 var requestsTable = Requests
-                    .Where(row => row.Status.Equals("closed", StringComparison.OrdinalIgnoreCase)
+                    .Where(row => row.Status.Equals(Resources.request_status_closed, StringComparison.OrdinalIgnoreCase)
                                         && SelectedBoroughs.Contains(row.Borough.ToProperCase())
                                         && SelectedZipCodes.Contains(row.IncidentZip)
                                         && row.CreatedDate.HasValue
@@ -204,13 +206,13 @@ namespace NYC311Dashboard.Services
         {
             if (SelectedBoroughs == null || SelectedBoroughs.Count == 0)
             {
-                return Result.Failure("No boroughs selected for table!");
+                return Result.Failure(string.Join(" ", string.Format(Resources.empty_selction_table, Resources.groupy_category_boroughs)));
             }
 
             ZipCodes = Requests
             .Where(r => !string.IsNullOrWhiteSpace(r.Borough)
                 && SelectedBoroughs.Contains(r.Borough.ToProperCase())
-                && !r.Borough.Equals("unspecified", StringComparison.OrdinalIgnoreCase)
+                && !r.Borough.Equals(Resources.borough_unspecified, StringComparison.OrdinalIgnoreCase)
                 && !string.IsNullOrEmpty(r.IncidentZip))
             .Select(r => r.IncidentZip)
             .Distinct()
@@ -246,7 +248,7 @@ namespace NYC311Dashboard.Services
 
             if (SelectedZipCodes == null || SelectedZipCodes.Count == 0)
             {
-                return Result.Failure("No zip codes selected for table!");
+                return Result.Failure(string.Join(" ", string.Format(Resources.empty_selction_table, Resources.groupy_category_zip_codes)));
             }
 
             return Result.Success();

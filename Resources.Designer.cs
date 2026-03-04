@@ -106,11 +106,11 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No boroughs selected!.
+        ///   Looks up a localized string similar to No {0} selected for the table!.
         /// </summary>
-        public static string empty_selction_boroughs {
+        public static string empty_selction_table {
             get {
-                return ResourceManager.GetString("empty_selction_boroughs", resourceCulture);
+                return ResourceManager.GetString("empty_selction_table", resourceCulture);
             }
         }
         
@@ -151,11 +151,57 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to zip codes.
+        /// </summary>
+        public static string groupy_category_zip_codes {
+            get {
+                return ResourceManager.GetString("groupy_category_zip_codes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explore the data.
+        /// </summary>
+        public static string home_page_explore_data {
+            get {
+                return ResourceManager.GetString("home_page_explore_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explore New York City&apos;s non-emergency 311 service requests —
+        ///        visualised and broken down across the five boroughs..
+        /// </summary>
+        public static string home_page_intro {
+            get {
+                return ResourceManager.GetString("home_page_intro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select boroughs.
+        /// </summary>
+        public static string label_select_boroughs {
+            get {
+                return ResourceManager.GetString("label_select_boroughs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select options.
         /// </summary>
         public static string label_select_options {
             get {
                 return ResourceManager.GetString("label_select_options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select zip codes.
+        /// </summary>
+        public static string label_select_zip_codes {
+            get {
+                return ResourceManager.GetString("label_select_zip_codes", resourceCulture);
             }
         }
         
@@ -223,11 +269,29 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save as PDF?.
+        /// </summary>
+        public static string messaging_service_save_pdf {
+            get {
+                return ResourceManager.GetString("messaging_service_save_pdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string messaging_service_title_confirm {
             get {
                 return ResourceManager.GetString("messaging_service_title_confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download PDF?.
+        /// </summary>
+        public static string messaging_service_title_download {
+            get {
+                return ResourceManager.GetString("messaging_service_title_download", resourceCulture);
             }
         }
         
@@ -250,11 +314,29 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This report shows New York City 311 requests selected zip codes within the boroughs {0}.
+        /// </summary>
+        public static string report_boroughs_list_title {
+            get {
+                return ResourceManager.GetString("report_boroughs_list_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to closed.
         /// </summary>
         public static string request_status_closed {
             get {
                 return ResourceManager.GetString("request_status_closed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Boroughs.
+        /// </summary>
+        public static string select_boroughs {
+            get {
+                return ResourceManager.GetString("select_boroughs", resourceCulture);
             }
         }
         
@@ -286,11 +368,74 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requests by.
+        ///   Looks up a localized string similar to NYC 311 Requests.
+        /// </summary>
+        public static string title_download {
+            get {
+                return ResourceManager.GetString("title_download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 311 Dashboard.
+        /// </summary>
+        public static string title_home_page {
+            get {
+                return ResourceManager.GetString("title_home_page", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New York City.
+        /// </summary>
+        public static string title_home_page_eyebrow {
+            get {
+                return ResourceManager.GetString("title_home_page_eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NYC 311 Dashboard.
+        /// </summary>
+        public static string title_nyc_dashboard {
+            get {
+                return ResourceManager.GetString("title_nyc_dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precinct.
+        /// </summary>
+        public static string title_precinct {
+            get {
+                return ResourceManager.GetString("title_precinct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report.
+        /// </summary>
+        public static string title_report {
+            get {
+                return ResourceManager.GetString("title_report", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requests.
         /// </summary>
         public static string title_requests {
             get {
                 return ResourceManager.GetString("title_requests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requests by.
+        /// </summary>
+        public static string title_requests_by {
+            get {
+                return ResourceManager.GetString("title_requests_by", resourceCulture);
             }
         }
         
@@ -300,6 +445,24 @@ namespace NYC311Dashboard {
         public static string title_zip_code {
             get {
                 return ResourceManager.GetString("title_zip_code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requests per hour by selected boroughs.
+        /// </summary>
+        public static string title_zip_requests_chart {
+            get {
+                return ResourceManager.GetString("title_zip_requests_chart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total requests per hour for selected zip codes.
+        /// </summary>
+        public static string title_zip_requests_table {
+            get {
+                return ResourceManager.GetString("title_zip_requests_table", resourceCulture);
             }
         }
     }

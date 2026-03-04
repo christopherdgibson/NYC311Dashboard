@@ -7,6 +7,7 @@
 
 @using CSharpFunctionalExtensions
 @using NYC311Dashboard.Components
+@using NYC311Dashboard.Constants
 @using NYC311Dashboard.Models
 @using NYC311Dashboard.Services
 @using NYC311Dashboard.Services.Contracts
@@ -16,10 +17,10 @@
 @if (ShowChart)
 {
     <div class="content-block">
-        <h2>Requests per hour by selected boroughs</h2>
+        <h2>@Resources.title_zip_requests_chart</h2>
         <div id="chart" class="apex-chart-flex-container"></div>
         <hr class="section-divider" />
-        <h2>Total requests per hour for selected zip codes</h2>
+        <h2>@Resources.title_zip_requests_table</h2>
         <div class="table-flex-container">
             <SortableTable Items="requestsByZipHour" Options=@GetTableOptions() />
         </div>
@@ -33,15 +34,13 @@
     private List<string> zipCodes = new();
     private HashSet<string> selectedBoroughs = new();
     private HashSet<string> selectedZipCodes = new();
-    private string label = Resources.select_zip_codes;
-    private string message = Resources.refresh_data_boroughs_list;
 
     private bool chartNeedsRefresh = false;
     private bool ShowChart => requestsByZipHour != null && requestsByZipHour.Count != 0 && selectedZipCodes.Any();
 
     protected override void OnInitialized()
     {
-        LayoutService.SetTitle(Resources.title_zip_code, Resources.title_requests);
+        LayoutService.SetTitle(Resources.title_zip_code, Resources.title_requests_by);
     }
 
     protected override async Task OnInitializedAsync()
@@ -49,7 +48,7 @@
         if (RequestService.Boroughs.Count == 0) // selected boroughs check necessary for checkbox null error. Always the case?
         {
             LayoutService.SetSidebar(
-                LayoutService.RenderInactiveSidebarButton(Resources.data_none_available, message)
+                LayoutService.RenderInactiveSidebarButton(Resources.data_none_available, Resources.refresh_data_boroughs_list)
         );
             return;
         }
@@ -81,7 +80,7 @@
         selectedZipCodes = RequestService.SelectedZipCodes;
 
         LayoutService.SetSidebar(LayoutService.RenderCustomSidebar(
-             label,
+             Resources.select_zip_codes,
              zipCodes,
              selectedZipCodes,
              EventCallback.Factory.Create<HashSet<string>>(this, v => selectedZipCodes = v),
@@ -99,7 +98,7 @@
         }
 
         chartNeedsRefresh = false;
-        await ChartService.RenderLineChart("#chart");
+        await ChartService.RenderLineChart(SharedJsConstants.ChartId);
     }
 
     private async Task OnZipSelectionChanged()

@@ -113,11 +113,14 @@
 	<data name="groupy_category_boroughs" xml:space="preserve">
 		<value>boroughs</value>
 	</data>
-	<data name="empty_selction_boroughs" xml:space="preserve">
-		<value>No boroughs selected!</value>
+	<data name="groupy_category_zip_codes" xml:space="preserve">
+		<value>zip codes</value>
 	</data>
 	<data name="empty_selction" xml:space="preserve">
 		<value>No {0} selected!</value>
+	</data>
+	<data name="empty_selction_table" xml:space="preserve">
+		<value>No {0} selected for the table!</value>
 	</data>
 	<data name="failed_chart_options" xml:space="preserve">
 		<value>Failed to get chart options.</value>
@@ -128,8 +131,21 @@
 	<data name="failed_to_get_data" xml:space="preserve">
 		<value>Failed to get data.</value>
 	</data>
+	<data name="home_page_explore_data" xml:space="preserve">
+		<value>Explore the data</value>
+	</data>
+	<data name="home_page_intro" xml:space="preserve">
+		<value>Explore New York City's non-emergency 311 service requests —
+        visualised and broken down across the five boroughs.</value>
+	</data>
+	<data name="label_select_boroughs" xml:space="preserve">
+		<value>Select boroughs</value>
+	</data>
 	<data name="label_select_options" xml:space="preserve">
 		<value>Select options</value>
+	</data>
+	<data name="label_select_zip_codes" xml:space="preserve">
+		<value>Select zip codes</value>
 	</data>
 	<data name="loading_service_default_loading" xml:space="preserve">
 		<value>Loading, please wait...</value>
@@ -146,6 +162,9 @@
 	<data name="messaging_service_default_message" xml:space="preserve">
 		<value>No requests loaded.</value>
 	</data>
+	<data name="messaging_service_save_pdf" xml:space="preserve">
+		<value>Save as PDF?</value>
+	</data>
 	<data name="messaging_service_error_occurred" xml:space="preserve">
 		<value>An error occurred. Please try again!</value>
 	</data>
@@ -155,8 +174,14 @@
 	<data name="messaging_service_title_confirm" xml:space="preserve">
 		<value>Confirm</value>
 	</data>
+	<data name="messaging_service_title_download" xml:space="preserve">
+		<value>Download PDF?</value>
+	</data>
 	<data name="messaging_service_title_error" xml:space="preserve">
 		<value>Error</value>
+	</data>
+	<data name="report_boroughs_list_title" xml:space="preserve">
+		<value>This report shows New York City 311 requests selected zip codes within the boroughs {0}</value>
 	</data>
 	<data name="refresh_data_boroughs_list" xml:space="preserve">
 		<value>Please refresh data to populate boroughs list!</value>
@@ -164,17 +189,47 @@
 	<data name="request_status_closed" xml:space="preserve">
 		<value>closed</value>
 	</data>
-	<data name="title_requests" xml:space="preserve">
-		<value>Requests by</value>
-	</data>
 	<data name="title_borough" xml:space="preserve">
 		<value>Borough</value>
+	</data>
+	<data name="title_download" xml:space="preserve">
+		<value>NYC 311 Requests</value>
+	</data>
+	<data name="title_home_page" xml:space="preserve">
+		<value>311 Dashboard</value>
+	</data>
+	<data name="title_home_page_eyebrow" xml:space="preserve">
+		<value>New York City</value>
+	</data>
+	<data name="title_nyc_dashboard" xml:space="preserve">
+		<value>NYC 311 Dashboard</value>
+	</data>
+	<data name="title_precinct" xml:space="preserve">
+		<value>Precinct</value>
+	</data>
+	<data name="title_report" xml:space="preserve">
+		<value>Report</value>
+	</data>
+	<data name="title_requests" xml:space="preserve">
+		<value>Requests</value>
+	</data>
+	<data name="title_requests_by" xml:space="preserve">
+		<value>Requests by</value>
 	</data>
 	<data name="title_zip_code" xml:space="preserve">
 		<value>Zip Code</value>
 	</data>
+	<data name="title_zip_requests_chart" xml:space="preserve">
+		<value>Requests per hour by selected boroughs</value>
+	</data>
+	<data name="title_zip_requests_table" xml:space="preserve">
+		<value>Total requests per hour for selected zip codes</value>
+	</data>
 	<data name="select_boroughs_zip_code_data" xml:space="preserve">
 		<value>Please select one or more boroughs to see zip code data.</value>
+	</data>
+	<data name="select_boroughs" xml:space="preserve">
+		<value>Select Boroughs</value>
 	</data>
 	<data name="select_zip_codes" xml:space="preserve">
 		<value>Select Zip Codes</value>

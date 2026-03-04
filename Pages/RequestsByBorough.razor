@@ -6,6 +6,7 @@
 
 @using CSharpFunctionalExtensions
 @using NYC311Dashboard.Components
+@using NYC311Dashboard.Constants
 @using NYC311Dashboard.Extensions
 @using NYC311Dashboard.Models
 @using NYC311Dashboard.Services
@@ -34,7 +35,6 @@
     private ChartOptions chartOptions = new();
     private string label = "Select Boroughs";
     //private DotNetObjectReference<RequestsByBorough>? dotNetRef;
-    private string message = "Please refresh data to populate boroughs list!";
 
     private bool chartNeedsRefresh = false;
 
@@ -42,7 +42,7 @@
 
     protected override void OnInitialized()
     {
-        LayoutService.SetTitle(Resources.title_borough, Resources.title_requests);
+        LayoutService.SetTitle(Resources.title_borough, Resources.title_requests_by);
     }
 
     protected override async Task OnInitializedAsync()
@@ -50,7 +50,7 @@
         if (RequestService.Boroughs.Count == 0)
         {
             LayoutService.SetSidebar(
-                LayoutService.RenderInactiveSidebarButton("No data available", message)
+                LayoutService.RenderInactiveSidebarButton("No data available", Resources.refresh_data_boroughs_list)
         );
             return;
         }
@@ -69,7 +69,7 @@
         selectedBoroughs = RequestService.SelectedBoroughs;
 
         LayoutService.SetSidebar(LayoutService.RenderCustomSidebar(
-             label,
+             Resources.select_boroughs,
              boroughs,
              selectedBoroughs,
              EventCallback.Factory.Create<HashSet<string>>(this, v => selectedBoroughs = v),
@@ -87,11 +87,11 @@
         }
 
         chartNeedsRefresh = false;
-        await ChartService.RenderBarChart("#chart");
+        await ChartService.RenderBarChart(SharedJsConstants.ChartId);
 
         // if (firstRender)
         // {
-        //     await ChartService.RenderBarChart("#chart", chartOptions);
+        //     await ChartService.RenderBarChart(SharedJsConstants.ChartId, chartOptions);
         //     dotNetRef = DotNetObjectReference.Create(this);
         //     await JS.InvokeVoidAsync("notifyChartDivReady", dotNetRef);
         //     await ChartService.UpdateApexChart(chartOptions);

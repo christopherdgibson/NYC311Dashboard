@@ -8,6 +8,7 @@
 
 @using CSharpFunctionalExtensions
 @using NYC311Dashboard.Components   
+@using NYC311Dashboard.Constants
 @using NYC311Dashboard.Models
 @using NYC311Dashboard.Services
 @using NYC311Dashboard.Services.Contracts
@@ -19,17 +20,17 @@
 {
     <div id="pdf-content" class="pdf-print-area">
 
-        <h2>NYC 311 Requests Report</h2>
-        <p>This report shows New York City 311 requests selected zip codes within the borougs @string.Join(", ", selectedBoroughs).</p>
+        <h2>@Resources.title_download @Resources.title_report</h2>
+        <p>@string.Format(Resources.report_boroughs_list_title, string.Join(", ", selectedBoroughs)).</p>
 
         @if (ShowBoroughChart)
         {
             <h3>Chart: Requests per hour by selected boroughs</h3>
-            <div id="chart-boroughs" class="apex-chart-flex-container"></div>
+            <div id="@SharedJsConstants.BoroughChartId" class="apex-chart-flex-container"></div>
 
             @if (ShowZipChart)
             {
-                <div id="chart-zip" class="apex-chart-flex-container"></div>
+                <div id="@SharedJsConstants.BoroughChartId" class="apex-chart-flex-container"></div>
 
                 <h3>Table: Total requests by date for selected boroughs</h3>
                 <div class="table-flex-container">
@@ -62,7 +63,6 @@
     private ChartOptions? boroughChartOptions;
     private ChartOptions? zipChartOptions;
 
-    private string message = "Please refresh data to populate boroughs list!";
     private bool zipChartNeedsRefresh = false;
     private bool boroughChartNeedsRefresh = false;
     private int sortOrder = 0;
@@ -75,7 +75,7 @@
 
     protected override void OnInitialized()
     {
-        LayoutService.SetTitle("Requests Report");
+        LayoutService.SetTitle(Resources.title_report, Resources.title_requests);
         boroughDateOptions = GetTableOptions<BoroughDateTableRow>(r => r.Borough);
         zipHourOptions = GetTableOptions<ZipHourTableRow>(r => r.Borough);
     }
@@ -86,7 +86,7 @@
         if (RequestService.Boroughs.Count == 0)
         {
             LayoutService.SetSidebar(
-                LayoutService.RenderInactiveSidebarButton("No data available", message)
+                LayoutService.RenderInactiveSidebarButton(Resources.data_none_available, Resources.refresh_data_boroughs_list)
         );
             return;
         }
@@ -110,9 +110,9 @@
 
         LayoutService.SetSidebar(
             LayoutService.RenderSidebarButton(
-                "Download PDF",
+                Resources.messaging_service_title_download,
                 "sidebar-btn",
-                "Save as PDF?",
+                Resources.messaging_service_save_pdf,
                 SaveAsPdf)
         );
 
@@ -128,13 +128,13 @@
         if (boroughChartNeedsRefresh)
         {
             boroughChartNeedsRefresh = false;
-            await ChartService.RenderBarChart("#chart-boroughs", ChartService.BarChartByBorough);  // only one error displays; consider errorList
+            await ChartService.RenderBarChart($"#{SharedJsConstants.BoroughChartId}", ChartService.BarChartByBorough);  // only one error displays; consider errorList
         }
 
         if (zipChartNeedsRefresh)
         {
             zipChartNeedsRefresh = false;
-            await ChartService.RenderLineChart("#chart-zip", ChartService.LineChartByZipHour);
+            await ChartService.RenderLineChart($"#{SharedJsConstants.ZipChartId}", ChartService.LineChartByZipHour);
         }
 
     }   

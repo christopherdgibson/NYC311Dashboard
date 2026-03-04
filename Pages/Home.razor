@@ -13,37 +13,36 @@
 <div class="home-page-container">
     <img class="nyc-home-image" src="images/nyc_background.png" alt="New York City" />
     <div class="home-page-hero-text">
-        <div class="home-page-eyebrow">New York City</div>
-        <div class="home-page-title">311 Dashboard</div>
+        <div class="home-page-eyebrow">@Resources.title_home_page_eyebrow</div>
+        <div class="home-page-title">@Resources.title_home_page</div>
     </div>
 </div>
 <div class="home-page-content">
     <p class="home-page-intro">
-        Explore New York City's non-emergency 311 service requests —
-        visualised and broken down across the five boroughs.
+		@Resources.home_page_intro
     </p>
     <div class="home-page-cards">
         <div class="home-page-card">
             <i class="bi bi-geo-alt-fill"></i>
-            <span>Borough</span>
+            <span>@Resources.title_borough</span>
         </div>
         <div class="home-page-card">
             <i class="bi bi-mailbox2-flag"></i>
-            <span>Zip Code</span>
+            <span>@Resources.title_zip_code</span>
         </div>
         <div class="home-page-card">
             <i class="bi bi-shield-fill"></i>
-            <span>Precinct</span>
+            <span>@Resources.title_precinct</span>
         </div>
     </div>
-    <a href="requests" class="home-page-cta">Explore the data</a>
+    <a href="requests" class="home-page-cta">@Resources.home_page_explore_data</a>
 </div>
 
 @code {
 
     protected override void OnInitialized()
     {
-        LayoutService.SetTitle("NYC 311 Dashboard");
+        LayoutService.SetTitle(Resources.title_nyc_dashboard);
     }
     protected override async Task OnInitializedAsync()
     {
