@@ -1,5 +1,5 @@
-﻿function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+﻿function scrollToTop(behavior = "smooth") {
+    window.scrollTo({ top: 0, behavior: behavior });
 }
 
 function changeClassName(classNameOld, classNameNew) {

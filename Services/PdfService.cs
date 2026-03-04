@@ -26,6 +26,7 @@ namespace NYC311Dashboard.Services
                 _loadingService.LoadingMessage = Resources.loading_service_loading_here;
                 _loadingService.IsLoading = true;
 
+                await _js.InvokeVoidAsync("scrollToTop", "instant");
                 await _js.InvokeVoidAsync("saveElementAsPdf", "pdf-content", options);
             }
             catch
