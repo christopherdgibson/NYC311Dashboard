@@ -125,6 +125,9 @@
 	<data name="failed_chart_options" xml:space="preserve">
 		<value>Failed to get chart options.</value>
 	</data>
+	<data name="failed_navigation_handler" xml:space="preserve">
+		<value>Navigation handler failed:</value>
+	</data>
 	<data name="failed_to_render_chart" xml:space="preserve">
 		<value>Failed to render chart. Please check your connection and try again.</value>
 	</data>
@@ -139,13 +142,13 @@
         visualised and broken down across the five boroughs.</value>
 	</data>
 	<data name="label_select_boroughs" xml:space="preserve">
-		<value>Select boroughs</value>
+		<value>Select Boroughs</value>
 	</data>
 	<data name="label_select_options" xml:space="preserve">
 		<value>Select options</value>
 	</data>
 	<data name="label_select_zip_codes" xml:space="preserve">
-		<value>Select zip codes</value>
+		<value>Select Zip Codes</value>
 	</data>
 	<data name="loading_service_default_loading" xml:space="preserve">
 		<value>Loading, please wait...</value>
@@ -175,13 +178,19 @@
 		<value>Confirm</value>
 	</data>
 	<data name="messaging_service_title_download" xml:space="preserve">
-		<value>Download PDF?</value>
+		<value>Download PDF</value>
 	</data>
 	<data name="messaging_service_title_error" xml:space="preserve">
 		<value>Error</value>
 	</data>
+	<data name="messaging_service_title_refresh" xml:space="preserve">
+		<value>Refresh 311 data</value>
+	</data>
+	<data name="report_boroughs_charts_title" xml:space="preserve">
+		<value>Total requests for selected boroughs and zip codes</value>
+	</data>
 	<data name="report_boroughs_list_title" xml:space="preserve">
-		<value>This report shows New York City 311 requests selected zip codes within the boroughs {0}</value>
+		<value>This report shows New York City 311 requests for selected zip codes within the boroughs {0}</value>
 	</data>
 	<data name="refresh_data_boroughs_list" xml:space="preserve">
 		<value>Please refresh data to populate boroughs list!</value>
@@ -191,6 +200,12 @@
 	</data>
 	<data name="title_borough" xml:space="preserve">
 		<value>Borough</value>
+	</data>
+	<data name="title_borough_requests_chart" xml:space="preserve">
+		<value>Total requests and duration for selected boroughs</value>
+	</data>
+	<data name="title_borough_requests_table" xml:space="preserve">
+		<value>Total requests by date for selected boroughs</value>
 	</data>
 	<data name="title_download" xml:space="preserve">
 		<value>NYC 311 Requests</value>
@@ -227,11 +242,5 @@
 	</data>
 	<data name="select_boroughs_zip_code_data" xml:space="preserve">
 		<value>Please select one or more boroughs to see zip code data.</value>
-	</data>
-	<data name="select_boroughs" xml:space="preserve">
-		<value>Select Boroughs</value>
-	</data>
-	<data name="select_zip_codes" xml:space="preserve">
-		<value>Select Zip Codes</value>
 	</data>
 </root>

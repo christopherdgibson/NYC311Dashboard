@@ -28,10 +28,10 @@
                     <span class="h1-main">@LayoutService.MainTitle</span>
                 </h1>
                 }
-                @if (Navigation.ToBaseRelativePath(Navigation.Uri) != "requestsreport")
-                {
+@*                 @if (Navigation.ToBaseRelativePath(Navigation.Uri) != "requestsreport")
+                { *@
                     <ErrorBlock />
-                }
+            @*     } *@
                 <button class="scroll-to-top-btn icon-btn" @onclick="LayoutService.ScrollToTop">
                     <i class="bi bi-arrow-up-circle-fill"></i>
                 </button>

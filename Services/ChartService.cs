@@ -1,8 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using NYC311Dashboard.Extensions;
-using NYC311Dashboard.Pages;
 using NYC311Dashboard.Services.Contracts;
 using NYC311Dashboard.Services.Models;
 
@@ -137,7 +135,7 @@ namespace NYC311Dashboard.Services
                 _loadingService.LoadingMessage = Resources.loading_service_loading_here;
                 _loadingService.IsLoading = true;
                 string type;
-                if (selection == "boroughs")
+                if (selection == Resources.groupy_category_boroughs)
                 {
                     type = "bar";
                 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using NYC311Dashboard.Components;
 using NYC311Dashboard.Services.Contracts;
-using System.Runtime.Versioning;
 
 namespace NYC311Dashboard.Services
 {
@@ -112,7 +111,7 @@ namespace NYC311Dashboard.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Navigation handler failed: {ex.Message}");
+                Console.WriteLine(string.Join(" ", Resources.failed_navigation_handler, ex.Message));
             }
 
             OnLocationChanged?.Invoke();

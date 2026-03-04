@@ -17,10 +17,10 @@
 @if (ShowChart)
 {
     <div class="content-block">
-        <h2>Total requests and duration for selected boroughs</h2>
-        <div id="chart" class="apex-chart-flex-container pageview-block"></div>
+        <h2>@Resources.title_borough_requests_chart</h2>
+        <div id="@SharedJsConstants.BoroughChartId" class="apex-chart-flex-container pageview-block"></div>
         <hr class="section-divider" />
-        <h2>Total requests by date for selected boroughs</h2>
+        <h2>@Resources.title_borough_requests_table</h2>
         <div class="table-flex-container pageview-block">
             <SortableTable Items="requestsByBorough" Options=@GetTableOptions() />
         </div>
@@ -33,7 +33,7 @@
     private List<string> boroughs = new();
     private HashSet<string> selectedBoroughs = new();
     private ChartOptions chartOptions = new();
-    private string label = "Select Boroughs";
+
     //private DotNetObjectReference<RequestsByBorough>? dotNetRef;
 
     private bool chartNeedsRefresh = false;
@@ -50,7 +50,7 @@
         if (RequestService.Boroughs.Count == 0)
         {
             LayoutService.SetSidebar(
-                LayoutService.RenderInactiveSidebarButton("No data available", Resources.refresh_data_boroughs_list)
+                LayoutService.RenderInactiveSidebarButton(Resources.data_none_available, Resources.refresh_data_boroughs_list)
         );
             return;
         }
@@ -69,7 +69,7 @@
         selectedBoroughs = RequestService.SelectedBoroughs;
 
         LayoutService.SetSidebar(LayoutService.RenderCustomSidebar(
-             Resources.select_boroughs,
+             Resources.label_select_boroughs,
              boroughs,
              selectedBoroughs,
              EventCallback.Factory.Create<HashSet<string>>(this, v => selectedBoroughs = v),
@@ -87,7 +87,7 @@
         }
 
         chartNeedsRefresh = false;
-        await ChartService.RenderBarChart(SharedJsConstants.ChartId);
+        await ChartService.RenderBarChart($"#{SharedJsConstants.BoroughChartId}");
 
         // if (firstRender)
         // {

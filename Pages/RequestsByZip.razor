@@ -18,7 +18,7 @@
 {
     <div class="content-block">
         <h2>@Resources.title_zip_requests_chart</h2>
-        <div id="chart" class="apex-chart-flex-container"></div>
+        <div id="@SharedJsConstants.ZipChartId" class="apex-chart-flex-container"></div>
         <hr class="section-divider" />
         <h2>@Resources.title_zip_requests_table</h2>
         <div class="table-flex-container">
@@ -80,7 +80,7 @@
         selectedZipCodes = RequestService.SelectedZipCodes;
 
         LayoutService.SetSidebar(LayoutService.RenderCustomSidebar(
-             Resources.select_zip_codes,
+             Resources.label_select_zip_codes,
              zipCodes,
              selectedZipCodes,
              EventCallback.Factory.Create<HashSet<string>>(this, v => selectedZipCodes = v),
@@ -98,7 +98,7 @@
         }
 
         chartNeedsRefresh = false;
-        await ChartService.RenderLineChart(SharedJsConstants.ChartId);
+        await ChartService.RenderLineChart($"#{SharedJsConstants.ZipChartId}");
     }
 
     private async Task OnZipSelectionChanged()

@@ -111,28 +111,13 @@ code {
         margin-bottom: 2rem;
     }
 
-    .content h2, h3 {
-        color: var(--theme-main-color);
-/*        margin-left: 2rem;*/
-    }
+h4 {
+    color: var(--theme-main-color);
+    margin-bottom: 0.5rem;
+}
 
 .pageview-block {
         margin: 0 3rem;
-    }
-
-.content-reports-page {
-    flex: 1 1 auto;
-    padding: 2.5rem;
-    margin-left: 0;
-    /*height: 100vh;*/
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    background: grey;
-}
-
-    .content-reports-page h1 {
-        color: white;
     }
 
 .pageview-btn {
@@ -165,7 +150,7 @@ h1 {
     text-transform: uppercase;
     color: var(--theme-main-color);
     border-bottom: 4px solid var(--theme-accent-color);
-    display: inline-block;
+    display: block;
     opacity: 0.7;
 }
 
@@ -360,7 +345,7 @@ h1 {
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.02em;
-    color: white;
+    color: inherit;
 }
 
 .home-page-info-container {
@@ -447,6 +432,53 @@ h1 {
     .home-page-cta:hover {
         opacity: 0.85;
     }
+
+/* ────────────────────────── Report page styles ────────────────────────── */
+
+.content-reports-page {
+    flex: 1 1 auto;
+    padding: 2.5rem;
+    margin-left: 0;
+    /*height: 100vh;*/
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background: grey;
+}
+
+    .content-reports-page h1 {
+        color: white;
+    }
+
+.report-list-title {
+    margin-bottom: 2rem;
+}
+.pdf-print-area .home-page-hero-text {
+    position: unset;
+    /*    bottom: 2.5rem;
+    left: 3rem;
+    z-index: 10;*/
+    /*    color: white;*/
+    color: var(--theme-main-color);
+    margin-bottom: 2rem;
+    /*    border-left: 5px solid var(--theme-accent-color);
+    padding-left: 1rem;*/
+}
+
+.pdf-print-area .home-page-title {
+    font-size: 3rem;
+}
+
+.pdf-print-area h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--theme-main-color);
+    border-left: 4px solid var(--theme-accent-color);
+    padding-left: 0.75rem;
+    margin: 1.5rem auto;
+}
 
 /* ────────────────────────── Data page styles ────────────────────────── */
 

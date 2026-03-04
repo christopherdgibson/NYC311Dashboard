@@ -124,6 +124,15 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Navigation handler failed:.
+        /// </summary>
+        public static string failed_navigation_handler {
+            get {
+                return ResourceManager.GetString("failed_navigation_handler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to get data..
         /// </summary>
         public static string failed_to_get_data {
@@ -179,7 +188,7 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select boroughs.
+        ///   Looks up a localized string similar to Select Boroughs.
         /// </summary>
         public static string label_select_boroughs {
             get {
@@ -197,7 +206,7 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select zip codes.
+        ///   Looks up a localized string similar to Select Zip Codes.
         /// </summary>
         public static string label_select_zip_codes {
             get {
@@ -287,7 +296,7 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download PDF?.
+        ///   Looks up a localized string similar to Download PDF.
         /// </summary>
         public static string messaging_service_title_download {
             get {
@@ -305,6 +314,15 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh 311 data.
+        /// </summary>
+        public static string messaging_service_title_refresh {
+            get {
+                return ResourceManager.GetString("messaging_service_title_refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please refresh data to populate boroughs list!.
         /// </summary>
         public static string refresh_data_boroughs_list {
@@ -314,7 +332,16 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This report shows New York City 311 requests selected zip codes within the boroughs {0}.
+        ///   Looks up a localized string similar to Total requests for selected boroughs and zip codes.
+        /// </summary>
+        public static string report_boroughs_charts_title {
+            get {
+                return ResourceManager.GetString("report_boroughs_charts_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This report shows New York City 311 requests for selected zip codes within the boroughs {0}.
         /// </summary>
         public static string report_boroughs_list_title {
             get {
@@ -332,15 +359,6 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select Boroughs.
-        /// </summary>
-        public static string select_boroughs {
-            get {
-                return ResourceManager.GetString("select_boroughs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please select one or more boroughs to see zip code data..
         /// </summary>
         public static string select_boroughs_zip_code_data {
@@ -350,20 +368,29 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select Zip Codes.
-        /// </summary>
-        public static string select_zip_codes {
-            get {
-                return ResourceManager.GetString("select_zip_codes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Borough.
         /// </summary>
         public static string title_borough {
             get {
                 return ResourceManager.GetString("title_borough", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total requests and duration for selected boroughs.
+        /// </summary>
+        public static string title_borough_requests_chart {
+            get {
+                return ResourceManager.GetString("title_borough_requests_chart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total requests by date for selected boroughs.
+        /// </summary>
+        public static string title_borough_requests_table {
+            get {
+                return ResourceManager.GetString("title_borough_requests_table", resourceCulture);
             }
         }
         
