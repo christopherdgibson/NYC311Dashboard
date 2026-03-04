@@ -52,36 +52,6 @@ main {
     border: none;
 }
 
-/* ─── Dropdown menu styles ─── */
-
-/*.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #f9f9f9;
-    min-width: 200px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-}
-
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        margin: 0 !important;
-        text-decoration: none;
-        display: block;
-    }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1
-        }*/
-
-/* Show dropdown content on hover */
-/*.dropdown:hover .dropdown-content {
-    display: block;
-}
-*/
-
-
 /* ────────────────────────── Mobile styles ────────────────────────── */
 
 @media (max-width: 768px) {
@@ -169,10 +139,6 @@ main {
     .nav-expand-menu {
         display: none;
     }
-
-/*    .scroll-to-top-mobile-btn {
-        display: none;
-    }*/
 
     .page {
         flex-direction: column;

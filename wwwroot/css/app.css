@@ -9,6 +9,8 @@
     --btn-primary-blue: #007bff;
     --theme-main-color: var(--nyc_flag-blue-color);
     --theme-accent-color: var(--nyc-311-yellow);
+    --sidebar-gradient-midpoint-color: #002C72;
+    --sidebar-gradient-bottom-color: #002060;
     --sidebar-width: clamp(180px, 25vw, 250px);
     --sidebar-closed: 30px;
     --header-height: 75px;
@@ -230,20 +232,6 @@ h1 {
     transform: translateX(0); /* slide in */
 }
 
-/*.sidebar-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;*/ /* takes remaining space below header */
-    /*overflow-y: auto;
-    background-image: linear-gradient(180deg, var(--theme-main-color) 50%, var(--theme-accent-color) 80%);
-}*/
-
-/*.sidebar-body-container {
-    display: flex;
-    position: relative;
-    height: 100%;
-}*/
-
 .sidebar-body-container {
     display: flex;
     height: 100%;
@@ -258,7 +246,7 @@ h1 {
     overflow-y: auto;
     flex: 1;
 /*    background-image: linear-gradient(180deg, var(--theme-main-color) 50%, var(--theme-accent-color) 80%);*/
-    background-image: linear-gradient(180deg, var(--theme-main-color) 0%, #002060 100%);
+    background-image: linear-gradient(180deg, var(--theme-main-color) 0%, var(--sidebar-gradient-bottom-color) 100%);
 }
 
 .sidebar-swap-container {
@@ -272,7 +260,7 @@ h1 {
     top: 50%;
     width: 30px;
     height: 60px;
-    background-color: var(--theme-main-color);
+    background-color: var(--sidebar-gradient-midpoint-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -303,17 +291,6 @@ h1 {
     transform: rotate(180deg);
 
 }
-    
-/*.sidebar-btn {*/
-    /* color: white;*/
-    /* background-color: unset;*/
-    /*color: var(--btn-sidebar-text-color);
-    background-color: var(--btn-sidebar-bg-color);
-    border: 2px solid #333;
-    padding: 15px;
-    width: 100%;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.5)
-}*/
 
 .sidebar-btn {
     color: var(--theme-main-color);
@@ -748,37 +725,6 @@ h1 {
 
 /* ────────────────────────── Checkbox dropdown styles ────────────────────────── */
 
-/*.dropdown-content {
-    position: absolute;
-    left: 0;
-    top: 100%;
-    width:100%;
-    background: white;
-    border: 1px solid #ccc;
-    z-index: 1000;
-    padding: 10px;
-    max-height: 350px;
-    overflow-y: auto;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
-.dropdown-row {
-    display: flex;
-    align-items: center;
-    padding: 4px 8px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background 0.15s;
-}*/
-
-    .dropdown-row * {
-        cursor: pointer;
-    }
-/*
-    .dropdown-row:hover {
-        background: #f0f4fa;
-    }*/
-
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
@@ -809,8 +755,12 @@ h1 {
 }
 
     .dropdown-row:hover {
-        background-color: var(--theme-accent-color); /* yellow hover, consistent with buttons */
-        color: var(--theme-main-color); /* blue text stays readable on yellow */
+        background-color: var(--theme-accent-color);
+        color: var(--theme-main-color);
+    }
+
+    .dropdown-row * {
+        cursor: pointer;
     }
 
     .dropdown-row input[type="checkbox"] {
@@ -1158,7 +1108,6 @@ nav {
     min-height: 220mm;
     margin: 0 auto;
     padding: 0; /* let html2pdf handle margins */
-    /*border: 2px dashed #333;*/
     background: #fff;
     box-sizing: border-box;
 }
