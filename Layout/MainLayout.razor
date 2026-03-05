@@ -2,6 +2,7 @@
 @using NYC311Dashboard.Components
 @using NYC311Dashboard.Services.Contracts
 @inherits LayoutComponentBase
+@implements IDisposable
 @inject ILayoutService LayoutService
 @inject NavigationManager Navigation
 
@@ -45,12 +46,14 @@
     {
         LayoutService.OnSidebarChanged += StateHasChanged;
         LayoutService.OnLocationChanged += StateHasChanged;
+        LayoutService.OnCloseAllDropdowns += StateHasChanged;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            await LayoutService.CloseDropdownOnClickAway();
             await LayoutService.CloseNavOnClick();
         }
     }
@@ -59,5 +62,6 @@
     {
         LayoutService.OnSidebarChanged -= StateHasChanged;
         LayoutService.OnLocationChanged -= StateHasChanged;
+        LayoutService.OnCloseAllDropdowns -= StateHasChanged;
     }
 }

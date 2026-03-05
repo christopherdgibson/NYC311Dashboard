@@ -24,18 +24,21 @@ namespace NYC311Dashboard.Services
             _navigation.LocationChanged += OnNavigationChanged;
         }
 
+        private List<Action> _closeHandlers = new();
+
         public string? MainTitle { get; private set; }
         public string? SupTitle { get; private set; }
 
         public RenderFragment? CustomSidebar { get; private set; }
         public event Action? OnSidebarChanged;
         public event Action? OnLocationChanged;
+        public event Action? OnCloseAllDropdowns;
 
         public void SetTitle(string? mainTitle, string? supTitle = null)
         {
             MainTitle = mainTitle;
             SupTitle = supTitle;
-            OnSidebarChanged?.Invoke(); // reuse existing event
+            OnSidebarChanged?.Invoke(); // reuse existing event?
         }
 
         public void SetSidebar(RenderFragment? fragment)
@@ -43,6 +46,7 @@ namespace NYC311Dashboard.Services
             CustomSidebar = fragment;
             OnSidebarChanged?.Invoke();
         }
+
         public RenderFragment RenderInactiveButton(string buttonText, string message) => builder =>
         {
             builder.OpenElement(0, "button");
@@ -84,17 +88,15 @@ namespace NYC311Dashboard.Services
                 {
                     int seq = 0;
 
-                    // header div
                     builder.OpenElement(seq++, "div");
                     builder.AddAttribute(seq++, "class", "sidebar-section-header");
                     builder.AddContent(seq++, header);
                     builder.CloseElement();
 
-                    // dropdown stack wrapper
                     builder.OpenElement(seq++, "div");
                     builder.AddAttribute(seq++, "class", "sidebar-dropdown-stack");
 
-                    foreach (var config in configs)
+                    foreach (var config in configs.OrderBy(c => c.Label))
                     {
                         builder.OpenComponent(seq++, typeof(CheckboxDropdown<TItem>));
                         builder.AddAttribute(seq++, "Label", config.Label);
@@ -104,10 +106,11 @@ namespace NYC311Dashboard.Services
                         builder.AddAttribute(seq++, "OnSelectionChanged", config.OnSelectionChanged);
                         builder.AddAttribute(seq++, "OptionLabel", config.OptionLabel ?? (x => x?.ToString()));
                         builder.AddAttribute(seq++, "SetIndeterminateSelection", SetIndeterminate);
+                        builder.AddAttribute(seq++, "RegisterCloseHandler", RegisterCloseHandler);
                         builder.CloseComponent();
                     }
 
-                    builder.CloseElement(); // close sidebar-dropdown-stack
+                    builder.CloseElement();
                 };
 
                 CustomSidebar = customSidebar;
@@ -139,11 +142,6 @@ namespace NYC311Dashboard.Services
             OnLocationChanged?.Invoke();
         }
 
-        private async Task SetIndeterminate(ElementReference selectAllRef, bool IsIndeterminate)
-        {
-            await _js.InvokeVoidAsync("setIndeterminateSelection", selectAllRef, IsIndeterminate);
-        }
-
         public async Task ChangeClassName(string oldClassName, string newClassName)
         {
             await _js.InvokeVoidAsync("changeClassName", oldClassName, newClassName);
@@ -163,11 +161,37 @@ namespace NYC311Dashboard.Services
         {
             await _js.InvokeVoidAsync("scrollToTop");
         }
+
+        public async Task CloseDropdownOnClickAway()
+        {
+            await _js.InvokeVoidAsync("closeDropdownOnClickAway", DotNetObjectReference.Create(this));
+        }
+
+        [JSInvokable]
+        public void OnGlobalClick() => CloseAllDropdowns();
+
+        private async Task SetIndeterminate(ElementReference selectAllRef, bool IsIndeterminate)
+        {
+            await _js.InvokeVoidAsync("setIndeterminateSelection", selectAllRef, IsIndeterminate);
+        }
+
+        private void RegisterCloseHandler(Action handler)
+        {
+            _closeHandlers.Add(handler);
+        }
+
+        private void CloseAllDropdowns()
+        {
+            foreach (var handler in _closeHandlers)
+            {
+                handler.Invoke();
+            }
+            OnCloseAllDropdowns.Invoke();
+        }
+
         public void Dispose()
         {
             _navigation.LocationChanged -= OnNavigationChanged;
         }
-
-
     }
 }

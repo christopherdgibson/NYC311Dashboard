@@ -43,16 +43,22 @@
     [Parameter] public EventCallback<HashSet<TItem>> SelectedValuesChanged { get; set; }
     [Parameter] public Func<Task>? OnSelectionChanged { get; set; }
     [Parameter] public Func<ElementReference, bool, Task>? SetIndeterminateSelection { get; set; }
+    [Parameter] public Action<Action>? RegisterCloseHandler { get; set; }
     [Parameter] public Func<TItem, string?> OptionLabel { get; set; } = x => x?.ToString();
 
     private bool showDropdown = false;
     private ElementReference selectAllRef;
 
-    private void ToggleDropdown() => showDropdown = !showDropdown;
-
     private bool IsAllSelected => Options != null && SelectedValues.Count == Options.Count();
     private bool IsNoneSelected => SelectedValues.Count == 0;
     private bool IsIndeterminate => !IsAllSelected && !IsNoneSelected;
+
+    protected override void OnInitialized()
+    {
+        RegisterCloseHandler?.Invoke(HandleCloseAllDropdowns);
+    }
+
+    private void ToggleDropdown() => showDropdown = !showDropdown;
 
     private async Task ToggleSelectAll(ChangeEventArgs e)
     {
@@ -128,6 +134,11 @@
         {
             await OnSelectionChanged.Invoke();
         }
+    }
+
+    private void HandleCloseAllDropdowns()
+    {
+        showDropdown = false;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -21,6 +21,12 @@ function toggleNav(element, className) {
 //    });
 //}
 
+window.setIndeterminateSelection = (element, indeterminate) => {
+    if (element) {
+        element.indeterminate = indeterminate;
+    }
+};
+
 function closeNavOnClick() {
     document.querySelectorAll('nav ul a').forEach(function (link) {
         link.addEventListener('click', () => {
@@ -28,6 +34,14 @@ function closeNavOnClick() {
     });
     });
 }
+
+window.closeDropdownOnClickAway = (dotNetRef) => {
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.sidebar-dropdown-stack')) {
+            dotNetRef.invokeMethodAsync('OnGlobalClick');
+        }
+    });
+};
 
 window.saveAsFile = function (fileName, bytesBase64) {
     var link = document.createElement('a');
@@ -64,13 +78,6 @@ window.saveElementAsPdf = function (elementId, options) {
     };
     html2pdf().set(opt).from(element).save();
 }
-
-
-window.setIndeterminateSelection = (element, indeterminate) => {
-    if (element) {
-        element.indeterminate = indeterminate;
-    }
-};
 
 window.renderApexChartMulti = function (elementSelector, options) {
     var options = {

@@ -14,9 +14,13 @@ namespace NYC311Dashboard.Services.Contracts
 
         event Action? OnLocationChanged;
 
+        event Action? OnCloseAllDropdowns;
+
         void SetTitle(string? mainTitle, string? supTitle = null);
 
         void SetSidebar(RenderFragment? fragment);
+
+        Task CloseDropdownOnClickAway();
 
         RenderFragment RenderButton(string buttonText, string classes, string message, Func<Task>? onConfirm);
 
