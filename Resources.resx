@@ -213,6 +213,9 @@
 	<data name="title_download" xml:space="preserve">
 		<value>NYC 311 Requests</value>
 	</data>
+	<data name="title_home" xml:space="preserve">
+		<value>Home</value>
+	</data>
 	<data name="title_home_page" xml:space="preserve">
 		<value>311 Dashboard</value>
 	</data>

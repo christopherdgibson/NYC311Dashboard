@@ -51,9 +51,6 @@ namespace NYC311Dashboard.Services
                     return;
                 }
 
-                //     requests.Clear();
-                //     sortOrder = 0;
-
                 Requests = result.Value.Where(r => r.Status.Equals(Resources.request_status_closed, StringComparison.OrdinalIgnoreCase)).ToList();
 
                 Boroughs = Requests
@@ -68,13 +65,10 @@ namespace NYC311Dashboard.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR: " + ex.Message);
-                Console.WriteLine(ex.ToString());
-                _messagingService.ShowError(Resources.messaging_service_error_occurred);
+                _messagingService.ShowError(Resources.messaging_service_error_occurred + ex.Message);
             }
             finally
             {
-
                 _loadingService.IsLoading = false;
             }
         }

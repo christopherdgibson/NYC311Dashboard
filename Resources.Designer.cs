@@ -413,6 +413,15 @@ namespace NYC311Dashboard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string title_home {
+            get {
+                return ResourceManager.GetString("title_home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 311 Dashboard.
         /// </summary>
         public static string title_home_page {

@@ -48,7 +48,7 @@ namespace NYC311Dashboard.Services
                         new ApexSeries { Name = Resources.chart_name_total_duration, Data = totalDurations }
                     };
 
-                    var result = GetChartOptions("boroughs", categories, series, height: "380");
+                    var result = GetChartOptions(Resources.groupy_category_boroughs, categories, series, height: "380");
 
                     options = result.IsSuccess ? result.Value : BarChartByBorough;
                 }
@@ -100,7 +100,7 @@ namespace NYC311Dashboard.Services
                         })
                         .ToList();
 
-                    var result = GetChartOptions("zip codes", categories, series, height: "380");
+                    var result = GetChartOptions(Resources.groupy_category_zip_codes, categories, series, height: "380");
 
                     options = result.IsSuccess ? result.Value : LineChartByZipHour;
                 }
