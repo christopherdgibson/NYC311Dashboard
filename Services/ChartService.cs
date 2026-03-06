@@ -82,11 +82,11 @@ namespace NYC311Dashboard.Services
 
         public async Task RenderLineChart(string elementSelector, ChartOptions? options = null)
         {
-            try
-            {
                 _loadingService.LoadingMessage = Resources.loading_service_loading_here;
                 _loadingService.IsLoading = true;
 
+            try
+            {
                 if (options == null)
                 {
                     if (!(_requestService.SelectedBoroughs?.Count > 0))
@@ -145,11 +145,11 @@ namespace NYC311Dashboard.Services
 
         public async Task RenderPrecinctChart(string elementSelector, ChartOptions? options = null)
         {
-            try
-            {
                 _loadingService.LoadingMessage = Resources.loading_service_loading_here;
                 _loadingService.IsLoading = true;
 
+            try
+            {
                 if (options == null)
                 {
                     if (!(_requestService.SelectedBoroughs?.Count > 0))
@@ -213,16 +213,12 @@ namespace NYC311Dashboard.Services
 
         public Result<ChartOptions> GetChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null)
         {
-            try
-            {
                 _loadingService.LoadingMessage = Resources.loading_service_loading_here;
                 _loadingService.IsLoading = true;
-                string type;
-                if (selection == Resources.groupby_category_boroughs)
+            try
                 {
-                    type = "bar";
-                }
-                else
+                string type = "bar";
+                if (selection == Resources.groupby_category_zip_codes)
                 {
                     type = "line";
                 }
@@ -244,11 +240,15 @@ namespace NYC311Dashboard.Services
                     Height = height
                 };
 
-                if (type == "bar")
+                if (selection == Resources.groupby_category_boroughs)
                 {
                     BarChartByBorough = options;
                 }
-                if (type == "line")
+                if (selection == Resources.groupby_category_precinct)
+                {
+                    ChartByPrecinct = options;
+                }
+                if (selection == Resources.groupby_category_zip_codes)
                 {
                     LineChartByZipHour = options;
                 }

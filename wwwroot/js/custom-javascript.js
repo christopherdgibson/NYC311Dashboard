@@ -9,11 +9,11 @@ function changeClassName(classNameOld, classNameNew) {
     }
 }
 
-function toggleNav(element, className) {
+function toggleClassName(element, className) {
     document.querySelector(element).classList.toggle(className);
 }
 
-//function closeNavOnClick() {
+//function closeNavOnClick() { // when sidebar toggled nav with class
 //    document.querySelector('nav ul').addEventListener('click', function (e) {
 //        if (e.target.tagName === 'A') {
 //            this.classList.remove('nav-open');

@@ -149,7 +149,7 @@ namespace NYC311Dashboard.Services
 
         public async Task ToggleClassName(string element = "nav ul", string className = "nav-open")
         {
-            await _js.InvokeVoidAsync("toggleNav", element, className);
+            await _js.InvokeVoidAsync("toggleClassName", element, className);
         }
 
         public async Task CloseNavOnClick(string element = "nav ul", string newClassName = "nav-open")
