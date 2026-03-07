@@ -79,60 +79,22 @@ window.saveElementAsPdf = function (elementId, options) {
     html2pdf().set(opt).from(element).save();
 }
 
-window.renderApexChartMulti = function (elementSelector, dataset, options) {
-    var options = {
-        chart: {
-            type: options.chart.type,
-            height: options.height,
-            width: options.width
-        },
-        series: dataset.series,
-        tooltip: {
-            y: {
-                formatter: function (val) {
-                    return val.toFixed(2);
-                }
-            }
-        },
-        yaxis: {
-            labels: {
-                formatter: function (val) {
-                    return val.toFixed(2);
-                }
-            }
-        },
-        xaxis: {
-            categories: dataset.categories
-        }
-    };
-
-    window.chartInstances = window.chartInstances || {};
-
-    var chartDiv = document.querySelector(elementSelector);
-    if (chartDiv) {
-        // destroy existing instance if re-rendering
-        if (window.chartInstances[elementSelector]) {
-            window.chartInstances[elementSelector].destroy();
-        }
-        window.chartInstances[elementSelector] = new ApexCharts(chartDiv, options);
-        window.chartInstances[elementSelector].render();
-        return null;
-    } else {
-        return `Chart element '${elementSelector}' not found`;
-    }
-}
-
 window.renderApexChart = function (elementSelector, dataset, options) {
-
-    function applyFormatter(formatStr, val) {
+    function applyFormat(formatStr, val) {
         if (!formatStr) return val;
         if (formatStr === "integer") return val.toFixed(0);
         if (formatStr.startsWith("decimal:")) {
             const places = parseInt(formatStr.split(":")[1], 10);
             return val.toFixed(places);
         }
-        // Extend here: "percent", "currency:USD", etc.
+        // Extend here if needed
         return val;
+    }
+
+    function applyFormatter(formatters, defaultFormatter, seriesIndex, val) {
+        const fallback = defaultFormatter ?? formatters?.[0];
+        const fmt = formatters?.[seriesIndex] ?? fallback;
+        return applyFormat(fmt, val);
     }
 
     var chartOptions = {
@@ -151,7 +113,7 @@ window.renderApexChart = function (elementSelector, dataset, options) {
         chartOptions.dataLabels = {
             enabled: options.dataLabels.enabled,
             formatter: function (val, { seriesIndex }) {
-                return applyFormatter(options.dataLabels.seriesFormatters?.[seriesIndex], val);
+                return applyFormatter(options.dataLabels.seriesFormatters.formatters, options.dataLabels.seriesFormatters.fallback, seriesIndex, val);
             },
             offsetY: options.dataLabels.offsetY,
             style: {
@@ -175,7 +137,7 @@ window.renderApexChart = function (elementSelector, dataset, options) {
             enabled: options.tooltip.enabled,
             y: {
                 formatter: function (val, { seriesIndex }) {
-                    return applyFormatter(options.tooltip.seriesFormatters?.[seriesIndex], val);
+                    return applyFormatter(options.tooltip.seriesFormatters.formatters, options.tooltip.seriesFormatters.fallback, seriesIndex, val);
                 }
             }
         };
@@ -185,7 +147,7 @@ window.renderApexChart = function (elementSelector, dataset, options) {
         chartOptions.yaxis = {
             labels: {
                 formatter: function (val) {
-                    return applyFormatter(options.yaxis.labelsFormatter, val);
+                    return applyFormat(options.yaxis.labelsFormatter, val);
                 }
             }
         };

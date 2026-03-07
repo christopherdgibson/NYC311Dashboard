@@ -82,17 +82,9 @@ namespace NYC311Dashboard.Services
                         _messagingService.ShowError(Resources.failed_chart_options);
                         return;
                     }
-                    else if (options.DataLabels == null)
-                    {
-                        options.DataLabels = new DataLabels
-                        {
-                            Enabled = true
-                        };
-                    }
-                    else
-                    {
-                        options.DataLabels.Enabled = true;
-                    }
+
+                    options.DataLabels ??= new DataLabels();
+                    options.DataLabels.Enabled = true;
                 }
 
                 BarChartByBorough = options;
@@ -169,11 +161,14 @@ namespace NYC311Dashboard.Services
                         _messagingService.ShowError(Resources.failed_chart_options);
                         return;
                     }
+
+                    options.Tooltip ??= new Tooltip();
+                    options.Tooltip.SeriesFormatters.Formatters = null;
                 }
 
                 LineChartByZipHour = options;
 
-                var error = await _js.InvokeAsync<string?>("renderApexChartMulti", elementSelector, dataset, options);
+                var error = await _js.InvokeAsync<string?>("renderApexChart", elementSelector, dataset, options);
                 if (error != null)
                 {
                     _messagingService.ShowError(error);

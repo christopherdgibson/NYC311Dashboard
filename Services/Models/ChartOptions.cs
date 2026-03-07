@@ -78,7 +78,7 @@ namespace NYC311Dashboard.Services.Models
         public bool Enabled { get; set; } = false;
 
         [JsonPropertyName("seriesFormatters")]
-        public List<string> SeriesFormatters { get; set; } = new() { "integer", "decimal:2" };
+        public SeriesFormatterOptions SeriesFormatters { get; set; } = new();
 
         [JsonPropertyName("offsetY")]
         public int OffsetY { get; set; } = -20;
@@ -102,13 +102,22 @@ namespace NYC311Dashboard.Services.Models
         public BarOptions Bar { get; set; } = new BarOptions();
     }
 
+    public class SeriesFormatterOptions
+    {
+        [JsonPropertyName("formatters")]
+        public List<string>? Formatters { get; set; } = new() { "integer", "decimal:2" };
+
+        [JsonPropertyName("fallback")]
+        public string? Fallback { get; set; } = "decimal:2";
+    }
+
     public class Tooltip
     {
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = true;
 
         [JsonPropertyName("seriesFormatters")]
-        public List<string> SeriesFormatters { get; set; } = new() { "integer", "decimal:2" };
+        public SeriesFormatterOptions SeriesFormatters { get; set; } = new();
     }
 
     public class YAxis
