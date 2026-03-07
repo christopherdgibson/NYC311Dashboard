@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using NYC311Dashboard.Extensions;
 using NYC311Dashboard.Services.Contracts;
 using NYC311Dashboard.Services.Models;
+using System.Data;
 
 namespace NYC311Dashboard.Services
 {
@@ -32,6 +33,7 @@ namespace NYC311Dashboard.Services
                 _loadingService.LoadingMessage = Resources.loading_service_loading_here;
                 _loadingService.IsLoading = true;
 
+                var dataset = new ApexDataSet();
                 if (options == null)
                 {
                     if (!(_requestService.SelectedBoroughs?.Count > 0))
@@ -40,35 +42,50 @@ namespace NYC311Dashboard.Services
                         return;
                     }
 
-                    var categories = _requestService.SelectedBoroughs.ToList();
-
-                    var totalDurations = _requestService.SelectedBoroughs
-                        .Select(b => _requestService.RequestsByBoroughDate.Where(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)).Sum(r => r.Duration))
+                    var boroughs = _requestService.SelectedBoroughs
+                        .Where(b => _requestService.RequestsByBoroughDate
+                            .Any(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)))
+                        .OrderBy(p => p)
                         .ToList();
 
-                    var totalCounts = _requestService.SelectedBoroughs
-                        .Select(b => (double)_requestService.Requests.Count(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)))
-                        .ToList();
-
-                    var series = new List<ApexSeries>
+                    dataset = new ApexDataSet
                     {
-                        new ApexSeries { Name = Resources.chart_name_total_count, Data = totalCounts },
-                        new ApexSeries { Name = Resources.chart_name_total_duration, Data = totalDurations }
+                        Categories = boroughs,
+                        Series = new List<ApexSeries>
+                        {
+                            new ApexSeries
+                            {
+                                Name = Resources.chart_name_total_count,
+                                Data = boroughs
+                                    .Select(b => (double)_requestService.Requests
+                                        .Count(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase)))
+                                    .ToList()
+                            },
+                            new ApexSeries
+                            {
+                                Name = Resources.chart_name_total_duration,
+                                Data = boroughs
+                                    .Select(b => _requestService.RequestsByBoroughDate
+                                        .Where(r => r.Borough.Equals(b, StringComparison.OrdinalIgnoreCase))
+                                        .Sum(r => r.Duration))
+                                    .ToList()
+                            }
+                        }
+
                     };
 
-                    var result = GetChartOptions(Resources.groupby_category_boroughs, categories, series, height: "380");
+                    var result = GetChartOptions(Resources.groupby_category_boroughs, height: "380");
 
                     options = result.IsSuccess ? result.Value : BarChartByBorough;
                 }
 
                 BarChartByBorough = options;
 
-                var error = await _js.InvokeAsync<string?>("renderApexBarChart", elementSelector, options);
+                var error = await _js.InvokeAsync<string?>("renderApexChart", elementSelector, dataset, options);
                 if (error != null)
                 {
                     _messagingService.ShowError(error);
                 }
-
             }
             catch
             {
@@ -82,11 +99,12 @@ namespace NYC311Dashboard.Services
 
         public async Task RenderLineChart(string elementSelector, ChartOptions? options = null)
         {
-                _loadingService.LoadingMessage = Resources.loading_service_loading_here;
-                _loadingService.IsLoading = true;
+            _loadingService.LoadingMessage = Resources.loading_service_loading_here;
+            _loadingService.IsLoading = true;
 
             try
             {
+                var dataset = new ApexDataSet();
                 if (options == null)
                 {
                     if (!(_requestService.SelectedBoroughs?.Count > 0))
@@ -107,7 +125,11 @@ namespace NYC311Dashboard.Services
                     .OrderBy(x => x)
                     .ToList();
 
-                    var series = _requestService.SelectedBoroughs
+                    dataset = new ApexDataSet
+                    {
+                        Categories = categories,
+
+                        Series = _requestService.SelectedBoroughs
                         .Where(borough => _requestService.RequestsByZipHour.Any(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && _requestService.SelectedZipCodes.Contains(r.Zip)))
                         .Select(borough => new ApexSeries
                         {
@@ -115,19 +137,22 @@ namespace NYC311Dashboard.Services
                             Data = categories.Select(cat =>
                                 _requestService.RequestsByZipHour
                                     .Where(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && _requestService.SelectedZipCodes.Contains(r.Zip) && r.CreatedDate.ToDateTimeHour() == cat)
-                                    .Sum(r => r.Duration)
-                            ).ToList()
+                                    .Sum(r => r.Duration)).
+                            ToList()
                         })
-                        .ToList();
+                        .OrderBy(s => s.Name)
+                        .ToList()
+                    };
 
-                    var result = GetChartOptions(Resources.groupby_category_zip_codes, categories, series, height: "380");
+                    var result = GetChartOptions(Resources.groupby_category_zip_codes, height: "380");
 
                     options = result.IsSuccess ? result.Value : LineChartByZipHour;
                 }
 
                 LineChartByZipHour = options;
 
-                var error = await _js.InvokeAsync<string?>("renderApexChartMulti", elementSelector, options);
+
+                var error = await _js.InvokeAsync<string?>("renderApexChartMulti", elementSelector, dataset, options);
                 if (error != null)
                 {
                     _messagingService.ShowError(error);
@@ -145,11 +170,12 @@ namespace NYC311Dashboard.Services
 
         public async Task RenderPrecinctChart(string elementSelector, ChartOptions? options = null)
         {
-                _loadingService.LoadingMessage = Resources.loading_service_loading_here;
-                _loadingService.IsLoading = true;
+            _loadingService.LoadingMessage = Resources.loading_service_loading_here;
+            _loadingService.IsLoading = true;
 
             try
             {
+                var dataGroups = new List<ApexDataGroup>();
                 if (options == null)
                 {
                     if (!(_requestService.SelectedBoroughs?.Count > 0))
@@ -164,36 +190,65 @@ namespace NYC311Dashboard.Services
                         return;
                     }
 
-                    var categories = _requestService.RequestsByPrecinct
-                    .Select(r => r.CreatedDate.ToDateTimeHour())
-                    .Distinct()
-                    .OrderBy(x => x)
-                    .ToList();
+                dataGroups = _requestService.SelectedBoroughs
+                    .OrderBy(b => b)
+                    .Select(borough =>
+                    {
+                        var boroughPrecincts = _requestService.SelectedPrecincts
+                            .Where(p => _requestService.RequestsByPrecinct
+                                .Any(r => r.Precinct.Equals(p, StringComparison.OrdinalIgnoreCase)
+                                       && r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase)))
+                            .OrderBy(p => p)
+                            .ToList();
 
-                    var series = _requestService.SelectedBoroughs
-                        .Where(borough => _requestService.RequestsByPrecinct.Any(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && _requestService.SelectedPrecincts.Contains(r.Precinct)))
-                        .Select(borough => new ApexSeries
+                        return new ApexDataGroup
                         {
-                            Name = borough,
-                            Data = categories.Select(cat =>
-                                _requestService.RequestsByPrecinct
-                                    .Where(r => r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase) && _requestService.SelectedPrecincts.Contains(r.Precinct) && r.CreatedDate.ToDateTimeHour() == cat)
-                                    .Sum(r => r.Duration)
-                            ).ToList()
-                        })
-                        .ToList();
+                            GroupKey = borough,
+                            Dataset = new ApexDataSet
+                            {
+                                Categories = boroughPrecincts,
+                                Series = new List<ApexSeries>
+                                {
+                                    new ApexSeries
+                                    {
+                                        Name = Resources.chart_name_total_count,
+                                        Data = boroughPrecincts
+                                            .Select(p => (double)_requestService.Requests
+                                                .Count(r => r.PolicePrecinct.Equals(p, StringComparison.OrdinalIgnoreCase)))
+                                            .ToList()
+                                    },
+                                    new ApexSeries
+                                    {
+                                        Name = Resources.chart_name_total_duration,
+                                        Data = boroughPrecincts
+                                            .Select(p => _requestService.RequestsByPrecinct
+                                                .Where(r => r.Precinct.Equals(p, StringComparison.OrdinalIgnoreCase))
+                                                .Sum(r => r.Duration))
+                                            .ToList()
+                                    }
+                                }
+                            }
+                        };
+                    }).ToList();
 
-                    var result = GetChartOptions(Resources.groupby_category_precinct, categories, series, height: "380");
+                    var result = GetChartOptions(Resources.groupby_category_precinct, height: "380");
 
                     options = result.IsSuccess ? result.Value : ChartByPrecinct;
                 }
 
                 ChartByPrecinct = options;
 
-                var error = await _js.InvokeAsync<string?>("renderApexChartMulti", elementSelector, options);
-                if (error != null)
+                // Check here for empty dataGroups?
+
+                foreach (var group in dataGroups)
                 {
-                    _messagingService.ShowError(error);
+
+                    var dataset = group.Dataset;
+                    var error = await _js.InvokeAsync<string?>("renderApexChart", elementSelector, dataset, options);
+                    if (error != null)
+                    {
+                        _messagingService.ShowError(error);
+                    }
                 }
             }
             catch
@@ -211,33 +266,33 @@ namespace NYC311Dashboard.Services
             await _js.InvokeVoidAsync("updateApexChart", options);
         }
 
-        public Result<ChartOptions> GetChartOptions(string selection, List<string> categories, List<ApexSeries> series, string? width = null, string? height = null)
+        public Result<ChartOptions> GetChartOptions(string selection, string? width = null, string? height = null)
         {
-                _loadingService.LoadingMessage = Resources.loading_service_loading_here;
-                _loadingService.IsLoading = true;
+            _loadingService.LoadingMessage = Resources.loading_service_loading_here;
+            _loadingService.IsLoading = true;
             try
-                {
+            {
                 string type = "bar";
                 if (selection == Resources.groupby_category_zip_codes)
                 {
                     type = "line";
                 }
 
-                if (!categories.Any())
-                {
-                    _messagingService.ShowInfo(string.Format(Resources.empty_selction, selection));
-                    _loadingService.IsLoading = false;
-                    return Result.Failure<ChartOptions>(string.Format(Resources.empty_selction, Resources.groupby_category_boroughs));
-                }
+                //if (!(categories?.Count > 0))
+                //{
+                //    _messagingService.ShowInfo(string.Format(Resources.empty_selction, selection));
+                //    _loadingService.IsLoading = false;
+                //    return Result.Failure<ChartOptions>(string.Format(Resources.empty_selction, Resources.groupby_category_boroughs));
+                //}
 
-                categories.Sort();
                 var options = new ChartOptions
                 {
-                    Chart = new Chart { Type = type },
-                    XAxis = new XAxis { Categories = categories },
-                    Series = series.OrderBy(r => r.Name).ToList(),
-                    Width = width,
-                    Height = height
+                    Chart = new Chart
+                    {
+                        Type = type,
+                        Width = width,
+                        Height = height
+                    }
                 };
 
                 if (selection == Resources.groupby_category_boroughs)

@@ -31,7 +31,7 @@ function closeNavOnClick() {
     document.querySelectorAll('nav ul a').forEach(function (link) {
         link.addEventListener('click', () => {
             document.getElementById('checkNav').checked = false;
-    });
+        });
     });
 }
 
@@ -79,14 +79,14 @@ window.saveElementAsPdf = function (elementId, options) {
     html2pdf().set(opt).from(element).save();
 }
 
-window.renderApexChartMulti = function (elementSelector, options) {
+window.renderApexChartMulti = function (elementSelector, dataset, options) {
     var options = {
         chart: {
             type: options.chart.type,
             height: options.height,
             width: options.width
         },
-        series: options.series,
+        series: dataset.series,
         tooltip: {
             y: {
                 formatter: function (val) {
@@ -102,7 +102,7 @@ window.renderApexChartMulti = function (elementSelector, options) {
             }
         },
         xaxis: {
-            categories: options.xaxis.categories
+            categories: dataset.categories
         }
     };
 
@@ -122,62 +122,64 @@ window.renderApexChartMulti = function (elementSelector, options) {
     }
 }
 
-window.renderApexBarChart = function (elementSelector, options) {
-    var options = {
+window.renderApexChart = function (elementSelector, dataset, options) {
+
+    function applyFormatter(formatStr, val) {
+        if (!formatStr) return val;
+        if (formatStr === "integer") return val.toFixed(0);
+        if (formatStr.startsWith("decimal:")) {
+            const places = parseInt(formatStr.split(":")[1], 10);
+            return val.toFixed(places);
+        }
+        // Extend here: "percent", "currency:USD", etc.
+        return val;
+    }
+
+    var chartOptions = {
         chart: {
             type: options.chart.type,
             height: options.height,
             width: options.width
         },
-        series: options.series,
+        series: dataset.series,
         dataLabels: {
-            enabled: true,
-            formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
-                if (seriesIndex === 0) {
-                    // Index var
-                    return val.toFixed(0);
-                } else {
-                    return val.toFixed(2);
-                }
-                return val;
+            enabled: options.dataLabels.enabled,
+            formatter: function (val, { seriesIndex }) {
+                const fmt = options.dataLabels.seriesFormatters?.[seriesIndex];
+                return applyFormatter(fmt, val);
             },
-            offsetY: -20,
+            offsetY: options.dataLabels.offsetY,
             style: {
-                fontSize: '12px',
-                colors: ["#304758"]
+                fontSize: options.dataLabels.style.fontSize,
+                colors: options.dataLabels.style.colors
             }
         },
         plotOptions: {
             bar: {
-                borderRadius: 1,
+                borderRadius: options.plotOptions.bar.borderRadius,
                 dataLabels: {
-                    position: 'top',
-                },
+                    position: options.plotOptions.bar.dataLabelsPosition,
+                }
             }
         },
         tooltip: {
-            enabled: true,
+            enabled: options.tooltip.enabled,
             y: {
-                formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
-                    if (seriesIndex === 1) {
-                        // Index var
-                        return val.toFixed(0);
-                    } else {
-                        return val.toFixed(2);
-                    }
-                    return val;
+                formatter: function (val, { seriesIndex }) {
+                    const fmt = options.tooltip.seriesFormatters?.[seriesIndex];
+                    return applyFormatter(fmt, val);
                 }
             }
         },
         yaxis: {
             labels: {
                 formatter: function (val) {
-                    return val.toFixed(0);
+                    return applyFormatter(options.yaxis.labelsFormatter, val);
                 }
             }
         },
         xaxis: {
-            categories: options.xaxis.categories
+            categories: dataset.categories
         }
     };
 
@@ -189,13 +191,13 @@ window.renderApexBarChart = function (elementSelector, options) {
         if (window.chartInstances[elementSelector]) {
             window.chartInstances[elementSelector].destroy();
         }
-        window.chartInstances[elementSelector] = new ApexCharts(chartDiv, options);
+        window.chartInstances[elementSelector] = new ApexCharts(chartDiv, chartOptions);
         window.chartInstances[elementSelector].render();
         return null;
     } else {
         return `Chart element '${elementSelector}' not found`;
     }
-}
+};
 
 window.updateApexChart = function (options) {
     var chartDiv = document.getElementById("chart");

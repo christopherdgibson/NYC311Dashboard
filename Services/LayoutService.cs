@@ -127,12 +127,22 @@ namespace NYC311Dashboard.Services
             }
         }
 
+        private string? _currentLocation;
+
         private async void OnNavigationChanged(object? sender, LocationChangedEventArgs e)
         {
+            var newPath = new Uri(e.Location).AbsolutePath;
+            var currentPath = _currentLocation == null ? null : new Uri(_currentLocation).AbsolutePath;
+
+            _currentLocation = e.Location;
+
+            if (newPath == currentPath)
+                return; // same page, skip scroll
+
             try
             {
                 //SetTitle(null); if needed later
-                await ScrollToTop();
+                await ScrollToTop(); // should this condition on different page if possible (e.g., ignore chart refreshes)?
             }
             catch (Exception ex)
             {
