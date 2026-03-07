@@ -22,7 +22,7 @@
         <div id="@SharedJsConstants.PrecinctChartId" class="table-flex-container">
             @foreach(var borough in RequestService.SelectedBoroughs)
             {
-                <div id="@(string.Join("-", SharedJsConstants.PrecinctChartId, borough.ToKebabCase()))" class="table-flex-item"></div>
+                <div id="@(string.Join("-", SharedJsConstants.PrecinctChartId, borough.ToKebabCase()))" class="chart-flex-item"></div>
             }
         </div>
         <hr class="section-divider" />

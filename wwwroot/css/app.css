@@ -181,7 +181,7 @@ h1 {
 .table-flex-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
     justify-content: center; /* Centers all items including orphan */
     align-items: flex-start;
 }
@@ -197,12 +197,9 @@ h1 {
 }
 
 .chart-flex-item {
-    flex: 0 1 calc(50% - 10px); /* Three per row with gap */
-    /*min-width: 350px;*/ /* Forces wrap on small screens */
-    /*max-width: 400px;*/
+    flex: 0 1 350px;
     display: grid;
     grid-template-rows: auto auto;
-    /*    text-align: center;*/
     gap: 10px;
 }
 
