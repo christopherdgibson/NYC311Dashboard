@@ -37,17 +37,17 @@
             @if (ShowBoroughChart)
             {
                 <h3>@Resources.report_boroughs_charts_title</h3>
-                <div id="@SharedJsConstants.BoroughChartId" class="apex-chart-flex-container"></div>
+                <div id="@SharedJsConstants.BoroughChartId" class="apex-chart-container"></div>
 
                 @if (ShowZipChart)
                 {
-                    <div id="@SharedJsConstants.ZipChartId" class="apex-chart-flex-container"></div>
+                    <div id="@SharedJsConstants.ZipChartId" class="apex-chart-container"></div>
                 }
 
                 @if (ShowPrecinctChart)
                 {
                     <h2>@Resources.title_precinct_requests_chart</h2>
-                    <div id="@SharedJsConstants.PrecinctChartId" class="table-flex-container">
+                    <div id="@SharedJsConstants.PrecinctChartId" class="chart-flex-container">
                         @foreach (var borough in selectedBoroughs)
                         {
                             <div id="@(string.Join("-", SharedJsConstants.PrecinctChartId, borough.ToKebabCase()))" class="chart-flex-item"></div>
