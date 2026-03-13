@@ -2,6 +2,7 @@
 using NYC311Dashboard.Constants;
 using NYC311Dashboard.Extensions;
 using NYC311Dashboard.Intrastructure.Contracts;
+using NYC311Dashboard.Mapping;
 using NYC311Dashboard.Models;
 using NYC311Dashboard.Services.Contracts;
 using NYC311Dashboard.Services.Models;
@@ -76,6 +77,19 @@ namespace NYC311Dashboard.Services
             {
                 _loadingService.IsLoading = false;
             }
+        }
+
+        public RequestTableRow MapInputToTableRow(RequestModel input)
+        {
+            var tableRow = ModelMapper.Map<RequestModel, RequestTableRow>(input, (src, tgt) =>
+            {
+                tgt.Borough = src.Borough.ToProperCase();
+                tgt.PolicePrecinct = src.PolicePrecinct.Replace("Precinct", "").Trim();
+                //tgt.PolicePrecinct = src.RawDate.ToDateTime();
+                // any other manipulations
+            });
+
+            return tableRow;
         }
 
         public TableOptions<T> GetTableOptions<T>(Expression<Func<T, string>>? groupBy)
