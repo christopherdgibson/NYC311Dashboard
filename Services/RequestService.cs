@@ -129,7 +129,7 @@ namespace NYC311Dashboard.Services
                     })
                     .Select(g =>
                     {
-                        var aggDictionary = new BoroughDateTableRow
+                        var aggTable = new BoroughDateTableRow
                         {
                             Borough = g.Key.Borough,
                             CreatedDate = g.Key.CreatedDate,
@@ -137,7 +137,7 @@ namespace NYC311Dashboard.Services
                             Duration = g.Sum(row => (row.ClosedDate.Value - row.CreatedDate.Value).TotalMinutes)
                         };
 
-                        return aggDictionary;
+                        return aggTable;
                     })
                     .ToList();
 
@@ -193,7 +193,7 @@ namespace NYC311Dashboard.Services
                     })
                     .Select(g =>
                     {
-                        var aggDictionary = new ZipHourTableRow
+                        var aggTable = new ZipHourTableRow
                         {
                             Borough = g.Key.Borough,
                             Zip = g.Key.Zip,
@@ -202,7 +202,7 @@ namespace NYC311Dashboard.Services
                             Duration = g.Sum(row => (row.ClosedDate.Value - row.CreatedDate.Value).TotalMinutes)
                         };
 
-                        return aggDictionary;
+                        return aggTable;
                     })
                     .ToList();
 
@@ -300,7 +300,7 @@ namespace NYC311Dashboard.Services
                     })
                     .Select(g =>
                     {
-                        var aggDictionary = new PrecinctTableRow
+                        var aggTable = new PrecinctTableRow
                         {
                             Borough = g.Key.Borough,
                             Precinct = g.Key.Precinct,
@@ -309,7 +309,7 @@ namespace NYC311Dashboard.Services
                             Duration = g.Sum(row => (row.ClosedDate.Value - row.CreatedDate.Value).TotalMinutes)
                         };
 
-                        return aggDictionary;
+                        return aggTable;
                     })
                     .ToList();
 

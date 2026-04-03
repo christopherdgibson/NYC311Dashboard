@@ -233,7 +233,7 @@ namespace NYC311Dashboard.Services
                                 .Where(p => _requestService.RequestsByPrecinct
                                     .Any(r => r.Precinct.Equals(p, StringComparison.OrdinalIgnoreCase)
                                            && r.Borough.Equals(borough, StringComparison.OrdinalIgnoreCase)))
-                                .OrderBy(p => p)
+                                .OrderBy(p => Convert.ToInt32(p))
                                 .ToList();
 
                             return new ApexDataGroup

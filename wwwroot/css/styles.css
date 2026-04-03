@@ -115,8 +115,12 @@ code {
     }
 
 h4 {
+    font-size: 1rem;
+    /*    font-weight: 700;*/
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: var(--theme-main-color);
-    margin-bottom: 0.5rem;
+    padding-left: 0.75rem;
 }
 
 .pageview-block {
